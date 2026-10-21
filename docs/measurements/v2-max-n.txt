@@ -1,0 +1,590 @@
+Raw output of: cargo test --locked -p impulse-engine-tests --test v2_measure -- --nocapture --test-threads 1
+Recorded 2026-10-19 on an M1 Max, Rust 1.94.0, rusty-kaspa a41a333, silverscript v1.0.0.
+Contract: contracts/impulse_vault_v2.sil, TEMPLATE_HASH_V2 75d754c16299e7707787f0e66d9880d7657d09b1bea4ef3bd508cefdb6dd7548.
+Method: the module comment of tests/engine/v2_measure.rs. Cargo build lines removed; nothing else edited.
+
+
+running 3 tests
+test per_byte_and_per_leg_units_are_measured ... Settle, script units per vault input (320 points)
+| Shape | Pad | N | K | Auth | Vault | Own leg | T_i | S | Units | Rule | Residual |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Tokens | 0 | 2 | 2 | true | 0 | KCC-20 | 1461 | 3121 | 230161 | 230170 | -9 |
+| Tokens | 0 | 2 | 2 | true | 1 | KCC-20 | 1660 | 3121 | 231566 | 231563 | 3 |
+| Tokens | 0 | 2 | 2 | false | 0 | KCC-20 | 1461 | 3121 | 130063 | 130072 | -9 |
+| Tokens | 0 | 2 | 2 | false | 1 | KCC-20 | 1660 | 3121 | 131468 | 131465 | 3 |
+| Mixed | 0 | 2 | 1 | true | 0 | KCC-20 | 1461 | 1461 | 211361 | 211360 | 1 |
+| Mixed | 0 | 2 | 1 | true | 1 | KAS | 0 | 1461 | 199757 | 199753 | 4 |
+| Mixed | 0 | 2 | 1 | false | 0 | KCC-20 | 1461 | 1461 | 111263 | 111262 | 1 |
+| Mixed | 0 | 2 | 1 | false | 1 | KAS | 0 | 1461 | 99659 | 99655 | 4 |
+| TokensTranche | 0 | 2 | 2 | true | 0 | KCC-20 | 1461 | 3121 | 245716 | 245723 | -7 |
+| TokensTranche | 0 | 2 | 2 | true | 1 | KCC-20 | 1660 | 3121 | 249112 | 249106 | 6 |
+| TokensTranche | 0 | 2 | 2 | false | 0 | KCC-20 | 1461 | 3121 | 145618 | 145625 | -7 |
+| TokensTranche | 0 | 2 | 2 | false | 1 | KCC-20 | 1660 | 3121 | 149014 | 149008 | 6 |
+| MixedTranche | 0 | 2 | 1 | true | 0 | KCC-20 | 1461 | 1461 | 226909 | 226913 | -4 |
+| MixedTranche | 0 | 2 | 1 | true | 1 | KAS | 0 | 1461 | 199930 | 199926 | 4 |
+| MixedTranche | 0 | 2 | 1 | false | 0 | KCC-20 | 1461 | 1461 | 126811 | 126815 | -4 |
+| MixedTranche | 0 | 2 | 1 | false | 1 | KAS | 0 | 1461 | 99832 | 99828 | 4 |
+| Tokens | 0 | 3 | 3 | true | 0 | KCC-20 | 1461 | 4582 | 299119 | 299130 | -11 |
+| Tokens | 0 | 3 | 3 | true | 1 | KCC-20 | 1660 | 4582 | 300524 | 300523 | 1 |
+| Tokens | 0 | 3 | 3 | true | 2 | KCC-20 | 1461 | 4582 | 299131 | 299130 | 1 |
+| Tokens | 0 | 3 | 3 | false | 0 | KCC-20 | 1461 | 4582 | 199021 | 199032 | -11 |
+| Tokens | 0 | 3 | 3 | false | 1 | KCC-20 | 1660 | 4582 | 200426 | 200425 | 1 |
+| Tokens | 0 | 3 | 3 | false | 2 | KCC-20 | 1461 | 4582 | 199033 | 199032 | 1 |
+| Mixed | 0 | 3 | 2 | true | 0 | KCC-20 | 1461 | 3121 | 282308 | 282310 | -2 |
+| Mixed | 0 | 3 | 2 | true | 1 | KCC-20 | 1660 | 3121 | 283713 | 283703 | 10 |
+| Mixed | 0 | 3 | 2 | true | 2 | KAS | 0 | 3121 | 270704 | 270703 | 1 |
+| Mixed | 0 | 3 | 2 | false | 0 | KCC-20 | 1461 | 3121 | 182210 | 182212 | -2 |
+| Mixed | 0 | 3 | 2 | false | 1 | KCC-20 | 1660 | 3121 | 183615 | 183605 | 10 |
+| Mixed | 0 | 3 | 2 | false | 2 | KAS | 0 | 3121 | 170606 | 170605 | 1 |
+| TokensTranche | 0 | 3 | 3 | true | 0 | KCC-20 | 1461 | 4582 | 314681 | 314690 | -9 |
+| TokensTranche | 0 | 3 | 3 | true | 1 | KCC-20 | 1660 | 4582 | 318077 | 318073 | 4 |
+| TokensTranche | 0 | 3 | 3 | true | 2 | KCC-20 | 1461 | 4582 | 314694 | 314690 | 4 |
+| TokensTranche | 0 | 3 | 3 | false | 0 | KCC-20 | 1461 | 4582 | 214583 | 214592 | -9 |
+| TokensTranche | 0 | 3 | 3 | false | 1 | KCC-20 | 1660 | 4582 | 217979 | 217975 | 4 |
+| TokensTranche | 0 | 3 | 3 | false | 2 | KCC-20 | 1461 | 4582 | 214596 | 214592 | 4 |
+| MixedTranche | 0 | 3 | 2 | true | 0 | KCC-20 | 1461 | 3121 | 297863 | 297870 | -7 |
+| MixedTranche | 0 | 3 | 2 | true | 1 | KCC-20 | 1660 | 3121 | 301259 | 301253 | 6 |
+| MixedTranche | 0 | 3 | 2 | true | 2 | KAS | 0 | 3121 | 270884 | 270883 | 1 |
+| MixedTranche | 0 | 3 | 2 | false | 0 | KCC-20 | 1461 | 3121 | 197765 | 197772 | -7 |
+| MixedTranche | 0 | 3 | 2 | false | 1 | KCC-20 | 1660 | 3121 | 201161 | 201155 | 6 |
+| MixedTranche | 0 | 3 | 2 | false | 2 | KAS | 0 | 3121 | 170786 | 170785 | 1 |
+| Tokens | 0 | 5 | 5 | true | 0 | KCC-20 | 1461 | 7703 | 446891 | 446906 | -15 |
+| Tokens | 0 | 5 | 5 | true | 1 | KCC-20 | 1660 | 7703 | 448296 | 448299 | -3 |
+| Tokens | 0 | 5 | 5 | true | 2 | KCC-20 | 1461 | 7703 | 446903 | 446906 | -3 |
+| Tokens | 0 | 5 | 5 | true | 3 | KCC-20 | 1660 | 7703 | 448296 | 448299 | -3 |
+| Tokens | 0 | 5 | 5 | true | 4 | KCC-20 | 1461 | 7703 | 446903 | 446906 | -3 |
+| Tokens | 0 | 5 | 5 | false | 0 | KCC-20 | 1461 | 7703 | 346793 | 346808 | -15 |
+| Tokens | 0 | 5 | 5 | false | 1 | KCC-20 | 1660 | 7703 | 348198 | 348201 | -3 |
+| Tokens | 0 | 5 | 5 | false | 2 | KCC-20 | 1461 | 7703 | 346805 | 346808 | -3 |
+| Tokens | 0 | 5 | 5 | false | 3 | KCC-20 | 1660 | 7703 | 348198 | 348201 | -3 |
+| Tokens | 0 | 5 | 5 | false | 4 | KCC-20 | 1461 | 7703 | 346805 | 346808 | -3 |
+| Mixed | 0 | 5 | 4 | true | 0 | KCC-20 | 1461 | 6242 | 430078 | 430086 | -8 |
+| Mixed | 0 | 5 | 4 | true | 1 | KCC-20 | 1660 | 6242 | 431483 | 431479 | 4 |
+| Mixed | 0 | 5 | 4 | true | 2 | KCC-20 | 1461 | 6242 | 430090 | 430086 | 4 |
+| Mixed | 0 | 5 | 4 | true | 3 | KCC-20 | 1660 | 6242 | 431483 | 431479 | 4 |
+| Mixed | 0 | 5 | 4 | true | 4 | KAS | 0 | 6242 | 418474 | 418479 | -5 |
+| Mixed | 0 | 5 | 4 | false | 0 | KCC-20 | 1461 | 6242 | 329980 | 329988 | -8 |
+| Mixed | 0 | 5 | 4 | false | 1 | KCC-20 | 1660 | 6242 | 331385 | 331381 | 4 |
+| Mixed | 0 | 5 | 4 | false | 2 | KCC-20 | 1461 | 6242 | 329992 | 329988 | 4 |
+| Mixed | 0 | 5 | 4 | false | 3 | KCC-20 | 1660 | 6242 | 331385 | 331381 | 4 |
+| Mixed | 0 | 5 | 4 | false | 4 | KAS | 0 | 6242 | 318376 | 318381 | -5 |
+| TokensTranche | 0 | 5 | 5 | true | 0 | KCC-20 | 1461 | 7703 | 462467 | 462480 | -13 |
+| TokensTranche | 0 | 5 | 5 | true | 1 | KCC-20 | 1660 | 7703 | 465863 | 465863 | 0 |
+| TokensTranche | 0 | 5 | 5 | true | 2 | KCC-20 | 1461 | 7703 | 462480 | 462480 | 0 |
+| TokensTranche | 0 | 5 | 5 | true | 3 | KCC-20 | 1660 | 7703 | 465863 | 465863 | 0 |
+| TokensTranche | 0 | 5 | 5 | true | 4 | KCC-20 | 1461 | 7703 | 462480 | 462480 | 0 |
+| TokensTranche | 0 | 5 | 5 | false | 0 | KCC-20 | 1461 | 7703 | 362369 | 362382 | -13 |
+| TokensTranche | 0 | 5 | 5 | false | 1 | KCC-20 | 1660 | 7703 | 365765 | 365765 | 0 |
+| TokensTranche | 0 | 5 | 5 | false | 2 | KCC-20 | 1461 | 7703 | 362382 | 362382 | 0 |
+| TokensTranche | 0 | 5 | 5 | false | 3 | KCC-20 | 1660 | 7703 | 365765 | 365765 | 0 |
+| TokensTranche | 0 | 5 | 5 | false | 4 | KCC-20 | 1461 | 7703 | 362382 | 362382 | 0 |
+| MixedTranche | 0 | 5 | 4 | true | 0 | KCC-20 | 1461 | 6242 | 445647 | 445660 | -13 |
+| MixedTranche | 0 | 5 | 4 | true | 1 | KCC-20 | 1660 | 6242 | 449043 | 449043 | 0 |
+| MixedTranche | 0 | 5 | 4 | true | 2 | KCC-20 | 1461 | 6242 | 445660 | 445660 | 0 |
+| MixedTranche | 0 | 5 | 4 | true | 3 | KCC-20 | 1660 | 6242 | 449043 | 449043 | 0 |
+| MixedTranche | 0 | 5 | 4 | true | 4 | KAS | 0 | 6242 | 418668 | 418673 | -5 |
+| MixedTranche | 0 | 5 | 4 | false | 0 | KCC-20 | 1461 | 6242 | 345549 | 345562 | -13 |
+| MixedTranche | 0 | 5 | 4 | false | 1 | KCC-20 | 1660 | 6242 | 348945 | 348945 | 0 |
+| MixedTranche | 0 | 5 | 4 | false | 2 | KCC-20 | 1461 | 6242 | 345562 | 345562 | 0 |
+| MixedTranche | 0 | 5 | 4 | false | 3 | KCC-20 | 1660 | 6242 | 348945 | 348945 | 0 |
+| MixedTranche | 0 | 5 | 4 | false | 4 | KAS | 0 | 6242 | 318570 | 318575 | -5 |
+| Tokens | 0 | 10 | 10 | true | 0 | KCC-20 | 1461 | 15605 | 863201 | 863226 | -25 |
+| Tokens | 0 | 10 | 10 | true | 1 | KCC-20 | 1660 | 15605 | 864606 | 864619 | -13 |
+| Tokens | 0 | 10 | 10 | true | 2 | KCC-20 | 1461 | 15605 | 863213 | 863226 | -13 |
+| Tokens | 0 | 10 | 10 | true | 3 | KCC-20 | 1660 | 15605 | 864606 | 864619 | -13 |
+| Tokens | 0 | 10 | 10 | true | 4 | KCC-20 | 1461 | 15605 | 863213 | 863226 | -13 |
+| Tokens | 0 | 10 | 10 | true | 5 | KCC-20 | 1660 | 15605 | 864606 | 864619 | -13 |
+| Tokens | 0 | 10 | 10 | true | 6 | KCC-20 | 1461 | 15605 | 863213 | 863226 | -13 |
+| Tokens | 0 | 10 | 10 | true | 7 | KCC-20 | 1660 | 15605 | 864606 | 864619 | -13 |
+| Tokens | 0 | 10 | 10 | true | 8 | KCC-20 | 1461 | 15605 | 863213 | 863226 | -13 |
+| Tokens | 0 | 10 | 10 | true | 9 | KCC-20 | 1660 | 15605 | 864606 | 864619 | -13 |
+| Tokens | 0 | 10 | 10 | false | 0 | KCC-20 | 1461 | 15605 | 763103 | 763128 | -25 |
+| Tokens | 0 | 10 | 10 | false | 1 | KCC-20 | 1660 | 15605 | 764508 | 764521 | -13 |
+| Tokens | 0 | 10 | 10 | false | 2 | KCC-20 | 1461 | 15605 | 763115 | 763128 | -13 |
+| Tokens | 0 | 10 | 10 | false | 3 | KCC-20 | 1660 | 15605 | 764508 | 764521 | -13 |
+| Tokens | 0 | 10 | 10 | false | 4 | KCC-20 | 1461 | 15605 | 763115 | 763128 | -13 |
+| Tokens | 0 | 10 | 10 | false | 5 | KCC-20 | 1660 | 15605 | 764508 | 764521 | -13 |
+| Tokens | 0 | 10 | 10 | false | 6 | KCC-20 | 1461 | 15605 | 763115 | 763128 | -13 |
+| Tokens | 0 | 10 | 10 | false | 7 | KCC-20 | 1660 | 15605 | 764508 | 764521 | -13 |
+| Tokens | 0 | 10 | 10 | false | 8 | KCC-20 | 1461 | 15605 | 763115 | 763128 | -13 |
+| Tokens | 0 | 10 | 10 | false | 9 | KCC-20 | 1660 | 15605 | 764508 | 764521 | -13 |
+| Mixed | 0 | 10 | 9 | true | 0 | KCC-20 | 1461 | 13945 | 844393 | 844416 | -23 |
+| Mixed | 0 | 10 | 9 | true | 1 | KCC-20 | 1660 | 13945 | 845798 | 845809 | -11 |
+| Mixed | 0 | 10 | 9 | true | 2 | KCC-20 | 1461 | 13945 | 844405 | 844416 | -11 |
+| Mixed | 0 | 10 | 9 | true | 3 | KCC-20 | 1660 | 13945 | 845798 | 845809 | -11 |
+| Mixed | 0 | 10 | 9 | true | 4 | KCC-20 | 1461 | 13945 | 844405 | 844416 | -11 |
+| Mixed | 0 | 10 | 9 | true | 5 | KCC-20 | 1660 | 13945 | 845798 | 845809 | -11 |
+| Mixed | 0 | 10 | 9 | true | 6 | KCC-20 | 1461 | 13945 | 844405 | 844416 | -11 |
+| Mixed | 0 | 10 | 9 | true | 7 | KCC-20 | 1660 | 13945 | 845798 | 845809 | -11 |
+| Mixed | 0 | 10 | 9 | true | 8 | KCC-20 | 1461 | 13945 | 844405 | 844416 | -11 |
+| Mixed | 0 | 10 | 9 | true | 9 | KAS | 0 | 13945 | 832789 | 832809 | -20 |
+| Mixed | 0 | 10 | 9 | false | 0 | KCC-20 | 1461 | 13945 | 744295 | 744318 | -23 |
+| Mixed | 0 | 10 | 9 | false | 1 | KCC-20 | 1660 | 13945 | 745700 | 745711 | -11 |
+| Mixed | 0 | 10 | 9 | false | 2 | KCC-20 | 1461 | 13945 | 744307 | 744318 | -11 |
+| Mixed | 0 | 10 | 9 | false | 3 | KCC-20 | 1660 | 13945 | 745700 | 745711 | -11 |
+| Mixed | 0 | 10 | 9 | false | 4 | KCC-20 | 1461 | 13945 | 744307 | 744318 | -11 |
+| Mixed | 0 | 10 | 9 | false | 5 | KCC-20 | 1660 | 13945 | 745700 | 745711 | -11 |
+| Mixed | 0 | 10 | 9 | false | 6 | KCC-20 | 1461 | 13945 | 744307 | 744318 | -11 |
+| Mixed | 0 | 10 | 9 | false | 7 | KCC-20 | 1660 | 13945 | 745700 | 745711 | -11 |
+| Mixed | 0 | 10 | 9 | false | 8 | KCC-20 | 1461 | 13945 | 744307 | 744318 | -11 |
+| Mixed | 0 | 10 | 9 | false | 9 | KAS | 0 | 13945 | 732691 | 732711 | -20 |
+| TokensTranche | 0 | 10 | 10 | true | 0 | KCC-20 | 1461 | 15605 | 878812 | 878835 | -23 |
+| TokensTranche | 0 | 10 | 10 | true | 1 | KCC-20 | 1660 | 15605 | 882208 | 882218 | -10 |
+| TokensTranche | 0 | 10 | 10 | true | 2 | KCC-20 | 1461 | 15605 | 878825 | 878835 | -10 |
+| TokensTranche | 0 | 10 | 10 | true | 3 | KCC-20 | 1660 | 15605 | 882208 | 882218 | -10 |
+| TokensTranche | 0 | 10 | 10 | true | 4 | KCC-20 | 1461 | 15605 | 878825 | 878835 | -10 |
+| TokensTranche | 0 | 10 | 10 | true | 5 | KCC-20 | 1660 | 15605 | 882208 | 882218 | -10 |
+| TokensTranche | 0 | 10 | 10 | true | 6 | KCC-20 | 1461 | 15605 | 878825 | 878835 | -10 |
+| TokensTranche | 0 | 10 | 10 | true | 7 | KCC-20 | 1660 | 15605 | 882208 | 882218 | -10 |
+| TokensTranche | 0 | 10 | 10 | true | 8 | KCC-20 | 1461 | 15605 | 878825 | 878835 | -10 |
+| TokensTranche | 0 | 10 | 10 | true | 9 | KCC-20 | 1660 | 15605 | 882208 | 882218 | -10 |
+| TokensTranche | 0 | 10 | 10 | false | 0 | KCC-20 | 1461 | 15605 | 778714 | 778737 | -23 |
+| TokensTranche | 0 | 10 | 10 | false | 1 | KCC-20 | 1660 | 15605 | 782110 | 782120 | -10 |
+| TokensTranche | 0 | 10 | 10 | false | 2 | KCC-20 | 1461 | 15605 | 778727 | 778737 | -10 |
+| TokensTranche | 0 | 10 | 10 | false | 3 | KCC-20 | 1660 | 15605 | 782110 | 782120 | -10 |
+| TokensTranche | 0 | 10 | 10 | false | 4 | KCC-20 | 1461 | 15605 | 778727 | 778737 | -10 |
+| TokensTranche | 0 | 10 | 10 | false | 5 | KCC-20 | 1660 | 15605 | 782110 | 782120 | -10 |
+| TokensTranche | 0 | 10 | 10 | false | 6 | KCC-20 | 1461 | 15605 | 778727 | 778737 | -10 |
+| TokensTranche | 0 | 10 | 10 | false | 7 | KCC-20 | 1660 | 15605 | 782110 | 782120 | -10 |
+| TokensTranche | 0 | 10 | 10 | false | 8 | KCC-20 | 1461 | 15605 | 778727 | 778737 | -10 |
+| TokensTranche | 0 | 10 | 10 | false | 9 | KCC-20 | 1660 | 15605 | 782110 | 782120 | -10 |
+| MixedTranche | 0 | 10 | 9 | true | 0 | KCC-20 | 1461 | 13945 | 859997 | 860025 | -28 |
+| MixedTranche | 0 | 10 | 9 | true | 1 | KCC-20 | 1660 | 13945 | 863393 | 863408 | -15 |
+| MixedTranche | 0 | 10 | 9 | true | 2 | KCC-20 | 1461 | 13945 | 860010 | 860025 | -15 |
+| MixedTranche | 0 | 10 | 9 | true | 3 | KCC-20 | 1660 | 13945 | 863393 | 863408 | -15 |
+| MixedTranche | 0 | 10 | 9 | true | 4 | KCC-20 | 1461 | 13945 | 860010 | 860025 | -15 |
+| MixedTranche | 0 | 10 | 9 | true | 5 | KCC-20 | 1660 | 13945 | 863393 | 863408 | -15 |
+| MixedTranche | 0 | 10 | 9 | true | 6 | KCC-20 | 1461 | 13945 | 860010 | 860025 | -15 |
+| MixedTranche | 0 | 10 | 9 | true | 7 | KCC-20 | 1660 | 13945 | 863393 | 863408 | -15 |
+| MixedTranche | 0 | 10 | 9 | true | 8 | KCC-20 | 1461 | 13945 | 860010 | 860025 | -15 |
+| MixedTranche | 0 | 10 | 9 | true | 9 | KAS | 0 | 13945 | 833018 | 833038 | -20 |
+| MixedTranche | 0 | 10 | 9 | false | 0 | KCC-20 | 1461 | 13945 | 759899 | 759927 | -28 |
+| MixedTranche | 0 | 10 | 9 | false | 1 | KCC-20 | 1660 | 13945 | 763295 | 763310 | -15 |
+| MixedTranche | 0 | 10 | 9 | false | 2 | KCC-20 | 1461 | 13945 | 759912 | 759927 | -15 |
+| MixedTranche | 0 | 10 | 9 | false | 3 | KCC-20 | 1660 | 13945 | 763295 | 763310 | -15 |
+| MixedTranche | 0 | 10 | 9 | false | 4 | KCC-20 | 1461 | 13945 | 759912 | 759927 | -15 |
+| MixedTranche | 0 | 10 | 9 | false | 5 | KCC-20 | 1660 | 13945 | 763295 | 763310 | -15 |
+| MixedTranche | 0 | 10 | 9 | false | 6 | KCC-20 | 1461 | 13945 | 759912 | 759927 | -15 |
+| MixedTranche | 0 | 10 | 9 | false | 7 | KCC-20 | 1660 | 13945 | 763295 | 763310 | -15 |
+| MixedTranche | 0 | 10 | 9 | false | 8 | KCC-20 | 1461 | 13945 | 759912 | 759927 | -15 |
+| MixedTranche | 0 | 10 | 9 | false | 9 | KAS | 0 | 13945 | 732920 | 732940 | -20 |
+| Tokens | 30 | 2 | 2 | true | 0 | KCC-20 | 3771 | 7741 | 292531 | 292540 | -9 |
+| Tokens | 30 | 2 | 2 | true | 1 | KCC-20 | 3970 | 7741 | 293936 | 293933 | 3 |
+| Mixed | 30 | 2 | 1 | true | 0 | KCC-20 | 3771 | 3771 | 250631 | 250630 | 1 |
+| Mixed | 30 | 2 | 1 | true | 1 | KAS | 0 | 3771 | 222857 | 222853 | 4 |
+| TokensTranche | 30 | 2 | 2 | true | 0 | KCC-20 | 3771 | 7741 | 331186 | 331193 | -7 |
+| TokensTranche | 30 | 2 | 2 | true | 1 | KCC-20 | 3970 | 7741 | 334582 | 334576 | 6 |
+| MixedTranche | 30 | 2 | 1 | true | 0 | KCC-20 | 3771 | 3771 | 289279 | 289283 | -4 |
+| MixedTranche | 30 | 2 | 1 | true | 1 | KAS | 0 | 3771 | 223030 | 223026 | 4 |
+| Tokens | 30 | 3 | 3 | true | 0 | KCC-20 | 3771 | 11512 | 384589 | 384600 | -11 |
+| Tokens | 30 | 3 | 3 | true | 1 | KCC-20 | 3970 | 11512 | 385994 | 385993 | 1 |
+| Tokens | 30 | 3 | 3 | true | 2 | KCC-20 | 3771 | 11512 | 384601 | 384600 | 1 |
+| Mixed | 30 | 3 | 2 | true | 0 | KCC-20 | 3771 | 7741 | 344678 | 344680 | -2 |
+| Mixed | 30 | 3 | 2 | true | 1 | KCC-20 | 3970 | 7741 | 346083 | 346073 | 10 |
+| Mixed | 30 | 3 | 2 | true | 2 | KAS | 0 | 7741 | 316904 | 316903 | 1 |
+| TokensTranche | 30 | 3 | 3 | true | 0 | KCC-20 | 3771 | 11512 | 423251 | 423260 | -9 |
+| TokensTranche | 30 | 3 | 3 | true | 1 | KCC-20 | 3970 | 11512 | 426647 | 426643 | 4 |
+| TokensTranche | 30 | 3 | 3 | true | 2 | KCC-20 | 3771 | 11512 | 423264 | 423260 | 4 |
+| MixedTranche | 30 | 3 | 2 | true | 0 | KCC-20 | 3771 | 7741 | 383333 | 383340 | -7 |
+| MixedTranche | 30 | 3 | 2 | true | 1 | KCC-20 | 3970 | 7741 | 386729 | 386723 | 6 |
+| MixedTranche | 30 | 3 | 2 | true | 2 | KAS | 0 | 7741 | 317084 | 317083 | 1 |
+| Tokens | 30 | 5 | 5 | true | 0 | KCC-20 | 3771 | 19253 | 578561 | 578576 | -15 |
+| Tokens | 30 | 5 | 5 | true | 1 | KCC-20 | 3970 | 19253 | 579966 | 579969 | -3 |
+| Tokens | 30 | 5 | 5 | true | 2 | KCC-20 | 3771 | 19253 | 578573 | 578576 | -3 |
+| Tokens | 30 | 5 | 5 | true | 3 | KCC-20 | 3970 | 19253 | 579966 | 579969 | -3 |
+| Tokens | 30 | 5 | 5 | true | 4 | KCC-20 | 3771 | 19253 | 578573 | 578576 | -3 |
+| Mixed | 30 | 5 | 4 | true | 0 | KCC-20 | 3771 | 15482 | 538648 | 538656 | -8 |
+| Mixed | 30 | 5 | 4 | true | 1 | KCC-20 | 3970 | 15482 | 540053 | 540049 | 4 |
+| Mixed | 30 | 5 | 4 | true | 2 | KCC-20 | 3771 | 15482 | 538660 | 538656 | 4 |
+| Mixed | 30 | 5 | 4 | true | 3 | KCC-20 | 3970 | 15482 | 540053 | 540049 | 4 |
+| Mixed | 30 | 5 | 4 | true | 4 | KAS | 0 | 15482 | 510874 | 510879 | -5 |
+| TokensTranche | 30 | 5 | 5 | true | 0 | KCC-20 | 3771 | 19253 | 617237 | 617250 | -13 |
+| TokensTranche | 30 | 5 | 5 | true | 1 | KCC-20 | 3970 | 19253 | 620633 | 620633 | 0 |
+| TokensTranche | 30 | 5 | 5 | true | 2 | KCC-20 | 3771 | 19253 | 617250 | 617250 | 0 |
+| TokensTranche | 30 | 5 | 5 | true | 3 | KCC-20 | 3970 | 19253 | 620633 | 620633 | 0 |
+| TokensTranche | 30 | 5 | 5 | true | 4 | KCC-20 | 3771 | 19253 | 617250 | 617250 | 0 |
+| MixedTranche | 30 | 5 | 4 | true | 0 | KCC-20 | 3771 | 15482 | 577317 | 577330 | -13 |
+| MixedTranche | 30 | 5 | 4 | true | 1 | KCC-20 | 3970 | 15482 | 580713 | 580713 | 0 |
+| MixedTranche | 30 | 5 | 4 | true | 2 | KCC-20 | 3771 | 15482 | 577330 | 577330 | 0 |
+| MixedTranche | 30 | 5 | 4 | true | 3 | KCC-20 | 3970 | 15482 | 580713 | 580713 | 0 |
+| MixedTranche | 30 | 5 | 4 | true | 4 | KAS | 0 | 15482 | 511068 | 511073 | -5 |
+| Tokens | 30 | 10 | 10 | true | 0 | KCC-20 | 3771 | 38705 | 1110371 | 1110396 | -25 |
+| Tokens | 30 | 10 | 10 | true | 1 | KCC-20 | 3970 | 38705 | 1111776 | 1111789 | -13 |
+| Tokens | 30 | 10 | 10 | true | 2 | KCC-20 | 3771 | 38705 | 1110383 | 1110396 | -13 |
+| Tokens | 30 | 10 | 10 | true | 3 | KCC-20 | 3970 | 38705 | 1111776 | 1111789 | -13 |
+| Tokens | 30 | 10 | 10 | true | 4 | KCC-20 | 3771 | 38705 | 1110383 | 1110396 | -13 |
+| Tokens | 30 | 10 | 10 | true | 5 | KCC-20 | 3970 | 38705 | 1111776 | 1111789 | -13 |
+| Tokens | 30 | 10 | 10 | true | 6 | KCC-20 | 3771 | 38705 | 1110383 | 1110396 | -13 |
+| Tokens | 30 | 10 | 10 | true | 7 | KCC-20 | 3970 | 38705 | 1111776 | 1111789 | -13 |
+| Tokens | 30 | 10 | 10 | true | 8 | KCC-20 | 3771 | 38705 | 1110383 | 1110396 | -13 |
+| Tokens | 30 | 10 | 10 | true | 9 | KCC-20 | 3970 | 38705 | 1111776 | 1111789 | -13 |
+| Mixed | 30 | 10 | 9 | true | 0 | KCC-20 | 3771 | 34735 | 1068463 | 1068486 | -23 |
+| Mixed | 30 | 10 | 9 | true | 1 | KCC-20 | 3970 | 34735 | 1069868 | 1069879 | -11 |
+| Mixed | 30 | 10 | 9 | true | 2 | KCC-20 | 3771 | 34735 | 1068475 | 1068486 | -11 |
+| Mixed | 30 | 10 | 9 | true | 3 | KCC-20 | 3970 | 34735 | 1069868 | 1069879 | -11 |
+| Mixed | 30 | 10 | 9 | true | 4 | KCC-20 | 3771 | 34735 | 1068475 | 1068486 | -11 |
+| Mixed | 30 | 10 | 9 | true | 5 | KCC-20 | 3970 | 34735 | 1069868 | 1069879 | -11 |
+| Mixed | 30 | 10 | 9 | true | 6 | KCC-20 | 3771 | 34735 | 1068475 | 1068486 | -11 |
+| Mixed | 30 | 10 | 9 | true | 7 | KCC-20 | 3970 | 34735 | 1069868 | 1069879 | -11 |
+| Mixed | 30 | 10 | 9 | true | 8 | KCC-20 | 3771 | 34735 | 1068475 | 1068486 | -11 |
+| Mixed | 30 | 10 | 9 | true | 9 | KAS | 0 | 34735 | 1040689 | 1040709 | -20 |
+| TokensTranche | 30 | 10 | 10 | true | 0 | KCC-20 | 3771 | 38705 | 1149082 | 1149105 | -23 |
+| TokensTranche | 30 | 10 | 10 | true | 1 | KCC-20 | 3970 | 38705 | 1152478 | 1152488 | -10 |
+| TokensTranche | 30 | 10 | 10 | true | 2 | KCC-20 | 3771 | 38705 | 1149095 | 1149105 | -10 |
+| TokensTranche | 30 | 10 | 10 | true | 3 | KCC-20 | 3970 | 38705 | 1152478 | 1152488 | -10 |
+| TokensTranche | 30 | 10 | 10 | true | 4 | KCC-20 | 3771 | 38705 | 1149095 | 1149105 | -10 |
+| TokensTranche | 30 | 10 | 10 | true | 5 | KCC-20 | 3970 | 38705 | 1152478 | 1152488 | -10 |
+| TokensTranche | 30 | 10 | 10 | true | 6 | KCC-20 | 3771 | 38705 | 1149095 | 1149105 | -10 |
+| TokensTranche | 30 | 10 | 10 | true | 7 | KCC-20 | 3970 | 38705 | 1152478 | 1152488 | -10 |
+| TokensTranche | 30 | 10 | 10 | true | 8 | KCC-20 | 3771 | 38705 | 1149095 | 1149105 | -10 |
+| TokensTranche | 30 | 10 | 10 | true | 9 | KCC-20 | 3970 | 38705 | 1152478 | 1152488 | -10 |
+| MixedTranche | 30 | 10 | 9 | true | 0 | KCC-20 | 3771 | 34735 | 1107167 | 1107195 | -28 |
+| MixedTranche | 30 | 10 | 9 | true | 1 | KCC-20 | 3970 | 34735 | 1110563 | 1110578 | -15 |
+| MixedTranche | 30 | 10 | 9 | true | 2 | KCC-20 | 3771 | 34735 | 1107180 | 1107195 | -15 |
+| MixedTranche | 30 | 10 | 9 | true | 3 | KCC-20 | 3970 | 34735 | 1110563 | 1110578 | -15 |
+| MixedTranche | 30 | 10 | 9 | true | 4 | KCC-20 | 3771 | 34735 | 1107180 | 1107195 | -15 |
+| MixedTranche | 30 | 10 | 9 | true | 5 | KCC-20 | 3970 | 34735 | 1110563 | 1110578 | -15 |
+| MixedTranche | 30 | 10 | 9 | true | 6 | KCC-20 | 3771 | 34735 | 1107180 | 1107195 | -15 |
+| MixedTranche | 30 | 10 | 9 | true | 7 | KCC-20 | 3970 | 34735 | 1110563 | 1110578 | -15 |
+| MixedTranche | 30 | 10 | 9 | true | 8 | KCC-20 | 3771 | 34735 | 1107180 | 1107195 | -15 |
+| MixedTranche | 30 | 10 | 9 | true | 9 | KAS | 0 | 34735 | 1040918 | 1040938 | -20 |
+| Tokens | 60 | 2 | 2 | true | 0 | KCC-20 | 6081 | 12361 | 354901 | 354910 | -9 |
+| Tokens | 60 | 2 | 2 | true | 1 | KCC-20 | 6280 | 12361 | 356306 | 356303 | 3 |
+| Mixed | 60 | 2 | 1 | true | 0 | KCC-20 | 6081 | 6081 | 289901 | 289900 | 1 |
+| Mixed | 60 | 2 | 1 | true | 1 | KAS | 0 | 6081 | 245957 | 245953 | 4 |
+| TokensTranche | 60 | 2 | 2 | true | 0 | KCC-20 | 6081 | 12361 | 416656 | 416663 | -7 |
+| TokensTranche | 60 | 2 | 2 | true | 1 | KCC-20 | 6280 | 12361 | 420052 | 420046 | 6 |
+| MixedTranche | 60 | 2 | 1 | true | 0 | KCC-20 | 6081 | 6081 | 351649 | 351653 | -4 |
+| MixedTranche | 60 | 2 | 1 | true | 1 | KAS | 0 | 6081 | 246130 | 246126 | 4 |
+| Tokens | 60 | 3 | 3 | true | 0 | KCC-20 | 6081 | 18442 | 470059 | 470070 | -11 |
+| Tokens | 60 | 3 | 3 | true | 1 | KCC-20 | 6280 | 18442 | 471464 | 471463 | 1 |
+| Tokens | 60 | 3 | 3 | true | 2 | KCC-20 | 6081 | 18442 | 470071 | 470070 | 1 |
+| Mixed | 60 | 3 | 2 | true | 0 | KCC-20 | 6081 | 12361 | 407048 | 407050 | -2 |
+| Mixed | 60 | 3 | 2 | true | 1 | KCC-20 | 6280 | 12361 | 408453 | 408443 | 10 |
+| Mixed | 60 | 3 | 2 | true | 2 | KAS | 0 | 12361 | 363104 | 363103 | 1 |
+| TokensTranche | 60 | 3 | 3 | true | 0 | KCC-20 | 6081 | 18442 | 531821 | 531830 | -9 |
+| TokensTranche | 60 | 3 | 3 | true | 1 | KCC-20 | 6280 | 18442 | 535217 | 535213 | 4 |
+| TokensTranche | 60 | 3 | 3 | true | 2 | KCC-20 | 6081 | 18442 | 531834 | 531830 | 4 |
+| MixedTranche | 60 | 3 | 2 | true | 0 | KCC-20 | 6081 | 12361 | 468803 | 468810 | -7 |
+| MixedTranche | 60 | 3 | 2 | true | 1 | KCC-20 | 6280 | 12361 | 472199 | 472193 | 6 |
+| MixedTranche | 60 | 3 | 2 | true | 2 | KAS | 0 | 12361 | 363284 | 363283 | 1 |
+| Tokens | 60 | 5 | 5 | true | 0 | KCC-20 | 6081 | 30803 | 710231 | 710246 | -15 |
+| Tokens | 60 | 5 | 5 | true | 1 | KCC-20 | 6280 | 30803 | 711636 | 711639 | -3 |
+| Tokens | 60 | 5 | 5 | true | 2 | KCC-20 | 6081 | 30803 | 710243 | 710246 | -3 |
+| Tokens | 60 | 5 | 5 | true | 3 | KCC-20 | 6280 | 30803 | 711636 | 711639 | -3 |
+| Tokens | 60 | 5 | 5 | true | 4 | KCC-20 | 6081 | 30803 | 710243 | 710246 | -3 |
+| Mixed | 60 | 5 | 4 | true | 0 | KCC-20 | 6081 | 24722 | 647218 | 647226 | -8 |
+| Mixed | 60 | 5 | 4 | true | 1 | KCC-20 | 6280 | 24722 | 648623 | 648619 | 4 |
+| Mixed | 60 | 5 | 4 | true | 2 | KCC-20 | 6081 | 24722 | 647230 | 647226 | 4 |
+| Mixed | 60 | 5 | 4 | true | 3 | KCC-20 | 6280 | 24722 | 648623 | 648619 | 4 |
+| Mixed | 60 | 5 | 4 | true | 4 | KAS | 0 | 24722 | 603274 | 603279 | -5 |
+| TokensTranche | 60 | 5 | 5 | true | 0 | KCC-20 | 6081 | 30803 | 772007 | 772020 | -13 |
+| TokensTranche | 60 | 5 | 5 | true | 1 | KCC-20 | 6280 | 30803 | 775403 | 775403 | 0 |
+| TokensTranche | 60 | 5 | 5 | true | 2 | KCC-20 | 6081 | 30803 | 772020 | 772020 | 0 |
+| TokensTranche | 60 | 5 | 5 | true | 3 | KCC-20 | 6280 | 30803 | 775403 | 775403 | 0 |
+| TokensTranche | 60 | 5 | 5 | true | 4 | KCC-20 | 6081 | 30803 | 772020 | 772020 | 0 |
+| MixedTranche | 60 | 5 | 4 | true | 0 | KCC-20 | 6081 | 24722 | 708987 | 709000 | -13 |
+| MixedTranche | 60 | 5 | 4 | true | 1 | KCC-20 | 6280 | 24722 | 712383 | 712383 | 0 |
+| MixedTranche | 60 | 5 | 4 | true | 2 | KCC-20 | 6081 | 24722 | 709000 | 709000 | 0 |
+| MixedTranche | 60 | 5 | 4 | true | 3 | KCC-20 | 6280 | 24722 | 712383 | 712383 | 0 |
+| MixedTranche | 60 | 5 | 4 | true | 4 | KAS | 0 | 24722 | 603468 | 603473 | -5 |
+| Tokens | 60 | 10 | 10 | true | 0 | KCC-20 | 6081 | 61805 | 1357541 | 1357566 | -25 |
+| Tokens | 60 | 10 | 10 | true | 1 | KCC-20 | 6280 | 61805 | 1358946 | 1358959 | -13 |
+| Tokens | 60 | 10 | 10 | true | 2 | KCC-20 | 6081 | 61805 | 1357553 | 1357566 | -13 |
+| Tokens | 60 | 10 | 10 | true | 3 | KCC-20 | 6280 | 61805 | 1358946 | 1358959 | -13 |
+| Tokens | 60 | 10 | 10 | true | 4 | KCC-20 | 6081 | 61805 | 1357553 | 1357566 | -13 |
+| Tokens | 60 | 10 | 10 | true | 5 | KCC-20 | 6280 | 61805 | 1358946 | 1358959 | -13 |
+| Tokens | 60 | 10 | 10 | true | 6 | KCC-20 | 6081 | 61805 | 1357553 | 1357566 | -13 |
+| Tokens | 60 | 10 | 10 | true | 7 | KCC-20 | 6280 | 61805 | 1358946 | 1358959 | -13 |
+| Tokens | 60 | 10 | 10 | true | 8 | KCC-20 | 6081 | 61805 | 1357553 | 1357566 | -13 |
+| Tokens | 60 | 10 | 10 | true | 9 | KCC-20 | 6280 | 61805 | 1358946 | 1358959 | -13 |
+| Mixed | 60 | 10 | 9 | true | 0 | KCC-20 | 6081 | 55525 | 1292533 | 1292556 | -23 |
+| Mixed | 60 | 10 | 9 | true | 1 | KCC-20 | 6280 | 55525 | 1293938 | 1293949 | -11 |
+| Mixed | 60 | 10 | 9 | true | 2 | KCC-20 | 6081 | 55525 | 1292545 | 1292556 | -11 |
+| Mixed | 60 | 10 | 9 | true | 3 | KCC-20 | 6280 | 55525 | 1293938 | 1293949 | -11 |
+| Mixed | 60 | 10 | 9 | true | 4 | KCC-20 | 6081 | 55525 | 1292545 | 1292556 | -11 |
+| Mixed | 60 | 10 | 9 | true | 5 | KCC-20 | 6280 | 55525 | 1293938 | 1293949 | -11 |
+| Mixed | 60 | 10 | 9 | true | 6 | KCC-20 | 6081 | 55525 | 1292545 | 1292556 | -11 |
+| Mixed | 60 | 10 | 9 | true | 7 | KCC-20 | 6280 | 55525 | 1293938 | 1293949 | -11 |
+| Mixed | 60 | 10 | 9 | true | 8 | KCC-20 | 6081 | 55525 | 1292545 | 1292556 | -11 |
+| Mixed | 60 | 10 | 9 | true | 9 | KAS | 0 | 55525 | 1248589 | 1248609 | -20 |
+| TokensTranche | 60 | 10 | 10 | true | 0 | KCC-20 | 6081 | 61805 | 1419352 | 1419375 | -23 |
+| TokensTranche | 60 | 10 | 10 | true | 1 | KCC-20 | 6280 | 61805 | 1422748 | 1422758 | -10 |
+| TokensTranche | 60 | 10 | 10 | true | 2 | KCC-20 | 6081 | 61805 | 1419365 | 1419375 | -10 |
+| TokensTranche | 60 | 10 | 10 | true | 3 | KCC-20 | 6280 | 61805 | 1422748 | 1422758 | -10 |
+| TokensTranche | 60 | 10 | 10 | true | 4 | KCC-20 | 6081 | 61805 | 1419365 | 1419375 | -10 |
+| TokensTranche | 60 | 10 | 10 | true | 5 | KCC-20 | 6280 | 61805 | 1422748 | 1422758 | -10 |
+| TokensTranche | 60 | 10 | 10 | true | 6 | KCC-20 | 6081 | 61805 | 1419365 | 1419375 | -10 |
+| TokensTranche | 60 | 10 | 10 | true | 7 | KCC-20 | 6280 | 61805 | 1422748 | 1422758 | -10 |
+| TokensTranche | 60 | 10 | 10 | true | 8 | KCC-20 | 6081 | 61805 | 1419365 | 1419375 | -10 |
+| TokensTranche | 60 | 10 | 10 | true | 9 | KCC-20 | 6280 | 61805 | 1422748 | 1422758 | -10 |
+| MixedTranche | 60 | 10 | 9 | true | 0 | KCC-20 | 6081 | 55525 | 1354337 | 1354365 | -28 |
+| MixedTranche | 60 | 10 | 9 | true | 1 | KCC-20 | 6280 | 55525 | 1357733 | 1357748 | -15 |
+| MixedTranche | 60 | 10 | 9 | true | 2 | KCC-20 | 6081 | 55525 | 1354350 | 1354365 | -15 |
+| MixedTranche | 60 | 10 | 9 | true | 3 | KCC-20 | 6280 | 55525 | 1357733 | 1357748 | -15 |
+| MixedTranche | 60 | 10 | 9 | true | 4 | KCC-20 | 6081 | 55525 | 1354350 | 1354365 | -15 |
+| MixedTranche | 60 | 10 | 9 | true | 5 | KCC-20 | 6280 | 55525 | 1357733 | 1357748 | -15 |
+| MixedTranche | 60 | 10 | 9 | true | 6 | KCC-20 | 6081 | 55525 | 1354350 | 1354365 | -15 |
+| MixedTranche | 60 | 10 | 9 | true | 7 | KCC-20 | 6280 | 55525 | 1357733 | 1357748 | -15 |
+| MixedTranche | 60 | 10 | 9 | true | 8 | KCC-20 | 6081 | 55525 | 1354350 | 1354365 | -15 |
+| MixedTranche | 60 | 10 | 9 | true | 9 | KAS | 0 | 55525 | 1248818 | 1248838 | -20 |
+
+Least-squares fit of the settle rule (unrounded) and the committed rule:
+  SIG (auth): fit 100097.864, committed 100098
+  A: fit -13579.255, committed -13579
+  B (N): fit 45585.419, committed 45585
+  C (N^2): fit 1310.853, committed 1311
+  D (K): fit 2209.682, committed 2210
+  E (tok_i): fit 1380.308, committed 1380
+  r (T_i): fit 7.000, committed 7
+  v (S): fit 10.000, committed 10
+  F (tranche): fit 159.159, committed 159
+  G (tranche, tok_i): fit 769.712, committed 770
+  t (tranche, T_i): fit 10.000, committed 10
+  H (tranche, N): fit 6.968, committed 7
+  largest residual of the fit: 14 units; of the committed rule: 28 units
+
+Settle, script units of all vault inputs of one transaction:
+| Shape | Pad | N | Auth | Measured | Rule | Residual |
+| --- | --- | --- | --- | --- | --- | --- |
+| Tokens | 0 | 2 | true | 461727 | 461733 | -6 |
+| Tokens | 0 | 2 | false | 261531 | 261537 | -6 |
+| Mixed | 0 | 2 | true | 411118 | 411113 | 5 |
+| Mixed | 0 | 2 | false | 210922 | 210917 | 5 |
+| TokensTranche | 0 | 2 | true | 494828 | 494829 | -1 |
+| TokensTranche | 0 | 2 | false | 294632 | 294633 | -1 |
+| MixedTranche | 0 | 2 | true | 426839 | 426839 | 0 |
+| MixedTranche | 0 | 2 | false | 226643 | 226643 | 0 |
+| Tokens | 0 | 3 | true | 898774 | 898783 | -9 |
+| Tokens | 0 | 3 | false | 598480 | 598489 | -9 |
+| Mixed | 0 | 3 | true | 836725 | 836716 | 9 |
+| Mixed | 0 | 3 | false | 536431 | 536422 | 9 |
+| TokensTranche | 0 | 3 | true | 947452 | 947453 | -1 |
+| TokensTranche | 0 | 3 | false | 647158 | 647159 | -1 |
+| MixedTranche | 0 | 3 | true | 870006 | 870006 | 0 |
+| MixedTranche | 0 | 3 | false | 569712 | 569712 | 0 |
+| Tokens | 0 | 5 | true | 2237289 | 2237316 | -27 |
+| Tokens | 0 | 5 | false | 1736799 | 1736826 | -27 |
+| Mixed | 0 | 5 | true | 2141608 | 2141609 | -1 |
+| Mixed | 0 | 5 | false | 1641118 | 1641119 | -1 |
+| TokensTranche | 0 | 5 | true | 2319153 | 2319166 | -13 |
+| TokensTranche | 0 | 5 | false | 1818663 | 1818676 | -13 |
+| MixedTranche | 0 | 5 | true | 2208061 | 2208079 | -18 |
+| MixedTranche | 0 | 5 | false | 1707571 | 1707589 | -18 |
+| Tokens | 0 | 10 | true | 8639083 | 8639225 | -142 |
+| Tokens | 0 | 10 | false | 7638103 | 7638245 | -142 |
+| Mixed | 0 | 10 | true | 8437994 | 8438125 | -131 |
+| Mixed | 0 | 10 | false | 7437014 | 7437145 | -131 |
+| TokensTranche | 0 | 10 | true | 8805152 | 8805265 | -113 |
+| TokensTranche | 0 | 10 | false | 7804172 | 7804285 | -113 |
+| MixedTranche | 0 | 10 | true | 8586627 | 8586795 | -168 |
+| MixedTranche | 0 | 10 | false | 7585647 | 7585815 | -168 |
+| Tokens | 30 | 2 | true | 586467 | 586473 | -6 |
+| Mixed | 30 | 2 | true | 473488 | 473483 | 5 |
+| TokensTranche | 30 | 2 | true | 665768 | 665769 | -1 |
+| MixedTranche | 30 | 2 | true | 512309 | 512309 | 0 |
+| Tokens | 30 | 3 | true | 1155184 | 1155193 | -9 |
+| Mixed | 30 | 3 | true | 1007665 | 1007656 | 9 |
+| TokensTranche | 30 | 3 | true | 1273162 | 1273163 | -1 |
+| MixedTranche | 30 | 3 | true | 1087146 | 1087146 | 0 |
+| Tokens | 30 | 5 | true | 2895639 | 2895666 | -27 |
+| Mixed | 30 | 5 | true | 2668288 | 2668289 | -1 |
+| TokensTranche | 30 | 5 | true | 3093003 | 3093016 | -13 |
+| MixedTranche | 30 | 5 | true | 2827141 | 2827159 | -18 |
+| Tokens | 30 | 10 | true | 11110783 | 11110925 | -142 |
+| Mixed | 30 | 10 | true | 10662524 | 10662655 | -131 |
+| TokensTranche | 30 | 10 | true | 11507852 | 11507965 | -113 |
+| MixedTranche | 30 | 10 | true | 11019057 | 11019225 | -168 |
+| Tokens | 60 | 2 | true | 711207 | 711213 | -6 |
+| Mixed | 60 | 2 | true | 535858 | 535853 | 5 |
+| TokensTranche | 60 | 2 | true | 836708 | 836709 | -1 |
+| MixedTranche | 60 | 2 | true | 597779 | 597779 | 0 |
+| Tokens | 60 | 3 | true | 1411594 | 1411603 | -9 |
+| Mixed | 60 | 3 | true | 1178605 | 1178596 | 9 |
+| TokensTranche | 60 | 3 | true | 1598872 | 1598873 | -1 |
+| MixedTranche | 60 | 3 | true | 1304286 | 1304286 | 0 |
+| Tokens | 60 | 5 | true | 3553989 | 3554016 | -27 |
+| Mixed | 60 | 5 | true | 3194968 | 3194969 | -1 |
+| TokensTranche | 60 | 5 | true | 3866853 | 3866866 | -13 |
+| MixedTranche | 60 | 5 | true | 3446221 | 3446239 | -18 |
+| Tokens | 60 | 10 | true | 13582483 | 13582625 | -142 |
+| Mixed | 60 | 10 | true | 12887054 | 12887185 | -131 |
+| TokensTranche | 60 | 10 | true | 14210552 | 14210665 | -113 |
+| MixedTranche | 60 | 10 | true | 13451487 | 13451655 | -168 |
+ok
+test practical_max_n ... practical_max_n: rusty-kaspa a41a333, silverscript v1.0.0, mainnet parameters, authority present, final settle unless named.
+Caps: 100,000 grams per dimension (pre-Toccata standard; v1 keeps it); CAP_V2 compute 450000, storage 450000, transient 900000 (D37).
+
+Tokens, every leg KCC-20, token templates 1461 and 1660 bytes:
+| N | Inputs | Outputs | Vault script (bytes) | Vault sigscript (bytes) | Escrow sigscript (bytes) | Most units of a vault input | Its budget | Budgets, all inputs | Compute mass | Transient mass | Storage mass at the 100,000 minimum | Storage mass at MIN_V2 | Most sig ops of an input |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2 | 5 | 5 | 8994 | 9069 | 1827 | 231566 | 23 | 48 | 28921 | 89164 | 49338 | 317903 | 2 |
+| 3 | 7 | 7 | 9181 | 9256 | 1827 | 300524 | 30 | 91 | 45456 | 135184 | 38930 | 306630 | 2 |
+| 4 | 9 | 9 | 9368 | 9443 | 1827 | 374094 | 37 | 152 | 64364 | 183496 | 30542 | 281295 | 2 |
+| 5 | 11 | 11 | 9555 | 9630 | 1827 | 448296 | 44 | 225 | 84647 | 232508 | 24644 | 252194 | 2 |
+| 6 | 13 | 13 | 9742 | 9817 | 1827 | 527110 | 52 | 318 | 107503 | 283812 | 20641 | 223998 | 2 |
+| 7 | 15 | 15 | 9929 | 10004 | 1827 | 606556 | 60 | 427 | 132134 | 335816 | 17884 | 198620 | 2 |
+| 8 | 17 | 17 | 10116 | 10191 | 1827 | 690614 | 69 | 556 | 159338 | 390112 | 15987 | 176645 | 2 |
+| 9 | 19 | 19 | 10303 | 10378 | 1827 | 775304 | 77 | 702 | 188417 | 445108 | 14666 | 157972 | 2 |
+| 10 | 21 | 21 | 10490 | 10565 | 1827 | 864606 | 86 | 870 | 220269 | 502396 | 13675 | 142260 | 2 |
+  N_max compute: 5 under 100,000; 10 under CAP_V2 (450000)
+  N_max storage: 10 under 100,000; 10 under CAP_V2 (450000)
+  N_max transient: 2 under 100,000; 10 under CAP_V2 (900000)
+  N_max overall: 2 under 100,000; 10 under CAP_V2 (measured up to MAX_LEGS = 10; 0 means not even N = 2)
+
+Tokens, every leg KCC-20, token templates 3771 and 3970 bytes:
+| N | Inputs | Outputs | Vault script (bytes) | Vault sigscript (bytes) | Escrow sigscript (bytes) | Most units of a vault input | Its budget | Budgets, all inputs | Compute mass | Transient mass | Storage mass at the 100,000 minimum | Storage mass at MIN_V2 | Most sig ops of an input |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2 | 5 | 5 | 8994 | 9069 | 4137 | 293936 | 29 | 62 | 34941 | 107644 | 49338 | 317903 | 2 |
+| 3 | 7 | 7 | 9181 | 9256 | 4137 | 385994 | 38 | 120 | 55286 | 162904 | 38930 | 306630 | 2 |
+| 4 | 9 | 9 | 9368 | 9443 | 4137 | 482664 | 48 | 200 | 78404 | 220456 | 30542 | 281295 | 2 |
+| 5 | 11 | 11 | 9555 | 9630 | 4137 | 579966 | 57 | 295 | 103197 | 278708 | 24644 | 252194 | 2 |
+| 6 | 13 | 13 | 9742 | 9817 | 4137 | 681880 | 68 | 420 | 131563 | 339252 | 20641 | 223998 | 2 |
+| 7 | 15 | 15 | 9929 | 10004 | 4137 | 784426 | 78 | 560 | 161604 | 400496 | 17884 | 198620 | 2 |
+| 8 | 17 | 17 | 10116 | 10191 | 4137 | 891584 | 89 | 728 | 195018 | 464032 | 15987 | 176645 | 2 |
+| 9 | 19 | 19 | 10303 | 10378 | 4137 | 999374 | 99 | 909 | 229907 | 528268 | 14666 | 157972 | 2 |
+| 10 | 21 | 21 | 10490 | 10565 | 4137 | 1111776 | 111 | 1130 | 269369 | 594796 | 13675 | 142260 | 2 |
+  N_max compute: 4 under 100,000; 10 under CAP_V2 (450000)
+  N_max storage: 10 under 100,000; 10 under CAP_V2 (450000)
+  N_max transient: 0 under 100,000; 10 under CAP_V2 (900000)
+  N_max overall: 0 under 100,000; 10 under CAP_V2 (measured up to MAX_LEGS = 10; 0 means not even N = 2)
+
+Tokens, every leg KCC-20, token templates 6081 and 6280 bytes:
+| N | Inputs | Outputs | Vault script (bytes) | Vault sigscript (bytes) | Escrow sigscript (bytes) | Most units of a vault input | Its budget | Budgets, all inputs | Compute mass | Transient mass | Storage mass at the 100,000 minimum | Storage mass at MIN_V2 | Most sig ops of an input |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2 | 5 | 5 | 8994 | 9069 | 6447 | 356306 | 35 | 77 | 41061 | 126124 | 49338 | 317903 | 2 |
+| 3 | 7 | 7 | 9181 | 9256 | 6447 | 471464 | 47 | 151 | 65316 | 190624 | 38930 | 306630 | 2 |
+| 4 | 9 | 9 | 9368 | 9443 | 6447 | 591234 | 59 | 248 | 92444 | 257416 | 30542 | 281295 | 2 |
+| 5 | 11 | 11 | 9555 | 9630 | 6447 | 711636 | 71 | 372 | 122447 | 324908 | 24644 | 252194 | 2 |
+| 6 | 13 | 13 | 9742 | 9817 | 6447 | 836650 | 83 | 519 | 155323 | 394692 | 20641 | 223998 | 2 |
+| 7 | 15 | 15 | 9929 | 10004 | 6447 | 962296 | 96 | 696 | 191374 | 465176 | 17884 | 198620 | 2 |
+| 8 | 17 | 17 | 10116 | 10191 | 6447 | 1092554 | 109 | 900 | 230698 | 537952 | 15987 | 176645 | 2 |
+| 9 | 19 | 19 | 10303 | 10378 | 6447 | 1223444 | 122 | 1129 | 272697 | 611428 | 14666 | 157972 | 2 |
+| 10 | 21 | 21 | 10490 | 10565 | 6447 | 1358946 | 135 | 1385 | 317969 | 687196 | 13675 | 142260 | 2 |
+  N_max compute: 4 under 100,000; 10 under CAP_V2 (450000)
+  N_max storage: 10 under 100,000; 10 under CAP_V2 (450000)
+  N_max transient: 0 under 100,000; 10 under CAP_V2 (900000)
+  N_max overall: 0 under 100,000; 10 under CAP_V2 (measured up to MAX_LEGS = 10; 0 means not even N = 2)
+
+TokensTranche, every leg KCC-20, token templates 1461 and 1660 bytes:
+| N | Inputs | Outputs | Vault script (bytes) | Vault sigscript (bytes) | Escrow sigscript (bytes) | Most units of a vault input | Its budget | Budgets, all inputs | Compute mass | Transient mass | Storage mass at the 100,000 minimum | Storage mass at MIN_V2 | Most sig ops of an input |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2 | 5 | 7 | 8994 | 9069 | 1869 | 249112 | 24 | 51 | 30309 | 90476 | 49505 | 322856 | 2 |
+| 3 | 7 | 10 | 9181 | 9256 | 1869 | 318077 | 31 | 97 | 47688 | 137152 | 42301 | 296777 | 2 |
+| 4 | 9 | 13 | 9368 | 9443 | 1869 | 391654 | 39 | 160 | 67340 | 186120 | 38306 | 267219 | 2 |
+| 5 | 11 | 16 | 9555 | 9630 | 1869 | 465863 | 46 | 237 | 88567 | 235788 | 36173 | 241811 | 2 |
+| 6 | 13 | 19 | 9742 | 9817 | 1869 | 544684 | 54 | 333 | 112267 | 287748 | 34984 | 221837 | 2 |
+| 7 | 15 | 22 | 9929 | 10004 | 1869 | 624137 | 62 | 444 | 137642 | 340408 | 34312 | 206552 | 2 |
+| 8 | 17 | 25 | 10116 | 10191 | 1869 | 708202 | 70 | 572 | 165290 | 395360 | 33947 | 194957 | 2 |
+| 9 | 19 | 28 | 10303 | 10378 | 1869 | 792899 | 79 | 719 | 195013 | 451012 | 33741 | 186130 | 2 |
+| 10 | 21 | 31 | 10490 | 10565 | 1869 | 882208 | 88 | 890 | 227709 | 508956 | 33601 | 179344 | 2 |
+  N_max compute: 5 under 100,000; 10 under CAP_V2 (450000)
+  N_max storage: 10 under 100,000; 10 under CAP_V2 (450000)
+  N_max transient: 2 under 100,000; 10 under CAP_V2 (900000)
+  N_max overall: 2 under 100,000; 10 under CAP_V2 (measured up to MAX_LEGS = 10; 0 means not even N = 2)
+
+TokensTranche, every leg KCC-20, token templates 3771 and 3970 bytes:
+| N | Inputs | Outputs | Vault script (bytes) | Vault sigscript (bytes) | Escrow sigscript (bytes) | Most units of a vault input | Its budget | Budgets, all inputs | Compute mass | Transient mass | Storage mass at the 100,000 minimum | Storage mass at MIN_V2 | Most sig ops of an input |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2 | 5 | 7 | 8994 | 9069 | 4179 | 334582 | 33 | 74 | 37229 | 108956 | 49505 | 322856 | 2 |
+| 3 | 7 | 10 | 9181 | 9256 | 4179 | 426647 | 42 | 138 | 58718 | 164872 | 42301 | 296777 | 2 |
+| 4 | 9 | 13 | 9368 | 9443 | 4179 | 523324 | 52 | 222 | 82780 | 223080 | 38306 | 267219 | 2 |
+| 5 | 11 | 16 | 9555 | 9630 | 4179 | 620633 | 62 | 327 | 109117 | 281988 | 36173 | 241811 | 2 |
+| 6 | 13 | 19 | 9742 | 9817 | 4179 | 722554 | 72 | 453 | 138127 | 343188 | 34984 | 221837 | 2 |
+| 7 | 15 | 22 | 9929 | 10004 | 4179 | 825107 | 82 | 602 | 169612 | 405088 | 34312 | 206552 | 2 |
+| 8 | 17 | 25 | 10116 | 10191 | 4179 | 932272 | 93 | 772 | 203770 | 469280 | 33947 | 194957 | 2 |
+| 9 | 19 | 28 | 10303 | 10378 | 4179 | 1040069 | 104 | 967 | 240603 | 534172 | 33741 | 186130 | 2 |
+| 10 | 21 | 31 | 10490 | 10565 | 4179 | 1152478 | 115 | 1185 | 280309 | 601356 | 33601 | 179344 | 2 |
+  N_max compute: 4 under 100,000; 10 under CAP_V2 (450000)
+  N_max storage: 10 under 100,000; 10 under CAP_V2 (450000)
+  N_max transient: 0 under 100,000; 10 under CAP_V2 (900000)
+  N_max overall: 0 under 100,000; 10 under CAP_V2 (measured up to MAX_LEGS = 10; 0 means not even N = 2)
+
+TokensTranche, every leg KCC-20, token templates 6081 and 6280 bytes:
+| N | Inputs | Outputs | Vault script (bytes) | Vault sigscript (bytes) | Escrow sigscript (bytes) | Most units of a vault input | Its budget | Budgets, all inputs | Compute mass | Transient mass | Storage mass at the 100,000 minimum | Storage mass at MIN_V2 | Most sig ops of an input |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2 | 5 | 7 | 8994 | 9069 | 6489 | 420052 | 42 | 95 | 43949 | 127436 | 49505 | 322856 | 2 |
+| 3 | 7 | 10 | 9181 | 9256 | 6489 | 535217 | 53 | 177 | 69548 | 192592 | 42301 | 296777 | 2 |
+| 4 | 9 | 13 | 9368 | 9443 | 6489 | 654994 | 65 | 284 | 98220 | 260040 | 38306 | 267219 | 2 |
+| 5 | 11 | 16 | 9555 | 9630 | 6489 | 775403 | 77 | 415 | 129467 | 328188 | 36173 | 241811 | 2 |
+| 6 | 13 | 19 | 9742 | 9817 | 6489 | 900424 | 90 | 573 | 163987 | 398628 | 34984 | 221837 | 2 |
+| 7 | 15 | 22 | 9929 | 10004 | 6489 | 1026077 | 102 | 756 | 201182 | 469768 | 34312 | 206552 | 2 |
+| 8 | 17 | 25 | 10116 | 10191 | 6489 | 1156342 | 115 | 968 | 241850 | 543200 | 33947 | 194957 | 2 |
+| 9 | 19 | 28 | 10303 | 10378 | 6489 | 1287239 | 128 | 1206 | 285293 | 617332 | 33741 | 186130 | 2 |
+| 10 | 21 | 31 | 10490 | 10565 | 6489 | 1422748 | 142 | 1475 | 332409 | 693756 | 33601 | 179344 | 2 |
+  N_max compute: 4 under 100,000; 10 under CAP_V2 (450000)
+  N_max storage: 10 under 100,000; 10 under CAP_V2 (450000)
+  N_max transient: 0 under 100,000; 10 under CAP_V2 (900000)
+  N_max overall: 0 under 100,000; 10 under CAP_V2 (measured up to MAX_LEGS = 10; 0 means not even N = 2)
+
+Kas, every leg KAS:
+| N | Inputs | Outputs | Vault script (bytes) | Vault sigscript (bytes) | Escrow sigscript (bytes) | Most units of a vault input | Its budget | Budgets, all inputs | Compute mass | Transient mass | Storage mass at the 100,000 minimum | Storage mass at MIN_V2 | Most sig ops of an input |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2 | 3 | 3 | 8994 | 9069 | 0 | 182949 | 18 | 36 | 23243 | 74212 | 60176 | 293118 | 2 |
+| 3 | 4 | 4 | 9181 | 9256 | 0 | 235094 | 23 | 69 | 36639 | 113156 | 62716 | 323913 | 2 |
+| 4 | 5 | 5 | 9368 | 9443 | 0 | 289859 | 28 | 112 | 51409 | 153596 | 61170 | 338061 | 2 |
+| 5 | 6 | 6 | 9555 | 9630 | 0 | 347244 | 34 | 170 | 68053 | 195532 | 57640 | 343251 | 2 |
+| 6 | 7 | 7 | 9742 | 9817 | 0 | 407249 | 40 | 240 | 86271 | 238964 | 53207 | 342896 | 2 |
+| 7 | 8 | 8 | 9929 | 10004 | 0 | 469874 | 46 | 322 | 106063 | 283892 | 48476 | 338831 | 2 |
+| 8 | 9 | 9 | 10116 | 10191 | 0 | 535119 | 53 | 424 | 128229 | 330316 | 43800 | 332178 | 2 |
+| 9 | 10 | 10 | 10303 | 10378 | 0 | 602984 | 60 | 540 | 152169 | 378236 | 39370 | 323661 | 2 |
+| 10 | 11 | 11 | 10490 | 10565 | 0 | 673469 | 67 | 670 | 177883 | 427652 | 35282 | 313861 | 2 |
+  N_max compute: 6 under 100,000; 10 under CAP_V2 (450000)
+  N_max storage: 10 under 100,000; 10 under CAP_V2 (450000)
+  N_max transient: 2 under 100,000; 10 under CAP_V2 (900000)
+  N_max overall: 2 under 100,000; 10 under CAP_V2 (measured up to MAX_LEGS = 10; 0 means not even N = 2)
+
+Summary (shape, padding lines, N_max under 100,000, N_max under CAP_V2): [(Tokens, 0, 2, 10), (Tokens, 30, 0, 10), (Tokens, 60, 0, 10), (TokensTranche, 0, 2, 10), (TokensTranche, 30, 0, 10), (TokensTranche, 60, 0, 10), (Kas, 0, 2, 10)]
+ok
+test refund_units_are_measured ... Refund, script units of the vault input:
+| Pad | N | Leg | T_i | Signer | Token in the transaction | Units | Rule | Residual |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 0 | 2 | KCC-20 | 1461 | depositor | true | 151384 | 151664 | -280 |
+| 0 | 2 | KCC-20 | 1461 | another depositor | true | 151848 | 151664 | 184 |
+| 0 | 2 | KCC-20 | 1461 | authority | true | 150836 | 150627 | 209 |
+| 0 | 2 | KCC-20 | 1461 | depositor, authorizer alone | false | 123150 | 122537 | 613 |
+| 0 | 2 | KAS | 0 | depositor | false | 122382 | 122537 | -155 |
+| 0 | 2 | KAS | 0 | another depositor | false | 122366 | 122537 | -171 |
+| 0 | 2 | KAS | 0 | authority | false | 121368 | 121500 | -132 |
+| 0 | 10 | KCC-20 | 1461 | depositor | true | 158864 | 159144 | -280 |
+| 0 | 10 | KCC-20 | 1461 | another depositor | true | 159328 | 159144 | 184 |
+| 0 | 10 | KCC-20 | 1461 | authority | true | 156820 | 156611 | 209 |
+| 0 | 10 | KCC-20 | 1461 | depositor, authorizer alone | false | 130630 | 130017 | 613 |
+| 0 | 10 | KAS | 0 | depositor | false | 129862 | 130017 | -155 |
+| 0 | 10 | KAS | 0 | another depositor | false | 129846 | 130017 | -171 |
+| 0 | 10 | KAS | 0 | authority | false | 127352 | 127484 | -132 |
+| 30 | 2 | KCC-20 | 3771 | depositor | true | 190654 | 190934 | -280 |
+| 30 | 2 | KCC-20 | 3771 | another depositor | true | 191118 | 190934 | 184 |
+| 30 | 2 | KCC-20 | 3771 | authority | true | 190106 | 189897 | 209 |
+| 30 | 2 | KCC-20 | 3771 | depositor, authorizer alone | false | 123150 | 122537 | 613 |
+| 30 | 2 | KAS | 0 | depositor | false | 122382 | 122537 | -155 |
+| 30 | 2 | KAS | 0 | another depositor | false | 122366 | 122537 | -171 |
+| 30 | 2 | KAS | 0 | authority | false | 121368 | 121500 | -132 |
+| 30 | 10 | KCC-20 | 3771 | depositor | true | 198134 | 198414 | -280 |
+| 30 | 10 | KCC-20 | 3771 | another depositor | true | 198598 | 198414 | 184 |
+| 30 | 10 | KCC-20 | 3771 | authority | true | 196090 | 195881 | 209 |
+| 30 | 10 | KCC-20 | 3771 | depositor, authorizer alone | false | 130630 | 130017 | 613 |
+| 30 | 10 | KAS | 0 | depositor | false | 129862 | 130017 | -155 |
+| 30 | 10 | KAS | 0 | another depositor | false | 129846 | 130017 | -171 |
+| 30 | 10 | KAS | 0 | authority | false | 127352 | 127484 | -132 |
+| 60 | 2 | KCC-20 | 6081 | depositor | true | 229924 | 230204 | -280 |
+| 60 | 2 | KCC-20 | 6081 | another depositor | true | 230388 | 230204 | 184 |
+| 60 | 2 | KCC-20 | 6081 | authority | true | 229376 | 229167 | 209 |
+| 60 | 2 | KCC-20 | 6081 | depositor, authorizer alone | false | 123150 | 122537 | 613 |
+| 60 | 2 | KAS | 0 | depositor | false | 122382 | 122537 | -155 |
+| 60 | 2 | KAS | 0 | another depositor | false | 122366 | 122537 | -171 |
+| 60 | 2 | KAS | 0 | authority | false | 121368 | 121500 | -132 |
+| 60 | 10 | KCC-20 | 6081 | depositor | true | 237404 | 237684 | -280 |
+| 60 | 10 | KCC-20 | 6081 | another depositor | true | 237868 | 237684 | 184 |
+| 60 | 10 | KCC-20 | 6081 | authority | true | 235360 | 235151 | 209 |
+| 60 | 10 | KCC-20 | 6081 | depositor, authorizer alone | false | 130630 | 130017 | 613 |
+| 60 | 10 | KAS | 0 | depositor | false | 129862 | 130017 | -155 |
+| 60 | 10 | KAS | 0 | another depositor | false | 129846 | 130017 | -171 |
+| 60 | 10 | KAS | 0 | authority | false | 127352 | 127484 | -132 |
+  fit: 120043.059 + 748.000 * N + (a depositor signs) (662.588 + 187.000 * N) + (with token) (4288.882 + 17.000 * T_i)
+  committed: 120004 + 748 * N + (a depositor signs) (663 + 187 * N) + (with token) (4290 + 17 * T_i); largest residual 613 units
+ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 199.77s
+
+EXIT 0

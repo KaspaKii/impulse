@@ -1,0 +1,12 @@
+command: cargo test --offline -q -p impulse-core --features zk --lib zk::e2e_tests -- --nocapture --test-threads=1 a_settle_with_a_real_proof a_kcc20_cash_settle
+commit: f6f06dc plus the v3 contract files of the contract step (contracts/impulse_vault_v3.sil, contracts/compiled/impulse_vault.v3.json, contracts/TEMPLATE_HASH_V3), uncommitted when this was run
+date: 2026-10-13T01:25Z
+template v3 hash: e68c826290f681639f5a13088bb96350c5d1a1e89c90ccdadd6dc3902fb60da1
+image id: e4ecfb2bc1a9e9fce969b41af67991b22603eac1ff0542756ccf0b8234d43386
+method: settles of self-settling trades (a KAS-cash trade and a KCC-20 cash trade; fixture KCC-20 tokens, real Groth16 proofs of circuits/IMAGE_ID) built by impulse_core::zk::settle; every input that needs no signature run in the pinned kaspa-txscript engine at the compute budget the builder committed (the fee input, the last, is signed by its owner and is not run: reported as (0, 0)); refunds are run with key files in crates/impulse-cli/src/zk_tests.rs and report no units. Units are the engine's used_script_units; the allowance is the budget's. Script units do not depend on machine load.
+---- raw output
+kcc20 cash: script units used and allowed per input: [(15555123, 15729999), (54317, 209999), (11186, 39999), (12392, 39999), (0, 0)]
+kcc20 cash: masses: Masses { compute: 174959, transient: 49356, storage: 48358, fee_mass: 174959 }
+script units used and allowed per input: [(15537743, 15729999), (23860, 209999), (11186, 39999), (0, 0)]
+masses: Masses { compute: 172465, transient: 42060, storage: 32505, fee_mass: 172465 }
+test result: ok. 18 passed; 0 failed; 1 ignored; 0 measured; 281 filtered out; finished in 2.61s

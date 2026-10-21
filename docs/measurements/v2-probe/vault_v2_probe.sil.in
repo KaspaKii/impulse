@@ -1,0 +1,143 @@
+// Copyright (c) 2026 the Impulse authors. A KiiLabs product. Licensed under the Apache License, Version 2.0.
+pragma silverscript ^0.1.0;
+// Feasibility probe for spec/V2.md only. Not the v2 template.
+contract ImpulseVaultV2Probe(
+    byte initVersion, byte initNetwork, byte[8] initNonce,
+    bool initHasAuthority, pubkey initAuthorityKey,
+    int initLegCount, byte[] initLegs,
+    bool initHasEarliest, int initEarliestDaa, int initExpiryDaa, byte initFundingMode, byte[32] initTradeRef,
+    int initLotCount, int initMinLot,
+    int initLegIndex
+) {
+    byte version = initVersion;
+    byte network = initNetwork;
+    byte[8] nonce = initNonce;
+    bool hasAuthority = initHasAuthority;
+    pubkey authorityKey = initAuthorityKey;
+    int legCount = initLegCount;
+    byte[] legs = initLegs;
+    bool hasEarliest = initHasEarliest;
+    int earliestDaa = initEarliestDaa;
+    int expiryDaa = initExpiryDaa;
+    byte fundingMode = initFundingMode;
+    byte[32] tradeRef = initTradeRef;
+    int lotCount = initLotCount;
+    int minLot = initMinLot;
+    int legIndex = initLegIndex;
+
+    struct KCC20State {
+        byte[32] ownerIdentifier;
+        byte identifierType;
+        int amount;
+        bool isMinter;
+    }
+
+    byte constant KIND_KAS = 0x00;
+    byte constant IDENTIFIER_PUBKEY = 0x00;
+    byte constant IDENTIFIER_SCRIPT_HASH = 0x01;
+    int constant MAX_LEGS = @MAX@;
+    int constant REC = 187;
+
+    function f32(int leg, int off) : byte[32] {
+        int o = leg * REC + off;
+        return byte[32](legs.slice(o, o + 32));
+    }
+    function f8(int leg, int off) : int {
+        int o = leg * REC + off;
+        return int(byte[8](legs.slice(o, o + 8)));
+    }
+    function f1(int leg, int off) : byte {
+        int o = leg * REC + off;
+        return legs[o];
+    }
+    function kasSpk(byte t, byte[32] id) : byte[] {
+        byte[] spk = byte[](new ScriptPubKeyP2SH(id));
+        if (t == IDENTIFIER_PUBKEY) {
+            spk = byte[](new ScriptPubKeyP2PK(pubkey(id)));
+        }
+        return spk;
+    }
+
+    entry settle(sig authSig, int lots) {
+        require(this.activeInputIndex == legIndex);
+        require(legCount <= MAX_LEGS);
+        require(legs.length == legCount * REC);
+        int amount = f8(legIndex, 113);
+        int unit = amount / lotCount;
+        int esc = legCount + legIndex;
+        byte myKind = f1(legIndex, 32);
+        int held = 0;
+        if (myKind == KIND_KAS) {
+            held = tx.inputs[legIndex].value;
+        } else {
+            byte[32] cov = f32(legIndex, 33);
+            require(OpCovInputCount(cov) == 1);
+            require(OpCovInputIdx(cov, 0) == esc);
+            KCC20State escrowed = readInputStateWithTemplate(esc, f8(legIndex, 97), f8(legIndex, 105), f32(legIndex, 65));
+            require(escrowed.identifierType == IDENTIFIER_SCRIPT_HASH);
+            require(this.activeScriptPubKey == byte[](new ScriptPubKeyP2SH(escrowed.ownerIdentifier)));
+            require(!escrowed.isMinter);
+            held = escrowed.amount;
+        }
+        require(held <= amount);
+        require(held % unit == 0);
+        require(lots >= 1);
+        int tranche = lots * unit;
+        require(tranche <= held);
+        require(lots >= minLot || tranche == held);
+        if (hasEarliest) {
+            require(tx.daa >= earliestDaa);
+        }
+        for (j, 0, legCount, MAX_LEGS) {
+            int amt = lots * (f8(j, 113) / lotCount);
+            if (f1(j, 32) == KIND_KAS) {
+                require(tx.outputs[j].scriptPubKey == kasSpk(f1(j, 121), f32(j, 122)));
+                require(tx.outputs[j].value == amt);
+            } else {
+                require(OpOutputCovenantId(j) == f32(j, 33));
+                require(tx.outputs[j].value >= tx.inputs[legCount + j].value);
+                KCC20State expected = KCC20State { ownerIdentifier: f32(j, 122), identifierType: f1(j, 121), amount: amt, isMinter: false };
+                validateOutputStateWithInputTemplate(j, expected, legCount + j, f8(j, 97), f8(j, 105), f32(j, 65));
+            }
+        }
+        byte[32] myCov = OpInputCovenantId(this.activeInputIndex);
+        int slot = legCount + legIndex;
+        if (tranche == held) {
+            require(OpCovOutputCount(myCov) == 0);
+            if (myKind != KIND_KAS) {
+                require(tx.outputs[slot].scriptPubKey == byte[](new ScriptPubKeyP2PK(pubkey(f32(legIndex, 0)))));
+                require(tx.outputs[slot].value >= tx.inputs[this.activeInputIndex].value);
+            }
+        } else {
+            require(myCov != byte[32](0x0000000000000000000000000000000000000000000000000000000000000000));
+            require(OpCovOutputCount(myCov) == 1);
+            require(OpCovOutputIdx(myCov, 0) == slot);
+            require(tx.outputs[slot].scriptPubKey == this.activeScriptPubKey);
+            if (myKind == KIND_KAS) {
+                require(tx.outputs[slot].value == held - tranche);
+            } else {
+                require(tx.outputs[slot].value >= tx.inputs[this.activeInputIndex].value);
+                int rem = 2 * legCount + legIndex;
+                require(OpOutputCovenantId(rem) == f32(legIndex, 33));
+                require(tx.outputs[rem].value >= tx.inputs[esc].value);
+                KCC20State remainder = KCC20State { ownerIdentifier: byte[32](tx.outputs[slot].scriptPubKey.slice(4, 36)), identifierType: IDENTIFIER_SCRIPT_HASH, amount: held - tranche, isMinter: false };
+                validateOutputStateWithInputTemplate(rem, remainder, esc, f8(legIndex, 97), f8(legIndex, 105), f32(legIndex, 65));
+            }
+        }
+        if (hasAuthority) {
+            require(checkSig(authSig, authorityKey));
+        }
+    }
+
+    entry refund(sig s, pubkey signer, int party) {
+        require(party >= 0 && party <= legCount);
+        bool ok = false;
+        if (party < legCount) {
+            ok = signer == pubkey(f32(party, 0));
+        } else {
+            ok = hasAuthority && signer == authorityKey;
+        }
+        require(ok);
+        require(checkSig(s, signer));
+    }
+}

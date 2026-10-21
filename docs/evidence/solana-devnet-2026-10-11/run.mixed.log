@@ -1,0 +1,116 @@
+# I19 Solana run, cluster devnet, 2026-10-11T22:00:37Z
+# solana-cli 3.1.13 (src:437252fc; feat:534737035, client:Agave)
+# solana-cargo-build-sbf 3.1.13, platform-tools v1.52
+# git e8003fb95b9e26500bf71ea4c4e0bf71e33078ec
+# payer (settlement authority) EbCswfc7gHTdjfrh2iHSoRZHQJbzzdsynCzEGvyAJ4Xp
+# party A 4vHX1114F5sqaTMgGVXkJeiBNwRLyonP1oGdtt5KidUE
+# party B GMfaremXXZ18888vKaMFMbWQ6GfqA1JGknQw4dgUm2qq
+
+== build programs
+    Finished `release` profile [optimized] target(s) in 0.64s
+    Finished `release` profile [optimized] target(s) in 0.21s
+$ shasum -a 256 solana/target/deploy/impulse_solana.so solana/target/deploy/impulse_htlc.so
+4a0d315a22ed10ea713263c0a8988aebc19192017c182fcb15154b75a8fdcdbb  solana/target/deploy/impulse_solana.so
+c49186cd37b2e17301fe82e4a5c300a030acbc14b1dfd4d91a5a7bf4ff9af75d  solana/target/deploy/impulse_htlc.so
+$ ls -l solana/target/deploy/impulse_solana.so solana/target/deploy/impulse_htlc.so
+-rwxr-xr-x@ 1 user  staff   33080 Oct 11 20:28 solana/target/deploy/impulse_htlc.so
+-rwxr-xr-x@ 1 user  staff  138552 Oct 11 20:15 solana/target/deploy/impulse_solana.so
+# payer needs at least 1947296480 lamports
+
+== fund the payer
+$ solana airdrop 1 EbCswfc7gHTdjfrh2iHSoRZHQJbzzdsynCzEGvyAJ4Xp --url https://api.devnet.solana.com
+Requesting airdrop of 1 SOL
+Error: airdrop request failed. This can happen when the rate limit is reached.
+$ solana airdrop 1 F9U9axxuz35ffk28tZp9r6C3n8yx3MEbibY5Yuydmg7M --url https://api.devnet.solana.com
+Requesting airdrop of 1 SOL
+Error: airdrop request failed. This can happen when the rate limit is reached.
+$ solana airdrop 1 EbCswfc7gHTdjfrh2iHSoRZHQJbzzdsynCzEGvyAJ4Xp --url https://api.devnet.solana.com
+Requesting airdrop of 1 SOL
+Error: airdrop request failed. This can happen when the rate limit is reached.
+# payer balance 5000000000 lamports
+
+== deploy (--final, not upgradeable)
+$ solana program deploy solana/target/deploy/impulse_solana.so --program-id $TMPDIR_RUN/impulse-solana-program.json --buffer $TMPDIR_RUN/buffer-impulse_solana.json --keypair $TMPDIR_RUN/payer.json --url https://api.devnet.solana.com --final --max-sign-attempts 50
+$ solana airdrop 1 EbCswfc7gHTdjfrh2iHSoRZHQJbzzdsynCzEGvyAJ4Xp --url https://api.devnet.solana.com
+Requesting airdrop of 1 SOL
+Program Id: 5G4u8j3dXuXvurs4mxJ2pNXLihHMgZRdomTSRhswi2Rf
+
+Signature: 3Eyq3U1Z81N8KzZBVLYN2brDxSKNkYt7xVdEd1pVZoJkJpDpZ5tqPFRUire7weYFMYAcuHYK9ip9HdC9ecGgxJuq
+
+$ solana program deploy solana/target/deploy/impulse_htlc.so --program-id $TMPDIR_RUN/impulse-htlc-program.json --buffer $TMPDIR_RUN/buffer-impulse_htlc.json --keypair $TMPDIR_RUN/payer.json --url https://api.devnet.solana.com --final --max-sign-attempts 50
+Error: airdrop request failed. This can happen when the rate limit is reached.
+$ solana airdrop 1 EbCswfc7gHTdjfrh2iHSoRZHQJbzzdsynCzEGvyAJ4Xp --url https://api.devnet.solana.com
+Requesting airdrop of 1 SOL
+Error: airdrop request failed. This can happen when the rate limit is reached.
+Program Id: EGzCZqc5fYqYqcUYWmXJpuqi4uqNWC91kgVozTc8BmqH
+
+Signature: 4dYBMghNzUhBBVgSX4nLTbCRhJGzfwNm3DsN4DRNLaLLXFDS3zFHnMKDvpZxqH9RpidTB1TdJUamXBqtnSrxyzx2
+
+$ solana program show 5G4u8j3dXuXvurs4mxJ2pNXLihHMgZRdomTSRhswi2Rf --url https://api.devnet.solana.com --keypair $TMPDIR_RUN/payer.json
+
+Program Id: 5G4u8j3dXuXvurs4mxJ2pNXLihHMgZRdomTSRhswi2Rf
+Owner: BPFLoaderUpgradeab1e11111111111111111111111
+ProgramData Address: CnZHj2iFNj4mXagskTgqA1pBCoK5ky5gzrT528AqipU2
+Authority: none
+Last Deployed In Slot: 510046060
+Data Length: 138552 (0x21d38) bytes
+Balance: 0.704723 SOL
+
+$ solana program show EGzCZqc5fYqYqcUYWmXJpuqi4uqNWC91kgVozTc8BmqH --url https://api.devnet.solana.com --keypair $TMPDIR_RUN/payer.json
+
+Program Id: EGzCZqc5fYqYqcUYWmXJpuqi4uqNWC91kgVozTc8BmqH
+Owner: BPFLoaderUpgradeab1e11111111111111111111111
+ProgramData Address: 84axErpDF9v2ofYbq71p1A36Arr7bCRKHwSobSA9RE6a
+Authority: none
+Last Deployed In Slot: 510046172
+Data Length: 33080 (0x8138) bytes
+Balance: 0.16892524 SOL
+
+
+== settlement from one term sheet, HTLC claim and refund
+    Finished `release` profile [optimized] target(s) in 1.46s
+$ solana/target/release/impulse-solana-devnet --url https://api.devnet.solana.com --cluster devnet --payer $TMPDIR_RUN/payer.json --party-a $TMPDIR_RUN/party-a.json --party-b $TMPDIR_RUN/party-b.json --impulse-program 5G4u8j3dXuXvurs4mxJ2pNXLihHMgZRdomTSRhswi2Rf --htlc-program EGzCZqc5fYqYqcUYWmXJpuqi4uqNWC91kgVozTc8BmqH --term-sheets solana/tests/fixtures/term-sheets.json --sheet external-cash --out ~/impulse/docs/evidence/solana-devnet-2026-10-11/record.json
+check: impulse-solana program 5G4u8j3dXuXvurs4mxJ2pNXLihHMgZRdomTSRhswi2Rf is executable
+check: impulse-htlc program EGzCZqc5fYqYqcUYWmXJpuqi4uqNWC91kgVozTc8BmqH is executable
+create mint TEST-ASSET (leg A): 4wRo7a36AyeacJ8aTAEFcB1zJ9W8bQMmo31Az3wkQdcuKkPTT9nZ41HNQvdMWHbuUYE7hHS9e13euDWFsBAa1dHj
+create mint TEST-USDC (leg B, stands in for USDC): 3bYLfRWvUzQ9kE186c38uQ9ueXZN6SuTtF4fHPYdnc4mZzxnZEtSTyQPn1CKTJqb78C2a7AaE6WG8mnKEQdd4ikH
+create party ATAs: 5zfzWaiZoQExAXtqgC2Kn5Xq5FTupvM4zFASuWFke2qn7ooo8rHf1dhWYB57T6nXbEeWpFRtFRuacw2cnWgnkKuH
+mint leg A to party A: 5uYu4Rb1jF12nSHsYREZUMYz8D6TM668xDrbzKeJEfLAXB3qYe1nCutVbCnr1Ly3Vu3p584DfdFfKRSUqDjCXbom
+mint leg B to party B: 63rwKNAAf1bnAWkjMFoPcYTh97yRrgpK5b9B1RMpCeLdLxeFD1KY9STqsRh6SgFJVZW9RmPqyRNXqDUdZ84dHGoe
+$ solana airdrop 1 EbCswfc7gHTdjfrh2iHSoRZHQJbzzdsynCzEGvyAJ4Xp --url https://api.devnet.solana.com
+CreateDvp: QY8NZg6EGvGuazx4dfoKZFFfLf6nT7QKBgFdWktJs3JzkSxX1DiPay3WpL14GURGgQFmZodiEr9K9JSxrg68JEj
+check: SwapDvp exists at the term-sheet PDA
+Requesting airdrop of 1 SOL
+Error: airdrop request failed. This can happen when the rate limit is reached.
+fund leg A (party A): 4hg9mTZ2AMGmhTPrzWWJbfg4NrEy4rBMhp8EpvUm9m6i5Ue5x779ak8nVD4KobiskVviZ3B74Sb6bthWvBfxtMvD
+fund leg B (party B): co6dS1ZotPQLDyDfdViLLBQL1jCCuySfpzjzt9a8WeMeGy1NfyKgdoCPoPJr1Xcq2Uw94QQq6CVqW7ppEpXoBLX
+check: escrow A = 1000000
+check: escrow B = 2500000
+SettleDvp: 3hde8P5W93HaBo7oKAsmj3cQ7PvXWTfKG1VaCbGQDVUpyAaXpB1uLomu6GJjwcujuBF3Qt3aQpnLpjCQWVJFWGBg
+check: party A received leg B = 2500000
+check: party B received leg A = 1000000
+check: party A leg A source = 0
+check: party B leg B source = 0
+check: SwapDvp and both escrows closed
+$ solana airdrop 1 EbCswfc7gHTdjfrh2iHSoRZHQJbzzdsynCzEGvyAJ4Xp --url https://api.devnet.solana.com
+send party A SOL for HTLC rent: 3HRTCtj5Gk5SBAf8Rb2q2xCNfA23FvrmjBuPR6XQLwZXyuYanDBZDdB57bFkK46bzVk1qY7TGwBW5Ur4fUmSkgqf
+Requesting airdrop of 1 SOL
+HTLC open (claim): 4RenBohQXr3LyR5kWFrXfs2AFpRUucLi5k1qUksp9Gm7YvjjMhuprmdY81GN4dNfcEe311aVwkbPJH7FjYnvm5wr
+check: HTLC escrow = 100000
+check: party A after open = 2400000
+HTLC claim: 2LLbn6XK6RaUBMMQbTMDq688THHfzi2qjQ2MrsAeaVx5nHWWTmM4HRbMFsUiAJLb3bnbA1tWXgWFkXBcYazujH7x
+check: party B after claim = 100000
+check: HTLC and its escrow closed
+Error: airdrop request failed. This can happen when the rate limit is reached.
+HTLC open (refund): 3w2a55Tnmit7wG4B4hH47VV2hj2RrMmDgtgdHy1qPAUsJt11ETK1a6UCApmFjRnCVvZUmYW4cJQgHkNk4tM2qcfn
+check: HTLC escrow = 100000
+check: party A after open = 2300000
+HTLC refund: itCpkG8nsMUCmBs8o2R9UEhgF37aH5xW2HeZX98dcav2CA553jAJXAea6dg84wsNREzxQLcGLhkFtqda8jLfjeP
+check: party A after refund = 2400000
+check: HTLC and its escrow closed
+impulse-solana-devnet: pass
+
+# payer balance left 4094947920 lamports (abandoned with the throwaway key)
+solana-devnet: pass
+# faucet refused; fund EbCswfc7gHTdjfrh2iHSoRZHQJbzzdsynCzEGvyAJ4Xp on devnet by hand (https://faucet.solana.com),
+# waiting up to 900 s

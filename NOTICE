@@ -1,0 +1,12 @@
+Impulse by WarpCore
+Impulse is a KiiLabs product.
+
+Includes code derived from the WarpCore settlement middleware, relicensed under Apache-2.0 by its author, and test fixtures from kaspanet/silverscript (ISC).
+
+The Solana programs under solana/ include code derived from solana-foundation/dvp
+(https://github.com/solana-foundation/dvp, commit df9919ed02c25a93620e7f6820107c9050ce3b92),
+Copyright (c) 2026 Solana Foundation, licensed under the MIT License. The upstream licence text is
+in solana/LICENSE-MIT and applies to those portions; Impulse modifications are licensed under
+Apache-2.0. Each derived file says so in its header.
+
+The Impulse and WarpCore names and logos, including demo/impulse-wordmark.svg, demo/favicon.svg, demo/visual/impulse-wordmark.svg and demo/visual/favicon.svg, are trademarks of their owner and are not licensed under the Apache License. See docs/brand/README.md.

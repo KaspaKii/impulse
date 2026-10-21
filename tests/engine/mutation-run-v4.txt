@@ -1,0 +1,195 @@
+Mutation run, contracts/impulse_vault_v4.sil (tests/engine/mutation-v4.py)
+source sha256 ad281e52bac096ff808cf0c7eb71205a34651acbc6d75db43496a69b4733f79b
+TEMPLATE_HASH_V4 9656711aae5fad7375afa9076241765356f6f7b9a9d5816ad0f4dc48cc4cddc5
+circuits/terms-core/src/statement.rs sha256 9fd2b9504d9b02d049dc2356b330d26de72791f28761669c0e3c49e49018cdd3
+IMAGE_ID_V4 ffaa95f97b44a9209e245579361b81baaa45bd414f11446f11d8d7a1903916a3
+require mutants 11, other mutants 55
+guest [H5] mutants 14 (circuits/terms-core/src/statement.rs)
+scope: the require tests run on the shipped template v4 (zero proof, refusal before the gate against a
+control refused by the gate); the journal tests run on the probe, the same source with the verify call
+replaced by a comparison with sha256(J). Real-receipt tests (v4_live.rs) are not mutated: a mutant is
+another vault address and a receipt binds one.
+
+baseline: every named test passes
+
+[T1] require(this.activeInputIndex <= 1);
+  expected flip: v4_script::v4_t1_vault_beyond_input_1_refused_shipped -> FLIPPED
+[T2] require(nIn >= 2 && nIn <= 4 && nIn <= tx.inputs.length);
+  expected flip: v4_script::v4_t2_input_count_bounds_shipped -> FLIPPED
+[T3] require(nOut >= 2 && nOut <= 4 && nOut <= tx.outputs.length);
+  expected flip: v4_script::v4_t3_output_count_bounds_shipped -> FLIPPED
+[T4] require(checkSig(authSig, authorityKey));
+  expected flip: v4_script::v4_t4_authority_signature_shipped -> FLIPPED
+[T8] require(tx.daa >= lockTime);
+  expected flip: v4_script::v4_t8_t9_lock_time_finality_shipped -> FLIPPED
+[T10] require(OpInputCovenantId(i) == want);
+  expected flip: v4_script::v4_t10_covenant_ids_of_every_settle_input_shipped -> FLIPPED
+[T5] require(checkSig(s, signer));
+  expected flip: v4_script::v4_t5_signer_signature_shipped -> FLIPPED
+[T6] require(unsigned(leg) <= 1);
+  expected flip: v4_script::v4_t6_leg_byte_shipped -> FLIPPED
+[T7] require(nIn >= 1 && nIn <= 2 && nIn <= tx.inputs.length && nOut >= 1 && nOut <= 2 && nOut <= tx.outputs.length);
+  expected flip: v4_script::v4_t7_refund_view_bounds_shipped -> FLIPPED
+[T9] require(tx.daa >= lockTime);
+  expected flip: v4_script::v4_t8_t9_lock_time_finality_shipped -> FLIPPED
+[T11] require(OpInputCovenantId(i) == want);
+  expected flip: v4_script::v4_t11_covenant_ids_of_every_refund_input_shipped -> FLIPPED
+[mutant] [T2] nIn >= 2 dropped
+  expected flip: v4_script::v4_t2_input_count_bounds_shipped -> FLIPPED
+[mutant] [T2] nIn <= 4 dropped
+  EQUIVALENT (not counted): v4_script::v4_t2_input_count_bounds_shipped still passes; the compiled for loop carries its own runtime check that the range is at most MAX_VIEW (silverscript v1.0.0 compiler/for.rs, 'sanity check end-start > max_iterations')
+[mutant] [T2] nIn <= tx.inputs.length dropped
+  EQUIVALENT (not counted): v4_script::v4_t2_input_count_bounds_shipped still passes; tx.inputs[i] beyond the transaction's inputs is an engine error before the gate
+[mutant] [T3] nOut >= 2 dropped
+  expected flip: v4_script::v4_t3_output_count_bounds_shipped -> FLIPPED
+[mutant] [T3] nOut <= 4 dropped
+  EQUIVALENT (not counted): v4_script::v4_t3_output_count_bounds_shipped still passes; the same runtime loop-range check on the output loop
+[mutant] [T3] nOut <= tx.outputs.length dropped
+  EQUIVALENT (not counted): v4_script::v4_t3_output_count_bounds_shipped still passes; tx.outputs[k] beyond the transaction's outputs is an engine error before the gate
+[mutant] [T7] nIn >= 1 dropped
+  expected flip: v4_script::v4_t7_refund_view_bounds_shipped -> FLIPPED
+[mutant] [T7] nIn <= 2 dropped
+  expected flip: v4_script::v4_t7_refund_view_bounds_shipped -> FLIPPED
+[mutant] [T7] nIn <= tx.inputs.length dropped
+  EQUIVALENT (not counted): v4_script::v4_t7_refund_view_bounds_shipped still passes; tx.inputs[i] beyond the transaction's inputs is an engine error before the gate
+[mutant] [T7] nOut >= 1 dropped
+  expected flip: v4_script::v4_t7_refund_view_bounds_shipped -> FLIPPED
+[mutant] [T7] nOut <= 2 dropped
+  expected flip: v4_script::v4_t7_refund_view_bounds_shipped -> FLIPPED
+[mutant] [T7] nOut <= tx.outputs.length dropped
+  EQUIVALENT (not counted): v4_script::v4_t7_refund_view_bounds_shipped still passes; tx.outputs[k] beyond the transaction's outputs is an engine error before the gate
+[mutant] J: tag removed
+  expected flip: v4_script::v4_probe_settle_accepted_every_cash_kind -> FLIPPED
+  and in the refund: v4_script::v4_probe_refund_accepted -> FLIPPED
+[mutant] J: settle mode byte removed
+  expected flip: v4_script::v4_probe_settle_accepted_every_cash_kind -> FLIPPED
+[mutant] J: refund mode byte removed
+  expected flip: v4_script::v4_probe_refund_accepted -> FLIPPED
+[mutant] J: settle mode byte is the refund's
+  expected flip: v4_script::v4_probe_settle_accepted_every_cash_kind -> FLIPPED
+[mutant] J: refund mode byte is the settle's
+  expected flip: v4_script::v4_probe_refund_accepted -> FLIPPED
+[mutant] J: vault scriptPubKey removed
+  expected flip: v4_script::v4_probe_settle_accepted_every_cash_kind -> FLIPPED
+  and in the refund: v4_script::v4_probe_refund_accepted -> FLIPPED
+[mutant] J: commitment removed
+  expected flip: v4_script::v4_probe_settle_accepted_every_cash_kind -> FLIPPED
+  and in the refund: v4_script::v4_probe_refund_accepted -> FLIPPED
+[mutant] J: authority removed
+  expected flip: v4_script::v4_probe_settle_accepted_every_cash_kind -> FLIPPED
+  and in the refund: v4_script::v4_probe_refund_accepted -> FLIPPED
+[mutant] J: settle leg removed
+  expected flip: v4_script::v4_probe_settle_accepted_every_cash_kind -> FLIPPED
+[mutant] J: refund leg removed
+  expected flip: v4_script::v4_probe_refund_accepted -> FLIPPED
+[mutant] J: refund input index removed
+  expected flip: v4_script::v4_probe_refund_accepted -> FLIPPED
+[mutant] J: lock time removed
+  expected flip: v4_script::v4_probe_settle_accepted_every_cash_kind -> FLIPPED
+  and in the refund: v4_script::v4_probe_refund_accepted -> FLIPPED
+[mutant] J: settle signer removed
+  expected flip: v4_script::v4_probe_settle_accepted_every_cash_kind -> FLIPPED
+[mutant] J: refund signer removed
+  expected flip: v4_script::v4_probe_refund_accepted -> FLIPPED
+[mutant] J: settle cov_a removed
+  expected flip: v4_script::v4_probe_settle_accepted_every_cash_kind -> FLIPPED
+[mutant] J: refund cov_a removed
+  expected flip: v4_script::v4_probe_refund_accepted -> FLIPPED
+[mutant] J: settle cov_c removed
+  expected flip: v4_script::v4_probe_settle_accepted_every_cash_kind -> FLIPPED
+[mutant] J: refund cov_c removed
+  expected flip: v4_script::v4_probe_refund_accepted -> FLIPPED
+[mutant] J: settle count_a removed
+  expected flip: v4_script::v4_probe_settle_accepted_every_cash_kind -> FLIPPED
+[mutant] J: refund count_a removed
+  expected flip: v4_script::v4_probe_refund_accepted -> FLIPPED
+[mutant] J: settle count_c removed
+  expected flip: v4_script::v4_probe_settle_accepted_every_cash_kind -> FLIPPED
+[mutant] J: refund count_c removed
+  expected flip: v4_script::v4_probe_refund_accepted -> FLIPPED
+[mutant] J: nIn removed
+  expected flip: v4_script::v4_probe_settle_accepted_every_cash_kind -> FLIPPED
+  and in the refund: v4_script::v4_probe_refund_accepted -> FLIPPED
+[mutant] J: nOut removed
+  expected flip: v4_script::v4_probe_settle_accepted_every_cash_kind -> FLIPPED
+  and in the refund: v4_script::v4_probe_refund_accepted -> FLIPPED
+[mutant] J: view items removed
+  expected flip: v4_script::v4_probe_settle_accepted_every_cash_kind -> FLIPPED
+  and in the refund: v4_script::v4_probe_refund_accepted -> FLIPPED
+[mutant] view: input value removed
+  expected flip: v4_script::v4_probe_settle_accepted_every_cash_kind -> FLIPPED
+  and in the refund: v4_script::v4_probe_refund_accepted -> FLIPPED
+[mutant] view: input scriptPubKey hash removed
+  expected flip: v4_script::v4_probe_settle_accepted_every_cash_kind -> FLIPPED
+  and in the refund: v4_script::v4_probe_refund_accepted -> FLIPPED
+[mutant] view: input covenant ID removed
+  expected flip: v4_script::v4_probe_settle_accepted_every_cash_kind -> FLIPPED
+  and in the refund: v4_script::v4_probe_refund_accepted -> FLIPPED
+[mutant] view: output value removed
+  expected flip: v4_script::v4_probe_settle_accepted_every_cash_kind -> FLIPPED
+  and in the refund: v4_script::v4_probe_refund_accepted -> FLIPPED
+[mutant] view: output scriptPubKey hash removed
+  expected flip: v4_script::v4_probe_settle_accepted_every_cash_kind -> FLIPPED
+  and in the refund: v4_script::v4_probe_refund_accepted -> FLIPPED
+[mutant] view: output covenant ID removed
+  expected flip: v4_script::v4_probe_settle_accepted_every_cash_kind -> FLIPPED
+  and in the refund: v4_script::v4_probe_refund_accepted -> FLIPPED
+[mutant] view: input loop stops at two
+  expected flip: v4_script::v4_probe_settle_accepted_every_cash_kind -> FLIPPED
+  and in the refund: v4_script::v4_probe_refund_accepted -> FLIPPED
+[mutant] view: output loop stops at two
+  expected flip: v4_script::v4_probe_settle_accepted_every_cash_kind -> FLIPPED
+  and in the refund: v4_script::v4_probe_refund_accepted -> FLIPPED
+[mutant] cov: settle asset slot expects no covenant
+  expected flip: v4_script::v4_probe_settle_accepted_every_cash_kind -> FLIPPED
+[mutant] cov: settle input 3 expects no covenant
+  expected flip: v4_script::v4_probe_settle_accepted_every_cash_kind -> FLIPPED
+[mutant] cov: external cash asset slot is input 2
+  expected flip: v4_script::v4_probe_settle_accepted_every_cash_kind -> FLIPPED
+[mutant] cov: refund input 1 expects no covenant
+  expected flip: v4_script::v4_probe_refund_accepted -> FLIPPED
+[mutant] cov: refund input 1 condition drops nIn == 2
+  expected flip: v4_script::v4_t11_covenant_ids_of_every_refund_input_shipped -> FLIPPED
+[mutant] cov: input bound raised to nine (both entries)
+  expected flip: v4_script::v4_t10_covenant_ids_of_every_settle_input_shipped -> FLIPPED
+[mutant] cov: settle loop covers the view only
+  expected flip: v4_script::v4_t10_covenant_ids_of_every_settle_input_shipped -> FLIPPED
+[mutant] cov: refund loop covers the view only
+  expected flip: v4_script::v4_t11_covenant_ids_of_every_refund_input_shipped -> FLIPPED
+[mutant] gate: verify call removed (both entries)
+  expected flip: v4_script::v4_t4_authority_signature_shipped -> FLIPPED
+[mutant] gate: image ID changed
+  expected flip: v4_template::v4_image_id_in_the_source_is_the_circuits_image_id_v4 -> FLIPPED
+
+guest baseline: every named terms-core test passes
+[guest] [H5] check removed
+  expected flip: terms-core statement::guest_refuses_h5_other_vault -> FLIPPED
+[guest] [H5] only for KCC-20 cash
+  expected flip: terms-core statement::guest_refuses_h5_other_vault -> FLIPPED
+[guest] [H5] also for external cash
+  expected flip: terms-core statement::h5_does_not_apply_to_external_cash_or_refunds -> FLIPPED
+[guest] [H5] off in statement
+  expected flip: terms-core statement::guest_refuses_h5_other_vault -> FLIPPED
+[guest] [H5] compares this vault's own slot
+  expected flip: terms-core statement::guest_refuses_h5_other_vault -> FLIPPED
+[guest] [H5] swaps in this leg's commitment
+  expected flip: terms-core statement::guest_refuses_h5_other_vault -> FLIPPED
+[guest] [H5] the other vault's redeem script is read
+  expected flip: terms-core statement::guest_refuses_h5_other_vault -> FLIPPED
+[guest] [H5] own script need not open J.vault_spk
+  expected flip: terms-core statement::guest_refuses_h5_witness -> FLIPPED
+[guest] [H5] commitment push byte unchecked
+  expected flip: terms-core statement::guest_refuses_h5_witness -> FLIPPED
+[guest] [H5] commitment unchecked
+  expected flip: terms-core statement::guest_refuses_h5_witness -> FLIPPED
+[guest] [H5] authority push byte unchecked
+  expected flip: terms-core statement::guest_refuses_h5_witness -> FLIPPED
+[guest] [H5] authority unchecked
+  expected flip: terms-core statement::guest_refuses_h5_witness -> FLIPPED
+[guest] [H5] length unchecked
+  expected flip: terms-core statement::guest_refuses_h5_witness -> FLIPPED
+[guest] [H5] state offset moved
+  expected flip: terms-core statement::guest_refuses_h5_other_vault -> FLIPPED
+
+equivalent mutants (conjuncts that another mechanism refuses identically, kept as defence in depth): 6
+result: 90 of 90 mutants caught by their named test

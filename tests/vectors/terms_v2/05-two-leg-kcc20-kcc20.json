@@ -1,0 +1,57 @@
+{
+  "name": "05-two-leg-kcc20-kcc20",
+  "description": "N = 2 equivalent of v1's KCC-20-cash mode: two KCC-20 legs, self-settling, revocable funding. Testnet.",
+  "terms": {
+    "version": 2,
+    "network": "testnet",
+    "nonce": "1313754702",
+    "authority_key": null,
+    "legs": [
+      {
+        "depositor_key": "3688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c",
+        "asset": {
+          "kind": "kcc20",
+          "covenant_id": "1010101010101010101010101010101010101010101010101010101010101010",
+          "template_hash": "2a5713a61a2c350c9f76583746d95054ef6bb4160e1c338239249549929b9c9c",
+          "template_prefix_len": 1,
+          "template_suffix_len": 1460,
+          "amount": "1000"
+        },
+        "delivery": {
+          "identifier_type": "pubkey",
+          "identifier": "624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f"
+        },
+        "refund": {
+          "identifier_type": "pubkey",
+          "identifier": "3688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c"
+        }
+      },
+      {
+        "depositor_key": "624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f",
+        "asset": {
+          "kind": "kcc20",
+          "covenant_id": "1111111111111111111111111111111111111111111111111111111111111111",
+          "template_hash": "2a5713a61a2c350c9f76583746d95054ef6bb4160e1c338239249549929b9c9c",
+          "template_prefix_len": 1,
+          "template_suffix_len": 1460,
+          "amount": "250000"
+        },
+        "delivery": {
+          "identifier_type": "pubkey",
+          "identifier": "3688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c"
+        },
+        "refund": {
+          "identifier_type": "pubkey",
+          "identifier": "624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f"
+        }
+      }
+    ],
+    "earliest_daa": "1000000",
+    "expiry_daa": "2000000",
+    "funding_mode": "revocable",
+    "partial": null,
+    "trade_ref": "2a5495227823385a86971651a3b6b68ed71311d73f43e9fd3a92ab53f1c4d7ce"
+  },
+  "canonical": "02014e4e4e4e0000000000023688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c0110101010101010101010101010101010101010101010101010101010101010102a5713a61a2c350c9f76583746d95054ef6bb4160e1c338239249549929b9c9c01000000b4050000e80300000000000000624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f003688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f0111111111111111111111111111111111111111111111111111111111111111112a5713a61a2c350c9f76583746d95054ef6bb4160e1c338239249549929b9c9c01000000b405000090d0030000000000003688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c00624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f0140420f000000000080841e000000000000002a5495227823385a86971651a3b6b68ed71311d73f43e9fd3a92ab53f1c4d7ce",
+  "terms_hash": "4dc0cf390aff12c8c9c2fac9e6b993f5992f2d64db13f0089e0b5898cb00befb"
+}

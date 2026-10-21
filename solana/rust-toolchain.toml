@@ -1,0 +1,8 @@
+# Copyright (c) 2026 the Impulse authors. A KiiLabs product. Licensed under the Apache License, Version 2.0.
+# Solana workspace only (owner decision D28). The Solana crates of the solana-foundation/dvp fork
+# (pinned df9919e) need 1.91.0; the on-chain build uses cargo-build-sbf --tools-version v1.52.
+# The Kaspa workspace at the repo root stays on its own rust-toolchain.toml (1.94.0, rule 3, docs/ENGINEERING-RULES.md).
+[toolchain]
+channel = "1.91.0"
+components = ["rustfmt", "clippy"]
+profile = "minimal"

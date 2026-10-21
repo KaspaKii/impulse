@@ -1,0 +1,7 @@
+{
+  "name": "14-receipt-journal-digest",
+  "description": "The journal and journal digest of a real RISC Zero receipt of the list guest (proof fixture a_list1, stand-in vault asset_list1). The digest is SHA-256 of the committed bytes, which is what the asset vault recomputes in script. Image id of the guest that made it is in circuits/IMAGE_ID.",
+  "fixture": "a_list1",
+  "journal": "496d70756c73652f7a6b2f776c2f76319bcc938724ce3c153bb7c53dec8ca7a7a722b5e8161c66a61946363e2a5e09290000aa2034e024ea85d5a9fed72313b144f4e624f1db1f62c633006550ca3ab79457b68a8700002079be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798ac",
+  "journal_hash": "3c2c848feae97ad7e563b182c7a77c1d78ea9e33409f94073f25032e014941a1"
+}

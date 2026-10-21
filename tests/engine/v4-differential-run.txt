@@ -1,0 +1,7 @@
+v4 differential (scripts/run-v4-differential.sh): terms-core against the v1 script on every v1 vector
+date 2026-10-20
+compared, both accept: 163
+compared, both refuse: 89
+compared, v1 refuses a signature or finality only, statement accepts: 7
+skipped, outside the v4 domain (no authority, or terms that do not decode as terms v4): 20
+divergences: 0 (a divergence fails the run)

@@ -1,0 +1,50 @@
+{
+  "name": "11-fund-kas-three-way-ring",
+  "description": "Funding of leg 2 of terms vector 08: exactly the leg amount at the leg's vault.",
+  "ipst": {
+    "ipst": 2,
+    "terms": "02004e4e4e4e00000000014a90052e5c90a8b21e84a231dd14be0ea3b5ba32eda078aca4419b891af63427033688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c0000e1f5050000000000624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f01eb74f9c8fc678e76839deffb02459f2edfc1875b9c431c9ee2a74fcbafc8488d624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f0000c2eb0b00000000002d085d24c2b33fd2a1761fd6994d546e72b131ff55c0c296d223956bc5a87db8016511b5280f1cebe32de116c06c4c68f8d6f3cee94ac028df8b3f57bbb8fa0e742d085d24c2b33fd2a1761fd6994d546e72b131ff55c0c296d223956bc5a87db80000a3e11100000000003688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c01d993433bbc1c0038866cffeb6a7ffc94e22b26abd5370fe1717f62022a0175fd0140420f000000000080841e000000000000002a5495227823385a86971651a3b6b68ed71311d73f43e9fd3a92ab53f1c4d7ce",
+    "lock_time": "0",
+    "inputs": [
+      {
+        "transaction_id": "602a411da069cfeb9cd466dbf88af2e0c6cad10629668dcaacf73a34d3d0df0c",
+        "index": 0,
+        "sequence": "0",
+        "compute_budget": 10,
+        "utxo": {
+          "amount": "5000000000",
+          "script_public_key": {
+            "version": 0,
+            "script": "20624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133fac"
+          },
+          "block_daa_score": "100",
+          "is_coinbase": false,
+          "covenant_id": null
+        },
+        "signer": "624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f",
+        "sighash": "3937939cbcc916120fcf33dd26d7cd10f39f677b98a77f6dbcf2494c808e93d1",
+        "signature": null,
+        "script_before": "",
+        "script_after": ""
+      }
+    ],
+    "outputs": [
+      {
+        "value": "300000000",
+        "script_public_key": {
+          "version": 0,
+          "script": "aa20c7d5bcec5d24c43e151456034e609275c9c32da62b1a60d22f6a0d56836d0fb887"
+        },
+        "covenant": null
+      },
+      {
+        "value": "4650000000",
+        "script_public_key": {
+          "version": 0,
+          "script": "20624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133fac"
+        },
+        "covenant": null
+      }
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "11-journal-p2pk-list1000",
+  "description": "J and journal_hash for owner A (P2PK) in list1000 at the stand-in vault asset_list1000.",
+  "list_root": "2ea098e635de07e22171cb8046bf60581317c14809fd6f2e36702ff274891124",
+  "vault_script_hash": "7bf3c977ed20c6b5a81a18facb51c6584bf9ef16922f6ba661addc0a820b4683",
+  "vault_spk": "0000aa207bf3c977ed20c6b5a81a18facb51c6584bf9ef16922f6ba661addc0a820b468387",
+  "owner_type": "pubkey",
+  "owner_id": "79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798",
+  "owner_spk": "00002079be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798ac",
+  "journal": "496d70756c73652f7a6b2f776c2f76312ea098e635de07e22171cb8046bf60581317c14809fd6f2e36702ff2748911240000aa207bf3c977ed20c6b5a81a18facb51c6584bf9ef16922f6ba661addc0a820b46838700002079be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798ac",
+  "journal_hash": "71c0fd59f82693f98519e6ee71101f434a1d7594f9ef32826430b7652f8bc12a"
+}

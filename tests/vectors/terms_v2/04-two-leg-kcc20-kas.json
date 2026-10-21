@@ -1,0 +1,53 @@
+{
+  "name": "04-two-leg-kcc20-kas",
+  "description": "N = 2 equivalent of v1's KAS-cash mode: a KCC-20 leg and a KAS leg, with a settlement authority, earmarked funding, the KAS delivered to a P2SH. Mainnet.",
+  "terms": {
+    "version": 2,
+    "network": "mainnet",
+    "nonce": "1313754702",
+    "authority_key": "4a90052e5c90a8b21e84a231dd14be0ea3b5ba32eda078aca4419b891af63427",
+    "legs": [
+      {
+        "depositor_key": "3688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c",
+        "asset": {
+          "kind": "kcc20",
+          "covenant_id": "1010101010101010101010101010101010101010101010101010101010101010",
+          "template_hash": "2a5713a61a2c350c9f76583746d95054ef6bb4160e1c338239249549929b9c9c",
+          "template_prefix_len": 1,
+          "template_suffix_len": 1460,
+          "amount": "1000"
+        },
+        "delivery": {
+          "identifier_type": "pubkey",
+          "identifier": "624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f"
+        },
+        "refund": {
+          "identifier_type": "pubkey",
+          "identifier": "3688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c"
+        }
+      },
+      {
+        "depositor_key": "624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f",
+        "asset": {
+          "kind": "kas",
+          "amount": "100000000"
+        },
+        "delivery": {
+          "identifier_type": "script_hash",
+          "identifier": "1a93fbdd0163c2fa2c5e9db6bf9239d83bc3794bc02625a8ef50829047d057fd"
+        },
+        "refund": {
+          "identifier_type": "script_hash",
+          "identifier": "6511b5280f1cebe32de116c06c4c68f8d6f3cee94ac028df8b3f57bbb8fa0e74"
+        }
+      }
+    ],
+    "earliest_daa": "1000000",
+    "expiry_daa": "2000000",
+    "funding_mode": "earmarked",
+    "partial": null,
+    "trade_ref": "2a5495227823385a86971651a3b6b68ed71311d73f43e9fd3a92ab53f1c4d7ce"
+  },
+  "canonical": "02004e4e4e4e00000000014a90052e5c90a8b21e84a231dd14be0ea3b5ba32eda078aca4419b891af63427023688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c0110101010101010101010101010101010101010101010101010101010101010102a5713a61a2c350c9f76583746d95054ef6bb4160e1c338239249549929b9c9c01000000b4050000e80300000000000000624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f003688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f0000e1f50500000000011a93fbdd0163c2fa2c5e9db6bf9239d83bc3794bc02625a8ef50829047d057fd016511b5280f1cebe32de116c06c4c68f8d6f3cee94ac028df8b3f57bbb8fa0e740140420f000000000080841e000000000001002a5495227823385a86971651a3b6b68ed71311d73f43e9fd3a92ab53f1c4d7ce",
+  "terms_hash": "8423b937d7f52bf60bfd8e11a080c3ee89fcbb916407483fe116bc2402a3314c"
+}

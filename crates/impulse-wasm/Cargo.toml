@@ -1,0 +1,55 @@
+[package]
+name = "impulse-wasm"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+impulse-core = { path = "../impulse-core" }
+js-sys.workspace = true
+# The address of a destination in the terms summary (I11); already in the tree through impulse-core.
+kaspa-addresses.workspace = true
+# For the KAS destination scriptPubKey of the terms JSON form; already in the tree.
+kaspa-consensus-core.workspace = true
+# The QR code of a funding URI (I11); the crate impulse-cli already uses, with its image, svg and
+# pic features off.
+qrcode.workspace = true
+# The in-page wallet (I11 phase 2): signs a sighash with a key it drew itself and never lets out.
+# Both crates are already in the tree through impulse-core and impulse-cli, at the lock's versions.
+secp256k1.workspace = true
+# For the input and output count of an IPST text (ops::ipst_from_json), and the strict terms-file
+# reader that refuses a key named twice through a serde visitor (I11); already in the tree through
+# serde_json and impulse-cli, at the version in the lock.
+serde.workspace = true
+serde_json.workspace = true
+wasm-bindgen.workspace = true
+zeroize.workspace = true
+
+# getrandom 0.3 reaches the tree through rusty-kaspa (ahash). On wasm32-unknown-unknown it needs
+# the wasm_js backend: this feature plus the cfg in .cargo/config.toml. Since I11 phase 2 one call
+# of impulse-wasm draws randomness: `Wallet.generate`, for the 32 bytes of a key, from the
+# browser's crypto.getRandomValues. Nothing else does (the ci.sh gate counts the draws).
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+getrandom = { version = "=0.3.4", features = ["wasm_js"] }
+
+[dev-dependencies]
+wasm-bindgen-test.workspace = true
+
+# I11: native tests compare the funding URI and the value cap with the command line's, on every
+# vector. impulse-cli (a wRPC client) does not build for wasm32, and nothing ships it.
+[target.'cfg(not(target_arch = "wasm32"))'.dev-dependencies]
+impulse-cli = { path = "../impulse-cli" }
+# I11 phase 2: native tests read the node's wRPC replies and build its requests with the real RPC
+# types of the pinned rusty-kaspa, so the JSON the SDK reads and writes is the JSON those types
+# define. Already in the tree through impulse-cli; nothing ships it.
+kaspa-wrpc-client.workspace = true
+
+# No wasm-opt: wasm-pack would download binaryen at build time (borrowed from KTT-Core-v2).
+[package.metadata.wasm-pack.profile.release]
+wasm-opt = false
+[package.metadata.wasm-pack.profile.dev]
+wasm-opt = false

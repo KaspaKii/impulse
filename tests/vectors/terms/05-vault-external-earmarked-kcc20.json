@@ -1,0 +1,47 @@
+{
+  "name": "05-vault-external-earmarked-kcc20",
+  "description": "External-cash vault mode: authority required, earmarked funding. KCC-20 asset; the cash leg settles off chain, so both cash destinations are off_chain. Mainnet.",
+  "terms": {
+    "version": 1,
+    "network": "mainnet",
+    "settlement_mode": "vault",
+    "nonce": "10797136737533877925",
+    "seller_key": "95e2f4e4fe97ed99e78ac44930508f03b408bde943a16d35bd8f1d0228a8bc3e",
+    "buyer_key": "67b2e7c8dfe143ccdad9cdd0929b9bfff2ed9039ef21a146a2caab1c2b542de3",
+    "authority_key": "146c937a7572d914e7cfec44a313b3a0327926634f78d81134d4c671c43ec50d",
+    "asset_leg": {
+      "kind": "kcc20",
+      "covenant_id": "fe904de9baa7fe17d441105dd757e7911e192998e4e096d3c84f4711c6b3dd0d",
+      "template_hash": "a227fc3aa2f3d922b7f8d7dfdca462660dbe51bd1735508f9dda9a656100c794",
+      "template_prefix_len": 40,
+      "template_suffix_len": 1420,
+      "amount": "10000"
+    },
+    "cash_leg": {
+      "kind": "external",
+      "amount": "100000000"
+    },
+    "buyer_delivery": {
+      "kind": "kcc20",
+      "identifier_type": "pubkey",
+      "identifier": "67b2e7c8dfe143ccdad9cdd0929b9bfff2ed9039ef21a146a2caab1c2b542de3"
+    },
+    "seller_proceeds": {
+      "kind": "off_chain"
+    },
+    "seller_refund": {
+      "kind": "kcc20",
+      "identifier_type": "pubkey",
+      "identifier": "95e2f4e4fe97ed99e78ac44930508f03b408bde943a16d35bd8f1d0228a8bc3e"
+    },
+    "buyer_refund": {
+      "kind": "off_chain"
+    },
+    "earliest_daa": "400036000",
+    "expiry_daa": "425920000",
+    "funding_mode": "earmarked",
+    "trade_ref": "310bc1efa56b14e848565e560d8f44399e76ec84618c48f85f08cc39d2581563"
+  },
+  "canonical": "010001a5de0638a822d79595e2f4e4fe97ed99e78ac44930508f03b408bde943a16d35bd8f1d0228a8bc3e67b2e7c8dfe143ccdad9cdd0929b9bfff2ed9039ef21a146a2caab1c2b542de301146c937a7572d914e7cfec44a313b3a0327926634f78d81134d4c671c43ec50d01fe904de9baa7fe17d441105dd757e7911e192998e4e096d3c84f4711c6b3dd0da227fc3aa2f3d922b7f8d7dfdca462660dbe51bd1735508f9dda9a656100c794280000008c05000010270000000000000200e1f50500000000010067b2e7c8dfe143ccdad9cdd0929b9bfff2ed9039ef21a146a2caab1c2b542de302010095e2f4e4fe97ed99e78ac44930508f03b408bde943a16d35bd8f1d0228a8bc3e0201a010d81700000000000663190000000001310bc1efa56b14e848565e560d8f44399e76ec84618c48f85f08cc39d2581563",
+  "terms_hash": "a573bee279b5f70f9226ee34f8480947d19ec0a79939a8f8f78c231ec0d04927"
+}

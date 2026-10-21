@@ -1,0 +1,257 @@
+Mutation run, contracts/impulse_vault_v2.sil (tests/engine/v2_mutation.py)
+source sha256 67107746c2cf04d76378640d05c02c7f870bc06d0756e70782da68950cf941a9
+TEMPLATE_HASH_V2 75d754c16299e7707787f0e66d9880d7657d09b1bea4ef3bd508cefdb6dd7548
+requires 62, mutants 62, test targets v2_settle, v2_refund, v2_foreign_covenant
+
+baseline: all tests pass
+
+[F4] require(tx.inputs.length <= legCount + MAX_INPUTS_AFTER_VAULTS);
+  SUFFIX_LEN 8471
+  expected flip: v2_foreign_covenant::f4_a_settle_above_n_plus_18_inputs_is_refused_at_the_bound -> FLIPPED
+  also flipped (0): none
+[S1] require(this.activeInputIndex == legIndex);
+  SUFFIX_LEN 8475
+  expected flip: v2_settle::s1_second_kas_deposit_cannot_settle_off_its_index -> FLIPPED
+  also flipped (0): none
+[V1] require(legCount <= MAX_LEGS);
+  SUFFIX_LEN 8474
+  expected flip: v2_settle::v1_leg_count_above_max_legs -> FLIPPED
+  also flipped (0): none
+[V2] require(legs.length == legCount * LEG_RECORD);
+  SUFFIX_LEN 8464
+  expected flip: v2_settle::v2_leg_list_longer_than_leg_count -> FLIPPED
+  also flipped (1): v2_settle::v2_leg_list_short
+[V5] require(legIndex >= 0 && legIndex < legCount);
+  SUFFIX_LEN 8470
+  expected flip: v2_settle::v5_leg_index_equal_to_leg_count -> FLIPPED
+  also flipped (0): none
+[P1] require(lots >= 1);
+  SUFFIX_LEN 8474
+  expected flip: v2_settle::p1_zero_lots -> FLIPPED
+  also flipped (0): none
+[E1] require(OpCovInputCount(myTokenCov) == 1);
+  SUFFIX_LEN 8472
+  expected flip: v2_foreign_covenant::e1_a_second_escrow_of_the_covenant_at_another_escrow_slot -> FLIPPED
+  also flipped (0): none
+[E2] require(OpCovInputIdx(myTokenCov, 0) == escrowIdx);
+  SUFFIX_LEN 8469
+  expected flip: v2_foreign_covenant::e2_the_escrow_slots_swap_their_covenants -> FLIPPED
+  also flipped (0): none
+[E3] require(escrowed.identifierType == IDENTIFIER_SCRIPT_HASH);
+  SUFFIX_LEN 8473
+  expected flip: v2_settle::e3_escrow_owner_type_pubkey -> FLIPPED
+  also flipped (0): none
+[E4] require(this.activeScriptPubKey == byte[](new ScriptPubKeyP2SH(escrowed.ownerIdentifier)));
+  SUFFIX_LEN 8459
+  expected flip: v2_settle::e4_escrow_owned_by_another_vault -> FLIPPED
+  also flipped (0): none
+[E6] require(!escrowed.isMinter);
+  SUFFIX_LEN 8476
+  expected flip: v2_settle::e6_minter_escrow -> FLIPPED
+  also flipped (0): none
+[P2] require(held <= myAmount);
+  SUFFIX_LEN 8473
+  expected flip: v2_settle::p2_kas_vault_over_funded -> FLIPPED
+  also flipped (0): none
+[P3] require(held % myUnit == 0);
+  SUFFIX_LEN 8471
+  expected flip: v2_settle::p3_held_not_whole_lots -> FLIPPED
+  also flipped (0): none
+[P4] require(tranche <= held);
+  SUFFIX_LEN 8474
+  expected flip: v2_settle::p4_tranche_beyond_held_with_crafted_negative_min_lot -> FLIPPED
+  also flipped (0): none
+[P5] require(lots >= minLot);
+  SUFFIX_LEN 8471
+  expected flip: v2_settle::p5_tranche_below_min_lot -> FLIPPED
+  also flipped (0): none
+[P6] require(held - tranche == 0 || held - tranche >= minLot * myUnit);
+  SUFFIX_LEN 8458
+  expected flip: v2_settle::p6_remainder_below_min_lot -> FLIPPED
+  also flipped (0): none
+[S3] require(tx.daa >= earliestDaa);
+  SUFFIX_LEN 8465
+  expected flip: v2_settle::s3_settle_one_daa_before_earliest -> FLIPPED
+  also flipped (0): none
+[V6] require(kind == KIND_KAS || kind == KIND_KCC20);
+  SUFFIX_LEN 8397
+  expected flip: v2_settle::v6_leg_kind_byte_2 -> FLIPPED
+  also flipped (0): none
+[S10] require(tx.inputs[j].scriptPubKey == byte[](new ScriptPubKeyP2SHFromRedeemScript(siblingRedeem)));
+  SUFFIX_LEN 8287
+  expected flip: v2_settle::s10_crossed_settle_of_two_trades_with_identical_deliveries -> FLIPPED
+  also flipped (1): v2_settle::s10_crossed_settle_of_trades_differing_only_in_nonce
+[V7] require(deliveryType == DEST_P2PK || deliveryType == DEST_P2SH);
+  SUFFIX_LEN 8377
+  expected flip: v2_settle::v7_kas_delivery_type_2 -> FLIPPED
+  also flipped (0): none
+[S4] require(tx.outputs[j].scriptPubKey == destSpk(deliveryType, deliveryId));
+  SUFFIX_LEN 8007
+  expected flip: v2_settle::s4_kas_delivery_to_stranger -> FLIPPED
+  also flipped (2): v2_settle::missing_delivery_fails_every_vault_n10, v2_settle::missing_delivery_fails_every_vault_n3_with_kas
+[S5] require(tx.outputs[j].value == deliver);
+  SUFFIX_LEN 8417
+  expected flip: v2_settle::s5_kas_delivery_short -> FLIPPED
+  also flipped (2): v2_settle::missing_delivery_fails_every_vault_n10, v2_settle::missing_delivery_fails_every_vault_n3_with_kas
+[D1] require(OpOutputCovenantId(j) == recBytes(rec, OFF_COVENANT));
+  SUFFIX_LEN 8187
+  expected flip: v2_foreign_covenant::d1_delivery_without_a_covenant_escrow_to_a_stranger -> FLIPPED
+  also flipped (0): none
+[D2] require(tx.outputs[j].value >= tx.inputs[tokenIdx].value);
+  SUFFIX_LEN 8407
+  expected flip: v2_settle::d2_delivery_carrier_kas_short -> FLIPPED
+  also flipped (0): none
+[F1] require(kinds[k] != KIND_KAS || OpInputCovenantId(legCount + k) == zero);
+  SUFFIX_LEN 8063
+  expected flip: v2_foreign_covenant::f1_every_vault_refuses_a_token_of_another_covenant_after_the_vaults -> FLIPPED
+  also flipped (2): v2_foreign_covenant::f1_a_fee_input_with_a_covenant_id_is_refused, v2_foreign_covenant::f1_a_leg_token_owned_by_another_vault_is_refused_outside_its_slot
+[C1] require(OpCovOutputCount(myCov) == 0);
+  SUFFIX_LEN 8474
+  expected flip: v2_settle::c1_final_settle_leaves_a_continuation -> FLIPPED
+  also flipped (0): none
+[S8] require(tx.outputs[slot].scriptPubKey == byte[](new ScriptPubKeyP2PK(myDepositor)));
+  SUFFIX_LEN 8464
+  expected flip: v2_settle::s8_authorizer_return_to_stranger -> FLIPPED
+  also flipped (1): v2_settle::s8_authorizer_return_omitted
+[S9] require(tx.outputs[slot].value >= tx.inputs[this.activeInputIndex].value);
+  SUFFIX_LEN 8473
+  expected flip: v2_settle::s9_authorizer_return_short -> FLIPPED
+  also flipped (0): none
+[C2] require(myCov != byte[32](0x0000000000000000000000000000000000000000000000000000000000000000));
+  SUFFIX_LEN 8442
+  expected flip: v2_settle::c2_tranche_from_a_zero_covenant_vault -> FLIPPED
+  also flipped (0): none
+[C3] require(OpCovOutputCount(myCov) == 1);
+  SUFFIX_LEN 8474
+  expected flip: v2_settle::c3_two_continuations -> FLIPPED
+  also flipped (0): none
+[C4] require(OpCovOutputIdx(myCov, 0) == slot);
+  SUFFIX_LEN 8473
+  expected flip: v2_settle::c4_continuation_at_another_position -> FLIPPED
+  also flipped (0): none
+[C5] require(tx.outputs[slot].scriptPubKey == this.activeScriptPubKey);
+  SUFFIX_LEN 8473
+  expected flip: v2_settle::c5_continuation_with_another_script -> FLIPPED
+  also flipped (0): none
+[C6] require(tx.outputs[slot].value == held - tranche);
+  SUFFIX_LEN 8468
+  expected flip: v2_settle::c6_kas_remainder_short -> FLIPPED
+  also flipped (0): none
+[C7] require(tx.outputs[slot].value >= tx.inputs[this.activeInputIndex].value);
+  SUFFIX_LEN 8473
+  expected flip: v2_settle::c7_authorizer_continuation_short -> FLIPPED
+  also flipped (0): none
+[C8] require(OpOutputCovenantId(remainderIdx) == myTokenCov);
+  SUFFIX_LEN 8472
+  expected flip: v2_foreign_covenant::c8_remainder_without_a_covenant_to_a_stranger -> FLIPPED
+  also flipped (0): none
+[C9] require(tx.outputs[remainderIdx].value >= tx.inputs[escrowIdx].value);
+  SUFFIX_LEN 8471
+  expected flip: v2_settle::c9_remainder_carrier_short -> FLIPPED
+  also flipped (0): none
+[S6] require(checkSig(authSig, authorityKey));
+  SUFFIX_LEN 8471
+  expected flip: v2_settle::s6_authority_signature_from_stranger -> FLIPPED
+  also flipped (0): none
+[F5] require(tx.inputs.length <= MAX_INPUTS);
+  SUFFIX_LEN 8475
+  expected flip: v2_foreign_covenant::f5_a_refund_with_13_inputs_is_refused_at_the_bound -> FLIPPED
+  also flipped (0): none
+[V3] require(legCount <= MAX_LEGS);
+  SUFFIX_LEN 8474
+  expected flip: v2_refund::v3_leg_count_above_max_legs -> FLIPPED
+  also flipped (0): none
+[V4] require(legs.length == legCount * LEG_RECORD);
+  SUFFIX_LEN 8464
+  expected flip: v2_refund::v4_leg_list_longer_than_leg_count -> FLIPPED
+  also flipped (1): v2_refund::v4_leg_list_short
+[V8] require(legIndex >= 0 && legIndex < legCount);
+  SUFFIX_LEN 8470
+  expected flip: v2_refund::v8_leg_index_equal_to_leg_count -> FLIPPED
+  also flipped (1): v2_refund::v8_negative_leg_index
+[V9] require(myKind == KIND_KAS || myKind == KIND_KCC20);
+  SUFFIX_LEN 8469
+  expected flip: v2_refund::v9_leg_kind_byte_2 -> FLIPPED
+  also flipped (0): none
+[V10] require(refundType == DEST_P2PK || refundType == DEST_P2SH);
+  SUFFIX_LEN 8467
+  expected flip: v2_refund::v10_kas_refund_type_2 -> FLIPPED
+  also flipped (0): none
+[R1] require(signerLeg >= 0 && signerLeg <= legCount);
+  SUFFIX_LEN 8465
+  expected flip: v2_refund::r1_signer_leg_beyond_the_authority -> FLIPPED
+  also flipped (2): v2_foreign_covenant::f5_a_refund_with_13_inputs_is_refused_at_the_bound, v2_refund::r1_negative_signer_leg
+[R16] require(signerLeg < legCount || hasAuthority);
+  SUFFIX_LEN 8467
+  expected flip: v2_refund::r16_authority_signs_when_the_terms_name_none -> FLIPPED
+  also flipped (0): none
+[R2] require(checkSig(s, signerKey));
+  SUFFIX_LEN 8473
+  expected flip: v2_refund::r2_depositor_named_stranger_signs -> FLIPPED
+  also flipped (1): v2_refund::r2_another_depositor_named_stranger_signs
+[R3] require(tx.daa >= expiryDaa);
+  SUFFIX_LEN 8465
+  expected flip: v2_refund::r3_earmarked_depositor_one_daa_before_expiry -> FLIPPED
+  also flipped (1): v2_refund::r3_depositor_naming_another_of_its_legs_is_still_earmarked
+[R4] require(this.activeInputIndex == 0);
+  SUFFIX_LEN 8475
+  expected flip: v2_refund::r4_second_kas_deposit_cannot_refund_off_input_0 -> FLIPPED
+  also flipped (0): none
+[R5] require(tx.outputs[0].value == tx.inputs[0].value);
+  SUFFIX_LEN 8473
+  expected flip: v2_refund::r5_vault_kas_short -> FLIPPED
+  also flipped (0): none
+[R15] require(OpCovOutputCount(myCov) == 0);
+  SUFFIX_LEN 8474
+  expected flip: v2_refund::r15_refund_leaves_a_continuation -> FLIPPED
+  also flipped (0): none
+[F3] require(c == zero || c == legCov);
+  SUFFIX_LEN 8389
+  expected flip: v2_foreign_covenant::f3_refund_refuses_a_token_of_another_covenant -> FLIPPED
+  also flipped (2): v2_foreign_covenant::f3_a_fee_input_with_a_covenant_id_is_refused, v2_foreign_covenant::f3_another_legs_token_at_the_vault_no_longer_moves_with_its_refund
+[R6] require(tx.outputs[0].scriptPubKey == destSpk(refundType, refundId));
+  SUFFIX_LEN 8432
+  expected flip: v2_refund::r6_kas_refund_to_stranger -> FLIPPED
+  also flipped (0): none
+[R7] require(tx.outputs[0].scriptPubKey == byte[](new ScriptPubKeyP2PK(depositor)));
+  SUFFIX_LEN 8465
+  expected flip: v2_refund::r7_authorizer_kas_to_stranger -> FLIPPED
+  also flipped (0): none
+[R11] require(tokenInputs == 1);
+  SUFFIX_LEN 8475
+  expected flip: v2_refund::r11_another_depositor_cannot_refund_the_authorizer_alone -> FLIPPED
+  also flipped (1): v2_refund::r11_authority_cannot_refund_the_authorizer_alone
+[R8] require(tokenInputs == 1);
+  SUFFIX_LEN 8475
+  expected flip: v2_refund::r8_second_escrow_rides_along -> FLIPPED
+  also flipped (0): none
+[R9] require(OpCovInputIdx(cov, 0) == REFUND_TOKEN_INPUT);
+  SUFFIX_LEN 8473
+  expected flip: v2_foreign_covenant::r9_covenant_less_copy_at_input_1_real_escrow_at_input_2 -> FLIPPED
+  also flipped (0): none
+[R12] require(this.activeScriptPubKey == byte[](new ScriptPubKeyP2SH(escrowed.ownerIdentifier)));
+  SUFFIX_LEN 8459
+  expected flip: v2_refund::r12_foreign_token_not_owned_by_the_vault -> FLIPPED
+  also flipped (0): none
+[R14] require(escrowed.amount >= unit);
+  SUFFIX_LEN 8474
+  expected flip: v2_refund::r14_decoy_below_one_lot -> FLIPPED
+  also flipped (0): none
+[R17] require(escrowed.amount <= legAmount);
+  SUFFIX_LEN 8473
+  expected flip: v2_refund::r17_token_above_the_leg_amount -> FLIPPED
+  also flipped (0): none
+[R18] require(escrowed.amount % unit == 0);
+  SUFFIX_LEN 8472
+  expected flip: v2_refund::r18_token_not_whole_lots -> FLIPPED
+  also flipped (0): none
+[R10] require(OpOutputCovenantId(REFUND_TOKEN_OUTPUT) == cov);
+  SUFFIX_LEN 8472
+  expected flip: v2_foreign_covenant::r10_home_output_without_a_covenant_escrow_to_a_stranger -> FLIPPED
+  also flipped (0): none
+[R13] require(tx.outputs[REFUND_TOKEN_OUTPUT].value >= tx.inputs[REFUND_TOKEN_INPUT].value);
+  SUFFIX_LEN 8473
+  expected flip: v2_refund::r13_home_carrier_short -> FLIPPED
+  also flipped (0): none
+
+result: 62 of 62 requires caught by their named test

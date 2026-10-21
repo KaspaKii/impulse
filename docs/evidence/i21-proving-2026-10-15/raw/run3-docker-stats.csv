@@ -1,0 +1,10 @@
+epoch_s,name,mem_usage,mem_perc,cpu_perc
+1792094182,impulse-zk-measure-terms-3-68524,0B / 0B,0.00%,0.00%
+1792094183,impulse-zk-measure-terms-3-68524,3.116GiB / 7.748GiB,40.22%,260.40%
+1792094185,impulse-zk-measure-terms-3-68524,4.393GiB / 7.748GiB,56.69%,99.93%
+1792094187,impulse-zk-measure-terms-3-68524,4.492GiB / 7.748GiB,57.97%,100.02%
+1792094189,impulse-zk-measure-terms-3-68524,5.752GiB / 7.748GiB,74.24%,524.40%
+1792094191,impulse-zk-measure-terms-3-68524,6.348GiB / 7.748GiB,81.93%,760.42%
+1792094193,impulse-zk-measure-terms-3-68524,6.936GiB / 7.748GiB,89.52%,940.50%
+1792094195,impulse-zk-measure-terms-3-68524,6.977GiB / 7.748GiB,90.05%,890.79%
+1792094198,impulse-zk-measure-terms-3-68524,6.965GiB / 7.748GiB,89.89%,789.33%

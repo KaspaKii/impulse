@@ -1,0 +1,121 @@
+Mutation run, impulse frost (scripts/frost-mutation.py)
+source sha256 9754306b8967a79977b03e72bc7deba2546916b1eacb37d0a6442cea0551ae42
+script sha256 8ae0f926fc40de38599f7f851cb1c2cbaa6298027095238dae5d8fd1fa0d1442
+mutants 56, test targets impulse-cli --lib --test frost
+
+baseline: all tests pass
+
+[A1] frost.rs: a slot naming the authority may spend any UTXO (a fee input is signed)
+  caught by (2): frost_tests::a_fee_input_locked_to_the_authority_key_is_never_signed, frost_tests::the_authority_inputs_are_the_unsigned_slots_of_the_terms_authority
+[A2] frost.rs: any kind the terms check finds is signed
+  caught by (1): frost_tests::only_a_settle_or_a_refund_by_the_authority_is_signed
+[A3] frost.rs: the outputs are not shown before signing
+  caught by (1): frost_tests::sign_and_aggregate_fill_the_authority_slots_of_the_ipst
+[A4] frost.rs: the change is not shown before signing
+  caught by (1): frost_tests::sign_and_aggregate_fill_the_authority_slots_of_the_ipst
+[A5] frost.rs: a wrong session typed back still signs
+  caught by (1): frost_tests::the_signer_types_the_session_back_before_its_share_signs
+[A6] frost.rs: the signer is never asked to approve
+  caught by (2): frost_tests::sign_and_aggregate_fill_the_authority_slots_of_the_ipst, frost_tests::the_signer_types_the_session_back_before_its_share_signs
+[T1] frost.rs: --cash-template ignored
+  caught by (1): frost_tests::kcc20_cash_external_cash_and_an_authority_refund_sign_through_the_commands
+[T2] frost.rs: the terms check runs without the cash template
+  caught by (1): frost_tests::kcc20_cash_external_cash_and_an_authority_refund_sign_through_the_commands
+[S1] frost.rs: a signature-share file of another set of inputs accepted
+  caught by (1): frost_tests::aggregate_refuses_tampered_session_files
+[S2] frost.rs: a commitment file with a repeated input accepted
+  caught by (1): frost_tests::aggregate_refuses_tampered_session_files
+[S3] frost.rs: a commitment file of another set of inputs accepted
+  caught by (1): frost_tests::aggregate_refuses_tampered_session_files
+[S4] frost.rs: trailing bytes after the last entry accepted
+  caught by (1): frost_tests::aggregate_refuses_tampered_session_files
+[S5] frost.rs: a commitment file of another session accepted
+  caught by (2): frost_tests::aggregate_refuses_before_writing_anything, frost_tests::sign_refuses_commitments_of_another_session_and_asks_while_missing
+[S6] frost.rs: a signature-share file of another session accepted
+  caught by (1): frost_tests::aggregate_refuses_tampered_session_files
+[S7] frost.rs: a signature share made against other commitments accepted
+  caught by (1): frost_tests::aggregate_refuses_tampered_session_files
+[S8] frost.rs: the group file of another group accepted
+  caught by (1): frost_tests::aggregate_refuses_before_writing_anything
+[S9] frost.rs: aggregate checks --out only when writing
+  caught by (1): frost_tests::aggregate_refuses_before_writing_anything
+[S10] frost.rs: sign overwrites its own signature-share file
+  caught by (1): frost_tests::sign_refuses_before_printing_or_writing_anything
+[W1] frost.rs: commitment set digest without the session
+  caught by (1): frost_tests::wire_formats_are_pinned
+[W2] frost.rs: commitment set digest without the party numbers
+  caught by (1): frost_tests::wire_formats_are_pinned
+[W3] frost.rs: round-1 tag changed
+  caught by (2): frost_tests::keygen_writes_an_owner_only_share_after_both_confirmations, frost_tests::wire_formats_are_pinned
+[W4] frost.rs: round-2 tag changed
+  caught by (2): frost_tests::keygen_writes_an_owner_only_share_after_both_confirmations, frost_tests::wire_formats_are_pinned
+[W5] frost.rs: share tag changed
+  caught by (2): frost_tests::keygen_writes_an_owner_only_share_after_both_confirmations, frost_tests::wire_formats_are_pinned
+[W6] frost.rs: group tag changed
+  caught by (2): frost_tests::keygen_writes_an_owner_only_share_after_both_confirmations, frost_tests::wire_formats_are_pinned
+[W7] frost.rs: commit tag changed
+  caught by (2): frost_tests::files_are_their_tag_and_lowercase_hex_and_nothing_else, frost_tests::wire_formats_are_pinned
+[W8] frost.rs: sigshare tag changed
+  caught by (1): frost_tests::wire_formats_are_pinned
+[W9] frost.rs: session domain changed
+  caught by (2): frost_tests::the_session_is_the_specified_digest_and_changes_with_any_part, frost_tests::wire_formats_are_pinned
+[W10] frost.rs: commitment set domain changed
+  caught by (1): frost_tests::wire_formats_are_pinned
+[W11] frost.rs: session digest without the signers
+  caught by (4): frost_tests::aggregate_refuses_before_writing_anything, frost_tests::the_session_is_the_specified_digest_and_changes_with_any_part, frost_tests::the_signer_types_the_session_back_before_its_share_signs, frost_tests::wire_formats_are_pinned
+[F1] frost.rs: a FIFO is opened before it is checked (the command waits for a writer)
+  caught by (1): frost_tests::a_fifo_is_refused_without_waiting_for_a_writer
+[F2] frost.rs: group or others may read a secret file
+  caught by (2): frost_tests::keygen_refuses_bad_round_files, frost_tests::the_share_file_is_owner_only_and_exactly_its_encoding
+[F3] frost.rs: a repeated signer accepted
+  caught by (2): frost_tests::sign_refuses_before_printing_or_writing_anything, frost_tests::signers_are_distinct_party_numbers
+[F4] frost.rs: fewer signers than the threshold accepted
+  caught by (4): frost_tests::aggregate_refuses_before_writing_anything, frost_tests::sign_refuses_before_printing_or_writing_anything, frost_tests::signers_are_distinct_party_numbers, frost_tests::signing_checks_the_share_and_the_set_before_any_nonce_leaves
+[F5] frost.rs: party 0 accepted as a signer
+  caught by (1): frost_tests::signers_are_distinct_party_numbers
+[F6] frost.rs: a typed-back digest or fingerprint not compared
+  caught by (1): frost_tests::keygen_refuses_what_the_parties_did_not_confirm
+[F7] frost.rs: keygen may overwrite an existing share or group file
+  caught by (1): frost_tests::keygen_checks_its_arguments_before_anything
+[F8] frost.rs: keygen starts without the share or group file's directory
+  caught by (1): frost_tests::keygen_checks_its_arguments_before_anything
+[K1] keygen.rs: a secret file overwrites one that appeared while keygen ran
+  caught by (1): frost_tests::keygen_never_overwrites_a_file_that_appears_while_it_runs
+[K2] keygen.rs: a round-2 file that cannot be removed is not reported
+  caught by (1): frost_tests::keygen_reports_round2_files_it_cannot_remove
+[K3] keygen.rs: received round-2 files are never removed
+  caught by (2): frost_tests::keygen_reports_round2_files_it_cannot_remove, frost_tests::keygen_writes_an_owner_only_share_after_both_confirmations
+[K4] keygen.rs: a round-2 file of another round-1 transcript accepted
+  caught by (1): frost_tests::keygen_refuses_bad_round_files
+[K5] keygen.rs: a round-2 file addressed to another party accepted
+  caught by (1): frost_tests::keygen_refuses_bad_round_files
+[K6] keygen.rs: a round file of another sender accepted
+  caught by (1): frost_tests::keygen_refuses_bad_round_files
+[K7] keygen.rs: a round file of another group shape accepted
+  caught by (1): frost_tests::keygen_refuses_bad_round_files
+[K8] keygen.rs: secret files written readable by others
+  caught by (1): frost_tests::keygen_writes_an_owner_only_share_after_both_confirmations
+[K9] keygen.rs: round-2 files written before the digest is confirmed
+  caught by (3): frost_tests::keygen_never_overwrites_a_file_that_appears_while_it_runs, frost_tests::keygen_refuses_what_the_parties_did_not_confirm, frost_tests::keygen_writes_an_owner_only_share_after_both_confirmations
+[K10] keygen.rs: the share written before the fingerprint is confirmed
+  caught by (4): frost_tests::keygen_never_overwrites_a_file_that_appears_while_it_runs, frost_tests::keygen_refuses_what_the_parties_did_not_confirm, frost_tests::keygen_reports_round2_files_it_cannot_remove, frost_tests::keygen_writes_an_owner_only_share_after_both_confirmations
+[K11] keygen.rs: a round-2 file readable by others accepted
+  caught by (1): frost_tests::keygen_refuses_bad_round_files
+[G1] signing.rs: a share of another group signs
+  caught by (2): frost_tests::sign_refuses_before_printing_or_writing_anything, frost_tests::signing_checks_the_share_and_the_set_before_any_nonce_leaves
+[G2] signing.rs: a signer outside its own signing set signs
+  caught by (2): frost_tests::sign_refuses_before_printing_or_writing_anything, frost_tests::signing_checks_the_share_and_the_set_before_any_nonce_leaves
+[G3] signing.rs: an incomplete commitment set signed
+  caught by (1): frost_tests::signing_refuses_an_incomplete_commitment_set
+[G4] signing.rs: a FROST signature for mainnet without --network mainnet
+  caught by (1): frost_tests::the_network_rule_comes_before_the_share_file_is_opened
+[G5] signing.rs: a share file readable by others accepted
+  caught by (1): frost_tests::the_share_file_is_owner_only_and_exactly_its_encoding
+[G6] signing.rs: nonces drawn before the signing set is checked
+  caught by (2): frost_tests::sign_refuses_before_printing_or_writing_anything, frost_tests::signing_checks_the_share_and_the_set_before_any_nonce_leaves
+[N1] frost.rs: frost sign does not require the trade the signer named
+  caught by (1): frost_tests::sign_refuses_before_printing_or_writing_anything
+[N2] frost.rs: the approval prompt does not name the terms
+  caught by (9): frost_tests::a_fee_input_locked_to_the_authority_key_is_never_signed, frost_tests::aggregate_refuses_before_writing_anything, frost_tests::aggregate_refuses_tampered_session_files, frost_tests::kcc20_cash_external_cash_and_an_authority_refund_sign_through_the_commands, frost_tests::mainnet_signing_reads_the_daa_score_from_the_node, frost_tests::sign_and_aggregate_fill_the_authority_slots_of_the_ipst, frost_tests::sign_refuses_before_printing_or_writing_anything, frost_tests::sign_refuses_commitments_of_another_session_and_asks_while_missing, frost_tests::the_signer_types_the_session_back_before_its_share_signs
+
+result: 56 of 56 mutants caught

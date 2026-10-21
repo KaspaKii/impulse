@@ -1,0 +1,93 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/impulse-core",
+    "crates/impulse-cli",
+    "crates/impulse-watch",
+    "crates/impulse-wasm",
+    "tests/engine",
+    "tests/parity",
+]
+# I20 (spec/V3-ZK.md section 5.5, D60): circuits/ is its own cargo workspace. The Solana
+# workspace (I19, I18 Solana half) is also its own, with its own toolchain (Rust 1.91.0) and lock
+# file; it never joins this one (owner decision D28, rule 3, docs/ENGINEERING-RULES.md).
+exclude = ["circuits", "solana"]
+
+[workspace.package]
+version = "0.4.0"
+edition = "2021"
+license = "Apache-2.0"
+repository = "https://github.com/kaspakii/impulse"
+
+[workspace.dependencies]
+# Pinned per rule 3, docs/ENGINEERING-RULES.md. Owner decision 2026-10-06: rusty-kaspa follows the exact
+# revision silverscript v1.0.0 pins (a41a333 = tag v2.0.1 plus 8 commits that add the
+# kaspa-txscript-zk-sdk crate). A different rusty-kaspa pin puts two kaspa-txscript
+# packages in the tree; scripts/ci-local.sh fails if that happens.
+kaspa-consensus-core = { git = "https://github.com/kaspanet/rusty-kaspa", rev = "a41a333b08848f41bf737b72592e463a6011b8ac" }
+kaspa-txscript = { git = "https://github.com/kaspanet/rusty-kaspa", rev = "a41a333b08848f41bf737b72592e463a6011b8ac" }
+# Added in I4 for vault addresses; already in the tree through kaspa-consensus-core.
+kaspa-addresses = { git = "https://github.com/kaspanet/rusty-kaspa", rev = "a41a333b08848f41bf737b72592e463a6011b8ac" }
+silverscript-abi = { git = "https://github.com/kaspanet/silverscript", tag = "v1.0.0" }
+# Added in I1 for the engine spike; since I3 used only by tests/engine (dev-dependencies).
+kaspa-txscript-errors = { git = "https://github.com/kaspanet/rusty-kaspa", rev = "a41a333b08848f41bf737b72592e463a6011b8ac" }
+silverscript-lang = { git = "https://github.com/kaspanet/silverscript", tag = "v1.0.0" }
+# crates.io, at the versions rusty-kaspa a41a333 already resolves (no new versions in the tree).
+rand = "0.8.5"
+secp256k1 = { version = "0.29.1", features = ["global-context", "rand-std"] }
+# Added in I2 for the terms codec and its tests, crates.io, at versions already in the lock.
+blake2b_simd = "1.0.5"
+proptest = { version = "1.11.0", default-features = false, features = ["std"] }
+# Added in I3 (engine tests read the committed constructor args JSON, as silverc does). Since I4
+# also a normal dependency of impulse-core, which parses the embedded template artifact.
+serde_json = "1.0.151"
+# Added in I7 for the impulse CLI. kaspa-wrpc-client comes from the same pinned rusty-kaspa
+# revision as above (no second kaspa-txscript). clap, tokio and zeroize are at the crates.io
+# versions already in the lock; qrcode 0.14.1 is new, with its image, svg and pic features off,
+# so it brings no further crates.
+kaspa-wrpc-client = { git = "https://github.com/kaspanet/rusty-kaspa", rev = "a41a333b08848f41bf737b72592e463a6011b8ac" }
+clap = { version = "4.6.7", features = ["derive"] }
+tokio = { version = "1.53.2", default-features = false, features = ["rt-multi-thread", "time"] }
+zeroize = "1.9.1"
+qrcode = { version = "0.14.1", default-features = false }
+# Added in I7 review round 1: the strict JSON reader refuses duplicate keys through a serde
+# visitor. Already in the tree through serde_json, at this version; no new crate.
+serde = "1.0.229"
+# Added in I8 for the watcher's async tests (rt, macros); already in the tree through kaspa-core,
+# no new versions.
+# (tokio is declared once above; impulse-watch adds rt and macros in its own manifest.)
+# Added in I6 for the raw transaction format of the decoder (rusty-kaspa's own borsh encoding of
+# Transaction), crates.io, at the version rusty-kaspa a41a333 already resolves.
+borsh = "1.8.1"
+# Added in I9 for impulse-wasm. wasm-bindgen is pinned exactly: the wasm-bindgen CLI (and its
+# test runner) must be the same version, 0.2.100, which rusty-kaspa a41a333 already resolves.
+wasm-bindgen = "=0.2.100"
+js-sys = "=0.3.77"
+wasm-bindgen-test = "=0.3.50"
+# Added in I13 for impulse_core::threshold (FROST t-of-n, BIP-340 output; impulse-core feature
+# `threshold`, off by default). crates.io, pinned
+# exactly. Default features off: the default `serialization` feature pulls postcard with
+# heapless 0.7 and atomic-polyfill, which fails `cargo audit --deny warnings` (RUSTSEC-2023-0089,
+# unmaintained; checked 2026-10-07).
+frost-secp256k1-tr = { version = "=3.0.0", default-features = false }
+# frost-core, the version frost-secp256k1-tr pins, used directly for aggregate_custom with every
+# cheater named (I13). Already in the tree, default features off for the same reason.
+frost-core = { version = "=3.0.0", default-features = false }
+# Dev-dependency of impulse-core (I13): compile-time check that FROST secret types erase on drop.
+# Already in the tree through frost-core, at the version in the lock.
+# (zeroize is declared once above.)
+
+# Added in I18 for the hashlock and in I20 for impulse_core::zk (feature `zk`, off by default). crates.io,
+# at the versions already in Cargo.lock. The ark crates parse the 128-byte compressed proof the same
+# way the Kaspa precompile does (rusty-kaspa workspace Cargo.toml pins ark 0.6.0 exactly).
+sha2 = "0.10.9"
+ark-bn254 = "=0.6.0"
+ark-groth16 = "=0.6.0"
+ark-serialize = "=0.6.0"
+# Added in I11/I18 (live demo) for the read-only Solana RPC counterpart source of the CLI
+# (crates/impulse-cli/src/xchain_solana.rs). All three are in the lock already: reqwest 0.12.28
+# with the same rustls features workflow-http turns on for kaspa-wrpc-client, bs58 0.5.1 and
+# base64 0.22.1 through workflow-core and others.
+reqwest = { version = "0.12.28", default-features = false, features = ["rustls-tls-webpki-roots"] }
+bs58 = "0.5.1"
+base64 = "0.22.1"

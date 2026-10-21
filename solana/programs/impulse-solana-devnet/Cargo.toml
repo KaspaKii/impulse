@@ -1,0 +1,22 @@
+# Copyright (c) 2026 the Impulse authors. A KiiLabs product. Licensed under the Apache License, Version 2.0.
+# I19 devnet run: one impulse-solana settlement from one Impulse term sheet, and one impulse-htlc
+# open+claim and open+refund, against a deployed copy of each program. Driven by
+# scripts/solana-devnet.sh. Refuses mainnet. Reads keypair files the script names; never prints,
+# logs or writes a key.
+[package]
+name = "impulse-solana-devnet"
+version.workspace = true
+edition.workspace = true
+license = "Apache-2.0"
+publish = false
+
+[dependencies]
+impulse-solana-client = { path = "../impulse-solana-client" }
+rand = "0.8.5"
+serde_json = { workspace = true }
+sha2 = "0.10.8"
+solana-client = "2.3.10"
+solana-sdk = "2.3.1"
+solana-system-interface = { version = "1.0.0", features = ["bincode"] }
+spl-associated-token-account = { version = "4.0.0", features = ["no-entrypoint"] }
+spl-token = { version = "6.0.0", features = ["no-entrypoint"] }

@@ -1,0 +1,172 @@
+Mutation run, contracts/impulse_vault_v3.sil (tests/engine/mutation-v3.py)
+source sha256 904cf59ac2fa9cf512bf7dd205e84c6ee89a794812e1e91b4713d58557a76ddd
+TEMPLATE_HASH_V3 f00009e88c562fc529d1c30e406c783eb7532e39f6426be518616eb9a7283d4c
+require mutants 39, gate and [S10] mutants 14
+test targets v3_refund, v3p_settle, v3p_locktime, v3p_escrow_release, v3p_gate, v3_journal, v3p_foreign_covenant, v3p_sibling; real-proof targets v3_proofs
+scope: the mutants run against the probe (template v3 with the verify call replaced), not the shipped
+bytecode; a real proof binds one vault address and a mutant is another address. This is not mutation
+evidence for contracts/impulse_vault_v3.sil as shipped; see tests/engine/V3-SHIPPED-COVERAGE.md.
+
+baseline: all tests pass
+
+[E1] require(OpCovInputCount(cov) == 1);
+  expected flip: v3p_escrow_release::suite::second_escrow_deposit_cannot_ride_along_a_settle -> FLIPPED
+  also flipped (0): none
+[E2] require(OpCovInputIdx(cov, 0) == idx);
+  expected flip: v3p_settle::suite::e2_escrow_without_covenant_binding_real_asset_elsewhere -> FLIPPED
+  also flipped (0): none
+[E3] require(escrowed.identifierType == IDENTIFIER_SCRIPT_HASH);
+  expected flip: v3p_settle::suite::e3_escrow_owner_type_pubkey -> FLIPPED
+  also flipped (0): none
+[E4] require(this.activeScriptPubKey == byte[](new ScriptPubKeyP2SH(escrowed.ownerIdentifier)));
+  expected flip: v3p_settle::suite::e4_escrow_owned_by_another_vault -> FLIPPED
+  also flipped (1): v3p_settle::suite::e4_escrow_owned_by_the_cash_vault
+[E5] require(escrowed.amount == amount);
+  expected flip: v3p_settle::suite::e5_escrow_over_funded -> FLIPPED
+  also flipped (3): v3p_settle::suite::e5_cash_escrow_over_funded, v3p_settle::suite::e5_cash_escrow_under_funded, v3p_settle::suite::e5_escrow_under_funded
+[E6] require(!escrowed.isMinter);
+  expected flip: v3p_settle::suite::e6_minter_escrow_cannot_hand_minting_to_a_stranger -> FLIPPED
+  also flipped (0): none
+[S8] require(tx.outputs[k].scriptPubKey == byte[](new ScriptPubKeyP2PK(depositor)));
+  expected flip: v3p_settle::suite::s8_seller_authorizer_return_to_stranger -> FLIPPED
+  also flipped (4): v3p_settle::suite::s8_buyer_authorizer_return_omitted, v3p_settle::suite::s8_buyer_authorizer_return_to_stranger, v3p_settle::suite::s8_external_cash_seller_return_omitted, v3p_settle::suite::s8_seller_authorizer_return_omitted
+[S9] require(tx.outputs[k].value >= tx.inputs[this.activeInputIndex].value);
+  expected flip: v3p_settle::suite::s9_seller_return_short -> FLIPPED
+  also flipped (2): v3p_settle::suite::s9_buyer_return_short, v3p_settle::suite::s9_external_cash_seller_return_short
+[D1] require(OpOutputCovenantId(k) == cov);
+  expected flip: v3p_foreign_covenant::suite::d1_output0_without_a_covenant_real_asset_to_a_stranger -> FLIPPED
+  also flipped (0): none
+[D2] require(tx.outputs[k].value >= tx.inputs[templateIdx].value);
+  expected flip: v3p_settle::suite::d2_asset_delivery_carrier_kas_short -> FLIPPED
+  also flipped (2): v3p_settle::suite::d2_cash_delivery_carrier_kas_short, v3p_settle::suite::d2_external_cash_asset_delivery_carrier_kas_short
+[F4] require(tx.inputs.length <= MAX_INPUTS);
+  expected flip: v3p_foreign_covenant::suite::f4_a_settle_with_13_inputs_is_refused_at_the_bound -> FLIPPED
+  also flipped (0): none
+[S1] require(this.activeInputIndex == legIndex);
+  expected flip: v3p_settle::suite::s1_second_kas_cash_deposit_cannot_settle_off_its_index -> FLIPPED
+  also flipped (0): none
+[S7] require(hasAuthority);
+  expected flip: v3p_settle::suite::s7_external_cash_without_authority -> FLIPPED
+  also flipped (1): v3p_settle::suite::s7_self_settling_external_cash_never_settles
+[S10] require(tx.inputs[otherLeg].scriptPubKey == byte[](new ScriptPubKeyP2SHFromRedeemScript(otherRedeem)));
+  expected flip: v3p_sibling::suite::s10_a_cash_token_at_the_asset_vault_cannot_pay_the_seller_without_the_cash_vault -> FLIPPED
+  also flipped (4): v3p_sibling::suite::s10_an_asset_token_at_the_cash_vault_cannot_deliver_to_the_buyer_without_the_asset_vault, v3p_sibling::suite::s10_asset_vault_refuses_a_kas_cash_settle_without_the_cash_vault, v3p_sibling::suite::s10_cross_trade_mixing_is_refused, v3p_sibling::suite::s10_this_vault_again_at_the_other_slot_is_refused
+[F1] require(c == zero || c == assetCov || c == cashCov);
+  expected flip: v3p_foreign_covenant::suite::f1_asset_vault_settle_refuses_a_token_of_another_covenant -> FLIPPED
+  also flipped (3): v3p_foreign_covenant::suite::f1_a_fee_input_with_a_covenant_id_is_refused, v3p_foreign_covenant::suite::f1_cash_vault_settle_refuses_a_token_of_another_covenant, v3p_foreign_covenant::suite::f1_settle_refuses_a_key_owned_token_of_another_covenant
+[F2] require(OpCovInputCount(otherCov) == 1);
+  expected flip: v3p_foreign_covenant::suite::f2_asset_vault_refuses_a_second_token_of_the_cash_covenant -> FLIPPED
+  also flipped (1): v3p_foreign_covenant::suite::f2_cash_vault_refuses_a_second_token_of_the_asset_covenant
+[S2] require(tx.inputs[this.activeInputIndex].value == amountB);
+  expected flip: v3p_settle::suite::s2_kas_cash_vault_under_funded -> FLIPPED
+  also flipped (1): v3p_settle::suite::s2_kas_cash_vault_over_funded
+[S3] require(tx.daa >= earliestDaa);
+  expected flip: v3p_locktime::suite::s3_settle_one_daa_before_earliest -> FLIPPED
+  also flipped (2): v3p_locktime::suite::s3_settle_with_finalized_vault_input, v3p_locktime::suite::s3_settle_with_timestamp_lock_time
+[S4] require(tx.outputs[1].scriptPubKey == sellerProceedsSpk);
+  expected flip: v3p_settle::suite::s4_kas_proceeds_to_stranger -> FLIPPED
+  also flipped (0): none
+[S5] require(tx.outputs[1].value == amountB);
+  expected flip: v3p_settle::suite::s5_kas_proceeds_short -> FLIPPED
+  also flipped (0): none
+[Z1] require(buyerDeliveryType == IDENTIFIER_PUBKEY || buyerDeliveryType == IDENTIFIER_SCRIPT_HASH);
+  expected flip: v3p_gate::z1_covenant_owner_refused -> FLIPPED
+  also flipped (0): none
+[Z2] require(proof.length == 0);
+  expected flip: v3p_gate::z2_cash_vault_nonempty_proof_refused -> FLIPPED
+  also flipped (1): v3p_gate::z2_kcc20_cash_vault_nonempty_proof_refused
+[S6] require(checkSig(authSig, authorityKey));
+  expected flip: v3p_settle::suite::s6_authority_signature_from_stranger -> FLIPPED
+  also flipped (2): v3p_settle::suite::s6_authority_signature_from_a_party, v3p_settle::suite::s6_authority_signature_missing
+[F5] require(tx.inputs.length <= MAX_INPUTS);
+  expected flip: v3p_foreign_covenant::suite::f5_a_refund_with_13_inputs_is_refused_at_the_bound -> FLIPPED
+  also flipped (0): none
+[R1] require(signer == depositor || signer == counterparty || (hasAuthority && signer == authorityKey));
+  expected flip: v3_refund::suite::r1_stranger_signer -> FLIPPED
+  also flipped (1): v3_refund::suite::r1_authority_key_without_authority_flag
+[R2] require(checkSig(s, signer));
+  expected flip: v3_refund::suite::r2_depositor_named_stranger_signs -> FLIPPED
+  also flipped (1): v3_refund::suite::r2_authority_named_counterparty_signs
+[R3] require(tx.daa >= expiryDaa);
+  expected flip: v3p_locktime::suite::r3_depositor_earmarked_refund_one_daa_before_expiry -> FLIPPED
+  also flipped (3): v3p_locktime::suite::r3_cash_depositor_earmarked_refund_one_daa_before_expiry, v3p_locktime::suite::r3_depositor_earmarked_refund_with_finalized_input, v3p_locktime::suite::r3_unknown_funding_mode_is_earmarked
+[R4] require(this.activeInputIndex == 0);
+  expected flip: v3_refund::suite::r4_second_kas_cash_deposit_cannot_refund_off_input_0 -> FLIPPED
+  also flipped (0): none
+[R5] require(tx.outputs[0].value == tx.inputs[0].value);
+  expected flip: v3_refund::suite::r5_authorizer_kas_short -> FLIPPED
+  also flipped (1): v3_refund::suite::r5_kas_cash_short
+[F3] require(c == zero || c == legCov);
+  expected flip: v3p_foreign_covenant::suite::f3_refund_refuses_a_token_of_another_covenant -> FLIPPED
+  also flipped (4): v3p_foreign_covenant::suite::f3_a_cash_token_at_the_asset_vault_no_longer_moves_with_its_refund, v3p_foreign_covenant::suite::f3_a_fee_input_with_a_covenant_id_is_refused, v3p_foreign_covenant::suite::f3_authorizer_alone_refuses_a_token_of_another_covenant_at_input_1, v3p_foreign_covenant::suite::f3_external_cash_vault_refund_refuses_any_token
+[R6] require(tx.outputs[0].scriptPubKey == buyerRefundSpk);
+  expected flip: v3_refund::suite::r6_kas_cash_to_stranger -> FLIPPED
+  also flipped (0): none
+[R7] require(tx.outputs[0].scriptPubKey == byte[](new ScriptPubKeyP2PK(depositor)));
+  expected flip: v3_refund::suite::r7_authorizer_kas_to_stranger -> FLIPPED
+  also flipped (1): v3_refund::suite::r7_authorizer_kas_to_counterparty
+[R11] require(tokenInputs == 1);
+  expected flip: v3_refund::suite::r11_counterparty_cannot_refund_asset_authorizer_without_token -> FLIPPED
+  also flipped (3): v3_refund::suite::r11_authority_cannot_refund_asset_authorizer_without_token, v3_refund::suite::r11_authority_cannot_refund_cash_authorizer_without_token, v3_refund::suite::r11_counterparty_cannot_refund_cash_authorizer_without_token
+[R8] require(tokenInputs == 1);
+  expected flip: v3p_escrow_release::suite::second_escrow_deposit_cannot_ride_along_a_refund -> FLIPPED
+  also flipped (0): none
+[R9] require(OpCovInputIdx(cov, 0) == REFUND_TOKEN_INPUT);
+  expected flip: v3p_foreign_covenant::suite::r9_covenant_less_copy_at_input_1_real_escrow_at_input_2 -> FLIPPED
+  also flipped (0): none
+[R12] require(this.activeScriptPubKey == byte[](new ScriptPubKeyP2SH(escrowed.ownerIdentifier)));
+  expected flip: v3_refund::suite::r12_counterparty_cannot_substitute_a_foreign_token -> FLIPPED
+  also flipped (0): none
+[R14] require(escrowed.amount == legAmount);
+  expected flip: v3_refund::suite::r14_asset_decoy_amount_0 -> FLIPPED
+  also flipped (7): v3_refund::suite::r14_asset_decoy_amount_0_by_authority, v3_refund::suite::r14_asset_decoy_amount_1, v3_refund::suite::r14_asset_decoy_amount_leg_minus_1, v3_refund::suite::r14_cash_decoy_amount_0, v3_refund::suite::r14_cash_decoy_amount_1, v3_refund::suite::r14_cash_decoy_amount_leg_minus_1, v3_refund::suite::r14_counterparty_cannot_refund_under_funded_escrow
+[R10] require(OpOutputCovenantId(REFUND_TOKEN_OUTPUT) == cov);
+  expected flip: v3p_foreign_covenant::suite::r10_home_output_without_a_covenant_escrow_to_a_stranger -> FLIPPED
+  also flipped (0): none
+[R13] require(tx.outputs[REFUND_TOKEN_OUTPUT].value >= tx.inputs[REFUND_TOKEN_INPUT].value);
+  expected flip: v3_refund::suite::r13_token_carrier_kas_short -> FLIPPED
+  also flipped (0): none
+[gate] verify call removed
+  expected flip: v3_proofs::v3_proof_bit_flip_refused -> FLIPPED
+  also flipped (7): v3_proofs::v3_forging_guest_refused, v3_proofs::v3_proof_for_cash_vault_refused, v3_proofs::v3_proof_for_other_owner_refused, v3_proofs::v3_proof_for_other_root_refused, v3_proofs::v3_proof_for_other_vault_refused, v3_proofs::v3_proof_length_refused, v3_proofs::v3_proof_owner_type_swap_refused
+[gate] journal without the tag
+  expected flip: v3_journal::v3_journal_accepted_for_pubkey_and_script_hash_owners -> FLIPPED
+  also flipped (0): none
+[gate] journal without the list root
+  expected flip: v3_journal::v3_journal_accepted_for_pubkey_and_script_hash_owners -> FLIPPED
+  also flipped (0): none
+[gate] journal without the vault scriptPubKey
+  expected flip: v3_journal::v3_journal_accepted_for_pubkey_and_script_hash_owners -> FLIPPED
+  also flipped (0): none
+[gate] journal without the owner scriptPubKey
+  expected flip: v3_journal::v3_journal_accepted_for_pubkey_and_script_hash_owners -> FLIPPED
+  also flipped (1): v3_journal::v3_journal_every_field_is_bound
+[gate] owner scriptPubKey always P2PK form
+  expected flip: v3_journal::v3_journal_accepted_for_pubkey_and_script_hash_owners -> FLIPPED
+  also flipped (0): none
+[gate] owner scriptPubKey always P2SH form
+  expected flip: v3_journal::v3_journal_accepted_for_pubkey_and_script_hash_owners -> FLIPPED
+  also flipped (0): none
+[gate] P2PK script ends with another opcode
+  expected flip: v3_journal::v3_journal_accepted_for_pubkey_and_script_hash_owners -> FLIPPED
+  also flipped (0): none
+[gate] gate on every leg
+  expected flip: v3p_gate::z2_cash_vault_empty_proof_settles -> FLIPPED
+  also flipped (4): v3p_gate::z1_covenant_owner_refused, v3p_gate::z1_script_hash_owner_settles, v3p_gate::z2_cash_vault_nonempty_proof_refused, v3p_gate::z2_kcc20_cash_vault_nonempty_proof_refused
+[gate] gate on no leg
+  expected flip: v3p_gate::z1_script_hash_owner_settles -> FLIPPED
+  also flipped (4): v3p_gate::z1_covenant_owner_refused, v3p_gate::z2_cash_vault_empty_proof_settles, v3p_gate::z2_cash_vault_nonempty_proof_refused, v3p_gate::z2_kcc20_cash_vault_nonempty_proof_refused
+[gate] [S10] only for KCC-20 cash (KAS cash left unbound)
+  expected flip: v3p_sibling::suite::s10_asset_vault_refuses_a_kas_cash_settle_without_the_cash_vault -> FLIPPED
+  also flipped (2): v3p_sibling::suite::s10_an_asset_token_at_the_cash_vault_cannot_deliver_to_the_buyer_without_the_asset_vault, v3p_sibling::suite::s10_this_vault_again_at_the_other_slot_is_refused
+[gate] [S10] also under external cash
+  expected flip: v3p_sibling::suite::s10_external_cash_asset_vault_settles_with_no_cash_vault -> FLIPPED
+  also flipped (0): none
+[gate] [S10] rebuilds this vault's own script (legIndex kept)
+  expected flip: v3p_settle::suite::settle_authority_kcc20_cash -> FLIPPED
+  also flipped (42): v3p_settle::suite::authorizer_returns_may_exceed_the_authorizer_value, v3p_settle::suite::d1_cash_output1_under_decoy_covenant, v3p_settle::suite::d2_asset_delivery_carrier_kas_short, v3p_settle::suite::d2_cash_delivery_carrier_kas_short, v3p_settle::suite::deliveries_may_carry_more_than_the_escrow_kas, v3p_settle::suite::e2_escrow_under_another_covenant_real_asset_elsewhere, v3p_settle::suite::e2_escrow_without_covenant_binding_real_asset_elsewhere, v3p_settle::suite::e3_escrow_owner_type_pubkey, v3p_settle::suite::e4_escrow_owned_by_another_vault, v3p_settle::suite::e4_escrow_owned_by_the_cash_vault, v3p_settle::suite::e5_cash_escrow_over_funded, v3p_settle::suite::e5_cash_escrow_under_funded, v3p_settle::suite::e5_escrow_over_funded, v3p_settle::suite::e5_escrow_under_funded, v3p_settle::suite::e6_minter_escrow_cannot_hand_minting_to_a_stranger, v3p_settle::suite::kcc20_proceeds_short, v3p_settle::suite::kcc20_proceeds_to_stranger, v3p_settle::suite::kcc20_proceeds_under_the_asset_template, v3p_settle::suite::output0_is_minter, v3p_settle::suite::output0_short_amount, v3p_settle::suite::output0_under_another_template, v3p_settle::suite::output0_wrong_owner, v3p_settle::suite::output0_wrong_owner_type, v3p_settle::suite::s1_asset_vault_refuses_input_1, v3p_settle::suite::s1_second_kas_cash_deposit_cannot_settle_off_its_index, v3p_settle::suite::s2_kas_cash_vault_over_funded, v3p_settle::suite::s2_kas_cash_vault_under_funded, v3p_settle::suite::s4_kas_proceeds_to_stranger, v3p_settle::suite::s5_kas_proceeds_short, v3p_settle::suite::s6_authority_signature_from_a_party, v3p_settle::suite::s6_authority_signature_from_stranger, v3p_settle::suite::s6_authority_signature_missing, v3p_settle::suite::s8_buyer_authorizer_return_omitted, v3p_settle::suite::s8_buyer_authorizer_return_to_stranger, v3p_settle::suite::s8_seller_authorizer_return_omitted, v3p_settle::suite::s8_seller_authorizer_return_to_stranger, v3p_settle::suite::s9_buyer_return_short, v3p_settle::suite::s9_seller_return_short, v3p_settle::suite::settle_authority_kas_cash, v3p_settle::suite::settle_earmarked_funding, v3p_settle::suite::settle_self_settling_kas_cash, v3p_settle::suite::settle_self_settling_kcc20_cash
+[gate] [S10] checks this vault's own slot
+  expected flip: v3p_settle::suite::settle_authority_kcc20_cash -> FLIPPED
+  also flipped (42): v3p_settle::suite::authorizer_returns_may_exceed_the_authorizer_value, v3p_settle::suite::d1_cash_output1_under_decoy_covenant, v3p_settle::suite::d2_asset_delivery_carrier_kas_short, v3p_settle::suite::d2_cash_delivery_carrier_kas_short, v3p_settle::suite::deliveries_may_carry_more_than_the_escrow_kas, v3p_settle::suite::e2_escrow_under_another_covenant_real_asset_elsewhere, v3p_settle::suite::e2_escrow_without_covenant_binding_real_asset_elsewhere, v3p_settle::suite::e3_escrow_owner_type_pubkey, v3p_settle::suite::e4_escrow_owned_by_another_vault, v3p_settle::suite::e4_escrow_owned_by_the_cash_vault, v3p_settle::suite::e5_cash_escrow_over_funded, v3p_settle::suite::e5_cash_escrow_under_funded, v3p_settle::suite::e5_escrow_over_funded, v3p_settle::suite::e5_escrow_under_funded, v3p_settle::suite::e6_minter_escrow_cannot_hand_minting_to_a_stranger, v3p_settle::suite::kcc20_proceeds_short, v3p_settle::suite::kcc20_proceeds_to_stranger, v3p_settle::suite::kcc20_proceeds_under_the_asset_template, v3p_settle::suite::output0_is_minter, v3p_settle::suite::output0_short_amount, v3p_settle::suite::output0_under_another_template, v3p_settle::suite::output0_wrong_owner, v3p_settle::suite::output0_wrong_owner_type, v3p_settle::suite::s1_asset_vault_refuses_input_1, v3p_settle::suite::s1_second_kas_cash_deposit_cannot_settle_off_its_index, v3p_settle::suite::s2_kas_cash_vault_over_funded, v3p_settle::suite::s2_kas_cash_vault_under_funded, v3p_settle::suite::s4_kas_proceeds_to_stranger, v3p_settle::suite::s5_kas_proceeds_short, v3p_settle::suite::s6_authority_signature_from_a_party, v3p_settle::suite::s6_authority_signature_from_stranger, v3p_settle::suite::s6_authority_signature_missing, v3p_settle::suite::s8_buyer_authorizer_return_omitted, v3p_settle::suite::s8_buyer_authorizer_return_to_stranger, v3p_settle::suite::s8_seller_authorizer_return_omitted, v3p_settle::suite::s8_seller_authorizer_return_to_stranger, v3p_settle::suite::s9_buyer_return_short, v3p_settle::suite::s9_seller_return_short, v3p_settle::suite::settle_authority_kas_cash, v3p_settle::suite::settle_earmarked_funding, v3p_settle::suite::settle_self_settling_kas_cash, v3p_settle::suite::settle_self_settling_kcc20_cash
+
+result: 53 of 53 mutants caught by their named test

@@ -1,0 +1,13 @@
+// Copyright (c) 2026 the Impulse authors. A KiiLabs product. Licensed under the Apache License, Version 2.0.
+pragma silverscript ^0.1.0;
+// Feasibility probe for spec/V2.md only: validateOutputState with a variable-length state field.
+// silverc v1.0.0 refuses it at compile time (see results.txt), so the v2 vault cannot carry a
+// changing counter next to a byte[] legs field; partial settlement continues with unchanged state.
+contract ContinuationStateProbe(byte[] initLegs, int initLotsLeft) {
+    byte[] legs = initLegs;
+    int lotsLeft = initLotsLeft;
+
+    entry step(int lots) {
+        validateOutputState(0, State { legs: legs, lotsLeft: lotsLeft - lots });
+    }
+}

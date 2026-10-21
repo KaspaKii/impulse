@@ -1,0 +1,38 @@
+# The node URL checks of impulse-cli (crates/impulse-cli/src/node.rs) and impulse-watch
+# (crates/impulse-watch/src/node.rs) are copies of each other, because the CLI links the
+# signing module and the watcher must not. Both crates' tests run this one table, so the
+# copies cannot drift apart. Columns, separated by a tab: the URL, and what mainnet does
+# with it: ok, insecure (a plain-text link to a host that is not this machine) or invalid
+# (not ws:// or wss://). Testnet accepts every ok and insecure URL and refuses every invalid one.
+wss://node.example:443	ok
+wss://node.example:443/path	ok
+ws://127.0.0.1:17110	ok
+ws://127.0.0.1	ok
+ws://127.0.0.1:17110/	ok
+ws://localhost:17110	ok
+ws://localhost:17110/path	ok
+ws://[::1]:17110	ok
+ws://10.0.0.5:17110	insecure
+ws://203.0.113.9:17110	insecure
+ws://node.example	insecure
+ws://node.example:17110	insecure
+ws://127.0.0.1.evil.example:17110	insecure
+ws://127.0.0.1.example:17110	insecure
+ws://127.0.0.1@203.0.113.9:17110	insecure
+ws://user@127.0.0.1:17110	insecure
+ws://localhost.example	insecure
+ws://localhost:abc	insecure
+ws://localhost:	insecure
+ws://127.0.0.1:x	insecure
+ws://127.0.0.1:	insecure
+ws://127.0.0.2:17110	insecure
+ws://[::2]:17110	insecure
+ws://[::1]x:17110	insecure
+http://127.0.0.1:17110	invalid
+127.0.0.1:17110	invalid
+ws://	invalid
+wss://	invalid
+ws://host name	invalid
+WS://127.0.0.1:17110	invalid
+grpc://127.0.0.1:16110	invalid
+http://127.0.0.1:16110	invalid

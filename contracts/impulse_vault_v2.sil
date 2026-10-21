@@ -1,0 +1,382 @@
+// Copyright (c) 2026 the Impulse authors. A KiiLabs product. Licensed under the Apache License, Version 2.0.
+// ImpulseVault v2: one template, two entries (settle, refund), instantiated per trade leg, for
+// trades of 2 to MAX_LEGS legs. Design: spec/V2.md, section 4. Increment: I16.
+//
+// The terms and the leg index are the contract state, so the template (everything around the
+// state span) and its hash are the same for every trade and every leg count, and the P2SH address
+// of a leg commits to every term. Fields the entries never read (version, network, nonce,
+// fundingMode on settle, tradeRef) are still part of the state and therefore of the address.
+//
+// Settle layout (spec/V2.md 4.3; N legs, the K KCC-20 legs first):
+//   inputs 0 .. N-1       vault of leg i at input i (KCC-20 authorizer, or the KAS of a KAS leg)
+//   inputs N .. N+K-1     escrowed token of KCC-20 leg j at input N + j
+//   outputs 0 .. N-1      delivery of leg j at output j
+//   outputs N .. N+K-1    authorizer KAS of KCC-20 leg j home to its depositor (final settle)
+//   outputs N .. 2N-1     continuation of vault i at N + i (tranche, I17)
+//   outputs 2N .. 2N+K-1  remainder token of KCC-20 leg j (tranche, I17)
+// Every vault checks every delivery, so each party's proceeds are enforced by its own vault, and
+// every vault checks that the other vault inputs are this trade's vaults ([S10]).
+//
+// Refund layout (one vault UTXO per refund transaction, as v1):
+//   input 0   the vault UTXO being refunded                    output 0  its KAS, whole
+//   input 1   the leg's escrowed token (KCC-20 leg)            output 1  that token, whole
+// Fees come from other inputs in both layouts.
+//
+// Release 0.4 of this template (spec/V2.md section 4.5, "Inputs outside the layout"): no token
+// rides along in a spend of this vault. On settle every input after the vaults carries no
+// covenant, except the escrow slot N + j of a KCC-20 leg j, which vault j checks ([F1]); on
+// refund every input after the vault carries no covenant or this leg's ([F3]). A settle has at
+// most N + MAX_INPUTS_AFTER_VAULTS inputs ([F4]) and a refund at most MAX_INPUTS ([F5]), the
+// bounds of those loops, checked by the contract itself..
+pragma silverscript ^0.1.0; // language version of the silverscript v1.0.0 compiler
+
+contract ImpulseVaultV2(
+    byte initVersion,
+    byte initNetwork,
+    byte[8] initNonce,
+    bool initHasAuthority,
+    pubkey initAuthorityKey,
+    int initLegCount,
+    byte[] initLegs,
+    bool initHasEarliest,
+    int initEarliestDaa,
+    int initExpiryDaa,
+    byte initFundingMode,
+    byte[32] initTradeRef,
+    int initLotCount,
+    int initMinLot,
+    int initLegIndex
+) {
+    // State, spec/V2.md 4.2. legIndex must stay the last field: [S10] rebuilds a sibling's
+    // redeem script by replacing the last eight bytes of the state.
+    byte version = initVersion;
+    byte network = initNetwork;
+    byte[8] nonce = initNonce;
+    bool hasAuthority = initHasAuthority;
+    pubkey authorityKey = initAuthorityKey;
+    int legCount = initLegCount;
+    byte[] legs = initLegs;
+    bool hasEarliest = initHasEarliest;
+    int earliestDaa = initEarliestDaa;
+    int expiryDaa = initExpiryDaa;
+    byte fundingMode = initFundingMode;
+    byte[32] tradeRef = initTradeRef;
+    int lotCount = initLotCount;
+    int minLot = initMinLot;
+    int legIndex = initLegIndex;
+
+    // KCC-20 runtime state; field order and types must match kcc20.sil exactly.
+    struct KCC20State {
+        byte[32] ownerIdentifier;
+        byte identifierType;
+        int amount;
+        bool isMinter;
+    }
+
+    // Compile-time loop bound (D29, D38) and the leg record (spec/V2.md 4.2).
+    int constant MAX_LEGS = 10;
+    int constant LEG_RECORD = 187;
+    int constant OFF_DEPOSITOR = 0;
+    int constant OFF_KIND = 32;
+    int constant OFF_COVENANT = 33;
+    int constant OFF_TEMPLATE_HASH = 65;
+    int constant OFF_PREFIX_LEN = 97;
+    int constant OFF_SUFFIX_LEN = 105;
+    int constant OFF_AMOUNT = 113;
+    int constant OFF_DELIVERY_TYPE = 121;
+    int constant OFF_DELIVERY_ID = 122;
+    int constant OFF_REFUND_TYPE = 154;
+    int constant OFF_REFUND_ID = 155;
+
+    byte constant KIND_KAS = 0x00;
+    byte constant KIND_KCC20 = 0x01;
+    byte constant DEST_P2PK = 0x00;
+    byte constant DEST_P2SH = 0x01;
+    byte constant IDENTIFIER_SCRIPT_HASH = 0x01;
+    byte constant FUNDING_REVOCABLE = 0x00;
+    int constant REFUND_TOKEN_INPUT = 1;
+    int constant REFUND_TOKEN_OUTPUT = 1;
+    // Inputs after the vault slots, at most (spec/V2.md 4.5).
+    int constant MAX_INPUTS_AFTER_VAULTS = 18;
+    int constant MAX_INPUTS = 12;
+    int constant MAX_INPUTS_AFTER_VAULT = 11;
+    // OpInputCovenantId of an input without a covenant (rusty-kaspa a41a333: ZERO_HASH).
+    byte[32] constant NO_COVENANT = byte[32](0x0000000000000000000000000000000000000000000000000000000000000000);
+
+    // Redeem script layout for [S10]: a 1-byte template prefix, the state (STATE_FIXED bytes of
+    // pushes around the legs payload, legIndex's 8-byte payload last), then the template suffix.
+    // SUFFIX_LEN is this template's own suffix length, a fixed point found by compiling: changing
+    // anything in this file changes it. scripts/build-template-v2.sh and the engine test
+    // v2_template::suffix_constant_is_the_template_suffix fail when it is stale.
+    int constant PREFIX_LEN = 1;
+    int constant STATE_FIXED = 142;
+    int constant SUFFIX_LEN = 8477;
+
+    // One leg record. Each read of `legs` pushes the whole list (script units are charged per
+    // pushed byte), so a record is sliced out once and its fields are read from it.
+    function legRecord(int leg) : byte[] {
+        int o = leg * LEG_RECORD;
+        return legs.slice(o, o + LEG_RECORD);
+    }
+
+    function recInt(byte[] rec, int off) : int {
+        return int(byte[8](rec.slice(off, off + 8)));
+    }
+
+    function recBytes(byte[] rec, int off) : byte[32] {
+        return byte[32](rec.slice(off, off + 32));
+    }
+
+    // A KAS destination: type 0 is a Schnorr P2PK of the identifier, type 1 a P2SH of it.
+    function destSpk(byte destType, byte[32] id) : byte[] {
+        byte[] spk = byte[](new ScriptPubKeyP2SH(id));
+        if (destType == DEST_P2PK) {
+            spk = byte[](new ScriptPubKeyP2PK(pubkey(id)));
+        }
+        return spk;
+    }
+
+    entry settle(sig authSig, int lots) {
+        // At most N + MAX_INPUTS_AFTER_VAULTS inputs, the bound of the input check below.
+        require(tx.inputs.length <= legCount + MAX_INPUTS_AFTER_VAULTS); // [F4]
+
+        // Position and the shape of the state, checked by the script itself.
+        require(this.activeInputIndex == legIndex); // [S1]
+        require(legCount <= MAX_LEGS); // [V1]
+        require(legs.length == legCount * LEG_RECORD); // [V2]
+        require(legIndex >= 0 && legIndex < legCount); // [V5]
+        require(lots >= 1); // [P1]
+
+        byte[] mine = legRecord(legIndex);
+        byte myKind = mine[OFF_KIND];
+        int myAmount = recInt(mine, OFF_AMOUNT);
+        int myUnit = myAmount / lotCount;
+        int escrowIdx = legCount + legIndex;
+        byte[32] myTokenCov = recBytes(mine, OFF_COVENANT);
+        int myPrefixLen = recInt(mine, OFF_PREFIX_LEN);
+        int mySuffixLen = recInt(mine, OFF_SUFFIX_LEN);
+        byte[32] myTemplateHash = recBytes(mine, OFF_TEMPLATE_HASH);
+        pubkey myDepositor = pubkey(recBytes(mine, OFF_DEPOSITOR));
+
+        // What this vault's escrow holds. A KCC-20 leg's escrow is the only input of its
+        // covenant, sits at N + i, runs the agreed template, is owned by this vault's script hash
+        // and is not a minter. A KAS leg's escrow is this vault UTXO itself.
+        int held = 0;
+        byte[32] escrowOwner = byte[32](0x0000000000000000000000000000000000000000000000000000000000000000);
+        if (myKind == KIND_KCC20) {
+            require(OpCovInputCount(myTokenCov) == 1); // [E1]
+            require(OpCovInputIdx(myTokenCov, 0) == escrowIdx); // [E2]
+            KCC20State escrowed = readInputStateWithTemplate(escrowIdx, myPrefixLen, mySuffixLen, myTemplateHash);
+            require(escrowed.identifierType == IDENTIFIER_SCRIPT_HASH); // [E3]
+            require(this.activeScriptPubKey == byte[](new ScriptPubKeyP2SH(escrowed.ownerIdentifier))); // [E4]
+            require(!escrowed.isMinter); // [E6]
+            held = escrowed.amount;
+            escrowOwner = escrowed.ownerIdentifier;
+        } else {
+            held = tx.inputs[this.activeInputIndex].value;
+        }
+
+        // Whole lots, never more than the leg amount; without partial terms (lotCount 1,
+        // minLot 1) these leave exactly lots 1 and held == amount, which is v1's [E5] and [S2].
+        require(held <= myAmount); // [P2]
+        require(held % myUnit == 0); // [P3]
+        int tranche = lots * myUnit;
+        require(tranche <= held); // [P4]
+        require(lots >= minLot); // [P5]
+        require(held - tranche == 0 || held - tranche >= minLot * myUnit); // [P6]
+
+        // Not before earliestDaa (absolute DAA-score lock time).
+        if (hasEarliest) {
+            require(tx.daa >= earliestDaa); // [S3]
+        }
+
+        // This vault's own redeem script is the last push of its signature script; a sibling's
+        // is the same bytes with legIndex replaced.
+        int me = this.activeInputIndex;
+        int sigEnd = OpTxInputScriptSigLen(me);
+        int stateEnd = sigEnd - SUFFIX_LEN;
+        int redeemStart = stateEnd - (PREFIX_LEN + STATE_FIXED + legs.length);
+        byte[] redeemHead = OpTxInputScriptSigSubstr(me, redeemStart, stateEnd - 8);
+        byte[] redeemTail = OpTxInputScriptSigSubstr(me, stateEnd, sigEnd);
+
+        // Every vault checks every leg's delivery. kinds collects each leg's kind byte for the
+        // input check below.
+        byte[] kinds = mine.slice(0, 0);
+        for (j, 0, legCount, MAX_LEGS) {
+            byte[] rec = legRecord(j);
+            byte kind = rec[OFF_KIND];
+            require(kind == KIND_KAS || kind == KIND_KCC20); // [V6]
+            kinds = kinds + rec.slice(OFF_KIND, OFF_KIND + 1);
+            if (j != legIndex) {
+                byte[] siblingRedeem = redeemHead + OpNum2Bin(j, 8) + redeemTail;
+                require(tx.inputs[j].scriptPubKey == byte[](new ScriptPubKeyP2SHFromRedeemScript(siblingRedeem))); // [S10]
+            }
+            int deliver = lots * (recInt(rec, OFF_AMOUNT) / lotCount);
+            byte deliveryType = rec[OFF_DELIVERY_TYPE];
+            byte[32] deliveryId = recBytes(rec, OFF_DELIVERY_ID);
+            if (kind == KIND_KAS) {
+                require(deliveryType == DEST_P2PK || deliveryType == DEST_P2SH); // [V7]
+                require(tx.outputs[j].scriptPubKey == destSpk(deliveryType, deliveryId)); // [S4]
+                require(tx.outputs[j].value == deliver); // [S5]
+            } else {
+                int tokenIdx = legCount + j;
+                require(OpOutputCovenantId(j) == recBytes(rec, OFF_COVENANT)); // [D1]
+                require(tx.outputs[j].value >= tx.inputs[tokenIdx].value); // [D2]
+                KCC20State delivered = KCC20State {
+                    ownerIdentifier: deliveryId,
+                    identifierType: deliveryType,
+                    amount: deliver,
+                    isMinter: false
+                };
+                validateOutputStateWithInputTemplate(j, delivered, tokenIdx, recInt(rec, OFF_PREFIX_LEN), recInt(rec, OFF_SUFFIX_LEN), recBytes(rec, OFF_TEMPLATE_HASH));
+            }
+        }
+
+        // No token rides along. Every input after the vaults carries no covenant, except the
+        // escrow slot N + j of a leg j whose kind is not KAS (a KCC-20 leg, [V6]), where vault j (an input here, [S10]) holds the
+        // only input of leg j's covenant ([E1], [E2]). kinds is padded with KAS kinds, so input
+        // N + k for k from N on is never an escrow slot.
+        byte[32] zero = NO_COVENANT;
+        kinds = kinds + byte[18](0x000000000000000000000000000000000000);
+        for (k, 0, tx.inputs.length - legCount, MAX_INPUTS_AFTER_VAULTS) {
+            require(kinds[k] != KIND_KAS || OpInputCovenantId(legCount + k) == zero); // [F1]
+        }
+
+        byte[32] myCov = OpInputCovenantId(this.activeInputIndex);
+        int slot = legCount + legIndex;
+        if (tranche == held) {
+            // Final: no continuation; a KCC-20 leg's authorizer goes home, at least in full.
+            require(OpCovOutputCount(myCov) == 0); // [C1]
+            if (myKind == KIND_KCC20) {
+                require(tx.outputs[slot].scriptPubKey == byte[](new ScriptPubKeyP2PK(myDepositor))); // [S8]
+                require(tx.outputs[slot].value >= tx.inputs[this.activeInputIndex].value); // [S9]
+            }
+        } else {
+            // Tranche (I17): the vault continues as the same covenant with the same script, and
+            // the remainder stays with it, exact.
+            require(myCov != byte[32](0x0000000000000000000000000000000000000000000000000000000000000000)); // [C2]
+            require(OpCovOutputCount(myCov) == 1); // [C3]
+            require(OpCovOutputIdx(myCov, 0) == slot); // [C4]
+            require(tx.outputs[slot].scriptPubKey == this.activeScriptPubKey); // [C5]
+            if (myKind == KIND_KAS) {
+                require(tx.outputs[slot].value == held - tranche); // [C6]
+            } else {
+                require(tx.outputs[slot].value >= tx.inputs[this.activeInputIndex].value); // [C7]
+                int remainderIdx = 2 * legCount + legIndex;
+                require(OpOutputCovenantId(remainderIdx) == myTokenCov); // [C8]
+                require(tx.outputs[remainderIdx].value >= tx.inputs[escrowIdx].value); // [C9]
+                KCC20State remainder = KCC20State {
+                    ownerIdentifier: escrowOwner,
+                    identifierType: IDENTIFIER_SCRIPT_HASH,
+                    amount: held - tranche,
+                    isMinter: false
+                };
+                validateOutputStateWithInputTemplate(remainderIdx, remainder, escrowIdx, myPrefixLen, mySuffixLen, myTemplateHash);
+            }
+        }
+
+        // The settlement authority signs, if there is one.
+        if (hasAuthority) {
+            require(checkSig(authSig, authorityKey)); // [S6]
+        }
+    }
+
+    entry refund(sig s, int signerLeg) {
+        // At most MAX_INPUTS inputs, the bound of the input check below.
+        require(tx.inputs.length <= MAX_INPUTS); // [F5]
+
+        require(legCount <= MAX_LEGS); // [V3]
+        require(legs.length == legCount * LEG_RECORD); // [V4]
+        require(legIndex >= 0 && legIndex < legCount); // [V8]
+        byte[] mine = legRecord(legIndex);
+        byte myKind = mine[OFF_KIND];
+        require(myKind == KIND_KAS || myKind == KIND_KCC20); // [V9]
+        byte refundType = mine[OFF_REFUND_TYPE];
+        byte[32] refundId = recBytes(mine, OFF_REFUND_ID);
+        if (myKind == KIND_KAS) {
+            require(refundType == DEST_P2PK || refundType == DEST_P2SH); // [V10]
+        }
+
+        // 1. A depositor of the terms (named by its leg) or the authority signs.
+        require(signerLeg >= 0 && signerLeg <= legCount); // [R1]
+        require(signerLeg < legCount || hasAuthority); // [R16]
+        pubkey signerKey = authorityKey;
+        if (signerLeg < legCount) {
+            signerKey = pubkey(recBytes(legRecord(signerLeg), OFF_DEPOSITOR));
+        }
+        require(checkSig(s, signerKey)); // [R2]
+
+        // 2. Earmarked: the depositor's own refund opens at expiryDaa. Roles are told apart by
+        //    key, so a depositor of several legs naming another of its legs is still the
+        //    depositor. Any funding mode other than revocable is treated as earmarked.
+        pubkey depositor = pubkey(recBytes(mine, OFF_DEPOSITOR));
+        bool isDepositor = signerKey == depositor;
+        if (fundingMode != FUNDING_REVOCABLE && isDepositor) {
+            require(tx.daa >= expiryDaa); // [R3]
+        }
+
+        // 3. Everything goes home whole: one vault UTXO per refund, at input 0, its KAS at
+        //    output 0, and no continuation of its covenant.
+        require(this.activeInputIndex == 0); // [R4]
+        require(tx.outputs[0].value == tx.inputs[0].value); // [R5]
+        byte[32] myCov = OpInputCovenantId(this.activeInputIndex);
+        require(OpCovOutputCount(myCov) == 0); // [R15]
+
+        // No token rides along: every input after the vault carries no covenant or this leg's
+        // covenant ([R8] and [R9] place that one at input 1).
+        byte[32] zero = NO_COVENANT;
+        byte[32] legCov = zero;
+        if (myKind != KIND_KAS) {
+            legCov = recBytes(mine, OFF_COVENANT);
+        }
+        for (i, 1, tx.inputs.length, MAX_INPUTS_AFTER_VAULT) {
+            byte[32] c = OpInputCovenantId(i);
+            require(c == zero || c == legCov); // [F3]
+        }
+        if (myKind == KIND_KAS) {
+            require(tx.outputs[0].scriptPubKey == destSpk(refundType, refundId)); // [R6]
+        } else {
+            require(tx.outputs[0].scriptPubKey == byte[](new ScriptPubKeyP2PK(depositor))); // [R7]
+
+            // Only the depositor may refund the authorizer on its own; any other signer takes
+            // the escrowed token home with it.
+            byte[32] cov = recBytes(mine, OFF_COVENANT);
+            int tokenInputs = OpCovInputCount(cov);
+            if (!isDepositor) {
+                require(tokenInputs == 1); // [R11]
+            }
+
+            // Any token of this leg's covenant in the transaction is this vault's escrow at
+            // input 1 and returns whole (amount, minter flag and its own KAS) to the depositor's
+            // refund owner at output 1.
+            if (tokenInputs > 0) {
+                require(tokenInputs == 1); // [R8]
+                require(OpCovInputIdx(cov, 0) == REFUND_TOKEN_INPUT); // [R9]
+                int prefixLen = recInt(mine, OFF_PREFIX_LEN);
+                int suffixLen = recInt(mine, OFF_SUFFIX_LEN);
+                byte[32] tmplHash = recBytes(mine, OFF_TEMPLATE_HASH);
+                KCC20State escrowed = readInputStateWithTemplate(REFUND_TOKEN_INPUT, prefixLen, suffixLen, tmplHash);
+                require(this.activeScriptPubKey == byte[](new ScriptPubKeyP2SH(escrowed.ownerIdentifier))); // [R12]
+                // Anyone can make a token owned by this vault. Outside the depositor's own refund
+                // it must hold whole lots, at least one and at most the leg amount, so a decoy
+                // costs at least one lot, which goes home to the depositor.
+                if (!isDepositor) {
+                    int legAmount = recInt(mine, OFF_AMOUNT);
+                    int unit = legAmount / lotCount;
+                    require(escrowed.amount >= unit); // [R14]
+                    require(escrowed.amount <= legAmount); // [R17]
+                    require(escrowed.amount % unit == 0); // [R18]
+                }
+                require(OpOutputCovenantId(REFUND_TOKEN_OUTPUT) == cov); // [R10]
+                require(tx.outputs[REFUND_TOKEN_OUTPUT].value >= tx.inputs[REFUND_TOKEN_INPUT].value); // [R13]
+                KCC20State home = KCC20State {
+                    ownerIdentifier: refundId,
+                    identifierType: refundType,
+                    amount: escrowed.amount,
+                    isMinter: escrowed.isMinter
+                };
+                validateOutputStateWithInputTemplate(REFUND_TOKEN_OUTPUT, home, REFUND_TOKEN_INPUT, prefixLen, suffixLen, tmplHash);
+            }
+        }
+    }
+}

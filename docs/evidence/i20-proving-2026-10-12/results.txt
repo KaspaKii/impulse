@@ -1,0 +1,30 @@
+I20 proving measurement (spec/V3-ZK.md section 14.2)
+directory: docs/evidence/i20-proving-2026-10-12
+method: circuits/scripts/measure-proving.sh (copied here); raw data in raw/; machine in machine.txt
+input: fixture a_list1000 (list of 1,000 entries, owner at the last position, stand-in vault)
+runs: 3, completed: 3
+1-minute load average at run start: 48.53 / 74.00 / 91.27 (other work shared the machine; see raw/run*-load-before.txt)
+
+figures for this laptop and these versions only; min / median / max over completed runs
+guest total cycles:               262144 / 262144 / 262144
+guest user cycles:                117671 / 117671 / 117671
+segments:                         1 / 1 / 1
+(a) execution, s:                 0.019 / 0.019 / 0.024
+(b) succinct receipt, s:          67.3 / 86.3 / 115.7
+(c1) identity_p254, s:            80.9 / 84.3 / 108.6
+(c2) Groth16 step in Docker, s:   27.2 / 27.3 / 36.1
+total in the prover, s:           187.7 / 222.3 / 223.9
+host peak resident memory, MiB:   1947.3 / 2161.3 / 2202.8
+Groth16 container peak memory, MiB (sampled about once a second): 7779.3 / 8133.6 / 8137.7
+Docker VM memory limit, MiB:      16223.5
+succinct seal, bytes:             222668 / 222668 / 222668
+compressed Groth16 proof, bytes:  128 / 128 / 128
+
+run {"docker_exit": 0, "docker_oom_or_kill": false, "docker_peak_mem_bytes": 8533026275, "execute_ms": 19, "exit": 0, "groth16_container": "impulse-zk-measure-1-46708", "groth16_ms": 36072, "host_peak_rss_bytes": 2309750784, "identity_p254_ms": 84259, "load_avg_1m_before": 74.0, "proof_bytes": 128, "run": 1, "segments": 1, "succinct_ms": 67347, "succinct_receipt_bytes": 222668, "total_cycles": 262144, "total_ms": 187725, "user_cycles": 117671}
+run {"docker_exit": 0, "docker_oom_or_kill": false, "docker_peak_mem_bytes": 8528731308, "execute_ms": 24, "exit": 0, "groth16_container": "impulse-zk-measure-2-46708", "groth16_ms": 27176, "host_peak_rss_bytes": 2041921536, "identity_p254_ms": 80900, "load_avg_1m_before": 91.27, "proof_bytes": 128, "run": 2, "segments": 1, "succinct_ms": 115741, "succinct_receipt_bytes": 222668, "total_cycles": 262144, "total_ms": 223866, "user_cycles": 117671}
+run {"docker_exit": 0, "docker_oom_or_kill": false, "docker_peak_mem_bytes": 8157216636, "execute_ms": 19, "exit": 0, "groth16_container": "impulse-zk-measure-3-46708", "groth16_ms": 27320, "host_peak_rss_bytes": 2266316800, "identity_p254_ms": 108582, "load_avg_1m_before": 48.53, "proof_bytes": 128, "run": 3, "segments": 1, "succinct_ms": 86308, "succinct_receipt_bytes": 222668, "total_cycles": 262144, "total_ms": 222254, "user_cycles": 117671}
+
+go or no-go (section 14.2): NO-GO
+  fewer than five runs: not a checkpoint run
+
+note (I20 review round 1, 2026-10-13): the figures above are loaded-machine upper bounds from 3 runs, not a checkpoint. The 1-minute load average at run start was 48 to 91 on this laptop. The NO-GO stands until a directory with at least 5 runs on an idle machine (circuits/scripts/measure-proving.sh, which now refuses to start above MAX_LOAD) is committed. Times of the fixture regenerations (4 to 9 minutes per proof) are uncontrolled and are not measurements.

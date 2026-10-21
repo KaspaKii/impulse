@@ -1,0 +1,10 @@
+{
+  "name": "02-leaf-p2sh",
+  "description": "The leaf of a P2SH owner under a fixed salt.",
+  "leaf_tag": "Impulse/zk/leaf/v1",
+  "salt": "e4bf0e9a63198d9c0d0add0ea128890169821dd76906cfd13530a1f1b5b2dd9a",
+  "owner_type": "script_hash",
+  "owner_id": "7f094678513f52a3f4130581a114d76d6ea40122c5bd49b425537292d0c3c676",
+  "owner_spk": "0000aa207f094678513f52a3f4130581a114d76d6ea40122c5bd49b425537292d0c3c67687",
+  "leaf": "6f1b7e1ddd5b8c637c705a67593ba8434439d1a2fbb2d50fd1d63eb661b8d1be"
+}

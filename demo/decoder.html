@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<!-- Copyright (c) 2026 the Impulse authors. A KiiLabs product. Licensed under the Apache License, Version 2.0. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self'; connect-src 'self' wss: ws://localhost:* ws://127.0.0.1:*; img-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Impulse decoder</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+<script type="module" src="decoder.js"></script>
+</head>
+<body class="decoder-page">
+<a class="skip" href="#main">Skip to the decoder</a>
+<header class="topbar">
+  <div class="brand">
+    <h1><img class="brand-word" src="impulse-wordmark.svg" alt="Impulse" width="77" height="26"></h1>
+    <span class="brand-sub">Settlement console</span>
+  </div>
+  <nav class="tabs" aria-label="Pages"><a href="index.html">Trade</a> <a href="decoder.html" aria-current="page">Decoder</a></nav>
+  <div class="topbar-state" aria-hidden="true">
+    <span class="net-badge"></span>
+    <span class="chip">Read only</span>
+  </div>
+</header>
+
+<div class="banner-row">
+  <p class="banner">This page reads a settlement from the node you name. It signs nothing and holds no key. Non-custodial software, not advice or an offer.</p>
+  <details class="banner-details">
+    <summary>Details</summary>
+    <p class="hint">Impulse is non-custodial, gives no advice or offer, issues no asset or token, and does not check issuer terms or sanctions obligations; those stay your own responsibility.</p>
+  </details>
+</div>
+
+<main id="main" class="decoder-shell">
+<section id="decoder-form" class="panel">
+  <h2 class="panel-title">Decode a settlement</h2>
+  <label>Network
+    <select id="decoder-network"><option value="testnet">testnet</option><option value="mainnet">mainnet</option></select>
+  </label>
+  <label>Node URL (wRPC JSON)
+    <input id="node-url" class="mono" autocomplete="off" spellcheck="false" placeholder="ws://127.0.0.1:18210">
+  </label>
+  <p class="hint"><code>wss://</code> to any host, or <code>ws://</code> to <code>localhost</code> or <code>127.0.0.1</code> only.</p>
+  <label>Transaction id (64 hex digits)
+    <input id="txid" class="mono" autocomplete="off" spellcheck="false">
+  </label>
+  <label>Chain block to look from (optional)
+    <input id="from-block" class="mono" autocomplete="off" spellcheck="false">
+  </label>
+  <p class="hint">A chain block at or before the submission, which the trade page prints.</p>
+  <div class="row"><button type="button" class="primary" id="decode" disabled>Decode</button></div>
+  <p id="decoder-status" class="status-line" role="status" data-state="idle" aria-live="polite">Loading.</p>
+  <details class="help">
+    <summary>Details</summary>
+    <p class="hint">Settlements are self-describing on chain. The page asks the node for the transaction, rebuilds the trade from the vault script each input reveals, checks it against the pinned template, and shows what the node says about it. Nothing is sent anywhere except to that node.</p>
+    <p class="hint">This page's policy allows no other plaintext link than <code>ws://</code> to a kaspad on this machine, so a node reachable over the internet needs <code>wss://</code>.</p>
+    <p class="hint">A node keeps no index of transactions by ID. The page looks in its mempool, and then, if you give a block, on the chain from that block.</p>
+  </details>
+</section>
+
+<section id="decoder-output" class="panel">
+  <h2 class="panel-title">Reconstructed trade</h2>
+  <div id="out-trade"><p class="pending">Nothing decoded yet.</p></div>
+  <h2 class="panel-title">Template-hash check</h2>
+  <div id="out-template"><p class="pending">Nothing decoded yet.</p></div>
+  <h2 class="panel-title">Receipt</h2>
+  <div id="out-receipt"><p class="pending">Nothing decoded yet.</p></div>
+</section>
+</main>
+
+<footer>
+  <p>Impulse by WarpCore. Apache License 2.0. Static page: no analytics, no third-party scripts. <a href="LICENSE">Licence</a></p>
+</footer>
+</body>
+</html>

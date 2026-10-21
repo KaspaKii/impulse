@@ -1,0 +1,8 @@
+ImpulseVault: 2938 bytes, template prefix 1, state 508, suffix 2429
+silverc sha256 12efce4ada1a8d9ce2ec8a241c377ac19a3371c593af27db4ffb1c90e6d71132
+artifact sha256 59cba93eabdf324f88a981749dbe44694ae94d5f069bd90ecdf3a0deae5944ce
+committed artifact sha256 59cba93eabdf324f88a981749dbe44694ae94d5f069bd90ecdf3a0deae5944ce
+artifact byte-identical to the committed artifact
+TEMPLATE_HASH compiled   1877344751ca7b4491ba6d19e20139995c83321b3106e539f1c1be4384a65fcd
+TEMPLATE_HASH committed  1877344751ca7b4491ba6d19e20139995c83321b3106e539f1c1be4384a65fcd
+TEMPLATE_HASH matches

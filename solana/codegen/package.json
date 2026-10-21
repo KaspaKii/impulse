@@ -1,0 +1,15 @@
+{
+  "name": "impulse-solana-codegen",
+  "private": true,
+  "description": "Regenerates the impulse-solana Rust client from the program IDL (Codama). Scripts adapted from solana-foundation/dvp df9919e, MIT, see solana/LICENSE-MIT.",
+  "license": "Apache-2.0 AND MIT",
+  "scripts": {
+    "generate": "tsx ./scripts/generate-clients.ts"
+  },
+  "devDependencies": {
+    "@codama/renderers-rust": "1.2.9",
+    "codama": "1.6.0",
+    "tsx": "4.21.0",
+    "typescript": "5.9.3"
+  }
+}

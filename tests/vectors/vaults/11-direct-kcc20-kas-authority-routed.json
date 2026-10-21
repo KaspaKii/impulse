@@ -1,0 +1,13 @@
+{
+  "name": "11-direct-kcc20-kas-authority-routed",
+  "terms_hash": "a4b6544357d09ff67a0db0c75fc58cd97436a89a27cbf0a9bd60f4183242b0d0",
+  "template_hash": "ec92ce9d06ff2f57a4f547b724b6fdfe9d9fa62814e687d8670ae96d331e6f02",
+  "asset_vault": {
+    "leg_index": 0,
+    "refused": "TEMPLATE_NO_VAULT"
+  },
+  "cash_vault": {
+    "leg_index": 1,
+    "refused": "TEMPLATE_NO_VAULT"
+  }
+}

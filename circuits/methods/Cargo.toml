@@ -1,0 +1,13 @@
+# Copyright (c) 2026 the Impulse authors. A KiiLabs product. Licensed under the Apache License, Version 2.0.
+# Embeds the guests' ELF binaries and image IDs (risc0-build, in Docker, pinned image).
+[package]
+name = "impulse-zk-methods"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[build-dependencies]
+risc0-build.workspace = true
+
+[package.metadata.risc0]
+methods = ["../list-guest", "../terms-guest", "../test-guests/forge-guest"]

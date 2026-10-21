@@ -1,0 +1,9 @@
+silverc: silverscript-lang 1.0.0 at 3ed9733
+vault_v2_probe MAX_LEGS=2 (state for N=3): bytecode 3139, prefix 1, state 703, suffix 2435
+vault_v2_probe MAX_LEGS=4 (state for N=3): bytecode 4265, prefix 1, state 703, suffix 3561
+vault_v2_probe MAX_LEGS=10 (state for N=3): bytecode 7643, prefix 1, state 703, suffix 6939
+vault_v2_probe MAX_LEGS=16 (state for N=3): bytecode 11021, prefix 1, state 703, suffix 10317
+hashlock_probe: bytecode 1077, prefix 1, state 350, suffix 726
+int_cast_probe bytecode: 6b0805000000000000006c76044de1e8088763757882599f69757600587f52799c69757551676a68
+continuation_state_probe (expected to fail):
+compile error: unsupported feature: validateOutputState does not support field type byte[]

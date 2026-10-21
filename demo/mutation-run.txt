@@ -1,0 +1,355 @@
+Mutation run, demo/dist (demo/mutation.mjs)
+app.js sha256 63375064b32a4298519fef7457581ceec13504e5098e7fb5c0f787a6aa6f5876
+main.js sha256 5c18dd769bb839cb64cefe3aaab6780a229289ee8f4bd1e5fc96751418b4ac34
+dom.js sha256 c99c7d4ce2ded1fc9f0e15ba1482ebbd7ca0258dab87ba10a59822c89466b7c2
+node.js sha256 299ee2acc3173a56b4d0d850b0595818d19b49f91448b9ad57040f4cbcf96679
+wallets.js sha256 9f9dde7ad1e231e6dc2eb8307d167edd810a88027da2c2f5fe86427da1940c6b
+actions.js sha256 1efa5544ca5099fe2c67f7bf37538807cf867b33aea57a40aafc1a87ee839cb7
+decoder.js sha256 d15c934f6df2cf10299d2e8cf994bfd9a252199708b6f4d87013b39568c45860
+config.js sha256 a011cf2cb15f0a9576377643c803ca2559f7b7462497927b2609437ea079d27a
+index.html sha256 7294bddbf7ddf96a24136eb3d2137b7c267cd663dbb8d6e253ff8782e5fca023
+decoder.html sha256 37adc87072ec4de6e4b87d89a8199e385b646f9708ea41ac4f20332f47a7cd9b
+test/chain.test.ts sha256 35230c8a423b4db52e2afcc3555a51d62f7e0296b444fa48ecdee97da7fe52c2
+test/component.test.ts sha256 dafb63fac0aa8bd9a45f999059f96dab57e8c8cf7a022ec051ea88c1948af567
+test/gates.test.ts sha256 a8dbe933dfa0edd60fcf796e5bd063a7617d80d6fbdb026ccb3b0d9ddbe197f1
+test/node.test.ts sha256 8af1aaba241e5ef9a4410e2877209b0de5d92c741665a89de22a0b54b5def36e
+test/outcome.test.ts sha256 71bd752019dfb3d91e1b3978fadad3f964c248e3f8ff62026054c4433e54cff1
+test/page.test.ts sha256 6104b692679b59e72891b0c1688dd7b6503ab4f77787935342e8aec7d063c32d
+test/paths.test.ts sha256 368f4b3b996e5930487d20a54350a30cced61cf53d45acc6612cdeeb1f264474
+test/refusals.test.ts sha256 e950f8d5a927e04a23deaa2a1f33656ad70c8ecfcd01ca07e6eeeb71fafe5ccd
+test/review.test.ts sha256 0bf1eabca3aeece1113d5130bdcaa4785813291945c1d3cb4ec3ed3bd249b6d6
+test/trade.test.ts sha256 dcd792e67ca393de37db34cc2286c641300d44093f495cb1867f7150a24a44db
+test/wallets.test.ts sha256 ec23dddd62620ec27677a21d312abc551935d772a0811855d995df60125d9994
+mutation.mjs sha256 4e8569bd7b2e6085fe778186ae88e5a88d427e289bf926c393441124a01fe63d
+mutants 163, test target demo/test/*.test.ts (126 tests)
+
+baseline: 126 of 126 pass
+
+[M1] app.js: the configured cap is not passed to the SDK
+  caught by (1): the configured cap can be lowered and binds; a cap above the default makes the page refuse every trade
+[M2] app.js: the mainnet switch is ignored by the creation checks
+  caught by (1): terms whose token is no pinned kcc20.sil build offer no funding, and a funding forced through the page's build is refused by the SDK before the node is asked, beside the pinned control
+[M3] app.js: the switch does not recompute: a testnet instruction stays on screen
+  caught by (1): flipping the network while a connection is still opening leaves no node attached: the score is not read from it and nothing is built
+[M4] app.js: a typed creation DAA score is claimed to come from a node
+  caught by (1): flipping the network while a connection is still opening leaves no node attached: the score is not read from it and nothing is built
+[M5] app.js: the QR shows the vault address, not the URI
+  caught by (1): the QR code on the page decodes to exactly the funding URI of the vector; a damaged one does not
+[M6] app.js: no quiet zone around the QR
+  caught by (1): the QR code has its quiet zone of four modules; a drawing with less is seen
+[M7] app.js: a quiet zone of one module
+  caught by (1): the QR code has its quiet zone of four modules; a drawing with less is seen
+[M8] app.js: the KAS echo of the cash amount reads the asset amount
+  caught by (1): example 08 in the page (vector 08 with its token pinned): terms hash, template hash, both vault addresses and the funding URI equal the SDK's, and the URI is joined here as spec/CLI.md writes it
+[M9] app.js: the value row shows the cap as the value
+  caught by (1): example 08 in the page (vector 08 with its token pinned): terms hash, template hash, both vault addresses and the funding URI equal the SDK's, and the URI is joined here as spec/CLI.md writes it
+[M10] app.js: the creation score is described as read from a node
+  caught by (1): example 08 in the page (vector 08 with its token pinned): terms hash, template hash, both vault addresses and the funding URI equal the SDK's, and the URI is joined here as spec/CLI.md writes it
+[M11] app.js: a KAS amount labelled as sompi
+  caught by (1): example 08 in the page (vector 08 with its token pinned): terms hash, template hash, both vault addresses and the funding URI equal the SDK's, and the URI is joined here as spec/CLI.md writes it
+[M12] app.js: the wallet confirmation sentence is dropped
+  caught by (1): example 08 in the page (vector 08 with its token pinned): terms hash, template hash, both vault addresses and the funding URI equal the SDK's, and the URI is joined here as spec/CLI.md writes it
+[M13] app.js: the decoded terms are never shown
+  caught by (1): the four destinations come before the legs, open, decoded and marked by the SDK; the status says what did not run
+[M14] app.js: the four destinations are never shown
+  caught by (1): the four destinations come before the legs, open, decoded and marked by the SDK; the status says what did not run
+[M15] app.js: a KAS declaration survives loading other terms
+  caught by (1): a declared value does not survive loading other terms: each trade needs a fresh declaration
+[M16] app.js: the form read back is not compared with the terms loaded
+  caught by (1): a form that changes a field while terms load is refused by the SDK's comparison; the page as built is accepted
+[M17] app.js: pasted text goes through JSON.parse, not the SDK's reader
+  caught by (1): the trade page runs the bundled SDK under its CSP: no foreign request, no violation, no eval
+[M18] app.js: no warning on a destination that pays the counterparty or the authority
+  caught by (1): terms whose destinations pay the counterparty or the authority are refused for the party they attack; the other party sees them marked, beside the vector's own
+[M19] app.js: no token notice on a KCC-20 leg
+  caught by (1): every KCC-20 leg carries TOKEN_UNASSESSED, every vault says who funds it, the warnings section says what is not checked
+[M20] app.js: the leg card no longer says to send nothing to the other vault
+  caught by (1): every KCC-20 leg carries TOKEN_UNASSESSED, every vault says who funds it, the warnings section says what is not checked
+[M21] app.js: the status claims all checks passed
+  caught by (1): the four destinations come before the legs, open, decoded and marked by the SDK; the status says what did not run
+[M22] app.js: a startup failure leaves the page idle
+  caught by (1): a template that does not match its pin stops the page at startup; a page whose module will not load derives nothing
+[M23] main.js: the startup template check is skipped
+  caught by (1): a template that does not match its pin stops the page at startup; a page whose module will not load derives nothing
+[M24] app.js: the mainnet notice never shows
+  caught by (1): mainnet is off by default, behind a switch that shows the mainnet notice
+[M25] app.js: a vector list that cannot be fetched is not reported
+  caught by (1): a golden vector list or file that cannot be fetched is reported; the page keeps working
+[M26] app.js: an HTTP error on a vector file is read as terms
+  caught by (1): a golden vector list or file that cannot be fetched is reported; the page keeps working
+[M27] index.html: the creation score has a default again
+  caught by (1): the creation DAA score has no default: nothing is derived until it is typed, and a stale one shows in the time left
+[M28] index.html: CSP: connections to anywhere
+  caught by (1): each page carries exactly its Content-Security-Policy and no referrer
+[M29] index.html: CSP: images from anywhere
+  caught by (1): each page carries exactly its Content-Security-Policy and no referrer
+[M30] index.html: CSP: default source anywhere
+  caught by (1): each page carries exactly its Content-Security-Policy and no referrer
+[M31] index.html: CSP: scripts from any https host
+  caught by (1): each page carries exactly its Content-Security-Policy and no referrer
+[M32] index.html: CSP: inline styles
+  caught by (1): each page carries exactly its Content-Security-Policy and no referrer
+[M33] index.html: CSP: forms may post anywhere
+  caught by (1): each page carries exactly its Content-Security-Policy and no referrer
+[M34] index.html: CSP: a base element may redirect relative URLs
+  caught by (1): each page carries exactly its Content-Security-Policy and no referrer
+[M35] index.html: CSP: eval allowed
+  caught by (1): each page carries exactly its Content-Security-Policy and no referrer
+[M36] decoder.html: decoder CSP: default source anywhere
+  caught by (1): each page carries exactly its Content-Security-Policy and no referrer
+[M37] decoder.js: the decoder button is never enabled
+  caught by (1): the walk follows the pages the node gives: each call starts from the last block of the page before, and the transaction in a later page is found
+[M38] index.html: the banner says the page caps every trade
+  caught by (1): the banner says what the cap checks and does not claim to cap every trade
+[M39] app.js: the page fetches a foreign URL at startup
+  caught by (1): the page's own files name no foreign host, hold no key code and fetch only the vectors
+[M40] config.js: the configured cap is above the SDK's default
+  caught by (1): the walk follows the pages the node gives: each call starts from the last block of the page before, and the transaction in a later page is found
+[M41] app.js: an empty nullable field is read as an empty string
+  caught by (1): the walk follows the pages the node gives: each call starts from the last block of the page before, and the transaction in a later page is found
+[M42] app.js: fields of a hidden kind group are read
+  caught by (1): the walk follows the pages the node gives: each call starts from the last block of the page before, and the transaction in a later page is found
+[M43] index.html: CSP: plaintext sockets to any host
+  caught by (3): each page carries exactly its Content-Security-Policy and no referrer | from a script the policy allows, no connection, load, frame, form or base reaches beyond the page; widening the one directive lets it through | plaintext sockets: the policy lets a script reach localhost and 127.0.0.1, and not the IPv6 loopback literal
+[M44] decoder.html: decoder CSP: connections to anywhere
+  caught by (1): each page carries exactly its Content-Security-Policy and no referrer
+[M45] node.js: the node URL is not checked before a socket is opened
+  caught by (1): the page opens a socket only to a URL the SDK allows, and only a node on the network, synced, is used
+[M46] node.js: the node is not checked for the network and for being synced
+  caught by (1): the node client: a connection that closes or fails before it opens, a node that never answers, one that hangs up or sends a frame that is not text, and one that fails the check
+[M47] actions.js: a transaction is submitted before its lock time has passed
+  caught by (1): the depositor's refund of an earmarked leg waits for the expiry, with nothing sent until the node's score has passed it
+[M48] actions.js: signing always claims the mainnet choice
+  caught by (1): the walk follows the pages the node gives: each call starts from the last block of the page before, and the transaction in a later page is found
+[M49] actions.js: submit is offered before every input is signed
+  caught by (1): after signatures are added the review is made at the node's score as it is now: a lock time that has passed reads as final, an expiry that has passed refuses the import, and a node that cannot be asked is said
+[M50] actions.js: a wiped wallet is offered for signing
+  caught by (1): a wallet wiped after the build can no longer sign; the document says whose key is missing
+[M51] actions.js: the page names the transaction it sent without checking the node's answer
+  caught by (1): a funding whose outcome is unknown counts as a deposit: the wallet says so and Wipe asks, beside a funding the node refused, which does not
+[M52] actions.js: the outputs are not shown before signing
+  caught by (1): an input or output without an address is shown by its script, beside an output with an address
+[M53] actions.js: the lock time row is not where a reader looks for it
+  caught by (3): a Direct trade in the page: build from the node's UTXOs, review, both wallets sign, submit | a refund in the page: the counterparty takes the cash leg home, both wallets sign, and the decoder reads it as refunded | the depositor's refund of an earmarked leg waits for the expiry, with nothing sent until the node's score has passed it
+[M54] actions.js: the node's score is not read again before submitting
+  caught by (1): the funding is built at the node's score: nothing is built at the expiry, and a funding signed in time is refused after the expiry with nothing sent
+[M55] wallets.js: the wallets are not wiped when the page is hidden
+  caught by (1): the wallets are wiped when the page is hidden or unloaded, and by the button for both; a navigation that is only asked for wipes nothing
+[M56] wallets.js: the wallets are wiped by a beforeunload that the person may cancel
+  caught by (1): a wallet that funded a cash vault is asked about before a wipe until the trade is settled or its cash refunded from this page, then not
+[M57] wallets.js: the wipe button does not wipe
+  caught by (1): wallet B can be wiped after it funded the cash vault, and wallet A settles the trade with no key of wallet B's
+[M58] wallets.js: a wallet that holds a key can be asked for another
+  caught by (1): the wallet buttons put public keys into the form, and wipe and regenerate replace a key
+[M59] app.js: an edited score still counts as read from the node
+  caught by (1): the page's own files name no foreign host, hold no key code and fetch only the vectors
+[M60] app.js: the actions are never offered
+  caught by (1): the walk follows the pages the node gives: each call starts from the last block of the page before, and the transaction in a later page is found
+[M61] app.js: the actions stay offered when the terms stop passing
+  caught by (1): flipping the network while a connection is still opening leaves no node attached: the score is not read from it and nothing is built
+[M62] app.js: a score read on one network survives the switch to the other
+  caught by (1): flipping the network while a connection is still opening leaves no node attached: the score is not read from it and nothing is built
+[M63] actions.js: the user's pins are not given to the wallet that signs
+  caught by (1): after signatures are added the review is made at the node's score as it is now: a lock time that has passed reads as final, an expiry that has passed refuses the import, and a node that cannot be asked is said
+[M64] actions.js: the user's pins are given to every wallet
+  caught by (1): a Direct trade between two wallets of the page settles on mainnet when each party's pins and the change are addresses elsewhere
+[M65] actions.js: the refund always carries the token
+  caught by (1): a refund without the token takes only the vault UTXO home and the page says the token stays escrowed
+[M66] decoder.js: every error of the mempool lookup is read as a miss
+  caught by (1): the decoder refuses what it should, each beside the settlement it decodes
+[M67] decoder.js: an unbound decoding is shown as bound
+  caught by (1): a transaction in the node's mempool is decoded without being bound; once mined, the chain path binds it
+[M68] decoder.js: the decoder trusts the ID the node states
+  SURVIVED, equivalent: rpcTransactionReply, called with the asked ID just before, already refuses a mempool entry or an accepted transaction whose own ID is not the asked one (SDK_TXID_MISMATCH, the 'swapped' case of the decoder test), so what reaches decodeFetched states the asked ID; decodeFetched's own refusal is tested in rpc_tests.rs and session.test.ts
+[M69] node.js: a binary frame from the node is read as text
+  caught by (1): the node client: a connection that closes or fails before it opens, a node that never answers, one that hangs up or sends a frame that is not text, and one that fails the check
+[M70] decoder.js: the chain walk never ends at the tip
+  caught by (1): the walk follows the pages the node gives: each call starts from the last block of the page before, and the transaction in a later page is found
+[M71] actions.js: the fee row shows the minimum relay fee as the KAS figure
+  caught by (1): every fact of the review of a Direct trade is the fixtures': network, trade, fee, node score, masses, and the script of a token that has no address
+[M72] actions.js: a mainnet signer is told testnet
+  caught by (1): Vault path on mainnet: the seller's key is outside the page, the buyer's wallet funds the KAS cash vault from the page, the page settles, and the decoder reads the trade back
+[M73] actions.js: the node's score row shows the lock time
+  caught by (1): the funding is built at the node's score: nothing is built at the expiry, and a funding signed in time is refused after the expiry with nothing sent
+[M74] actions.js: compute and storage mass swapped
+  caught by (1): every fact of the review of a Direct trade is the fixtures': network, trade, fee, node score, masses, and the script of a token that has no address
+[M75] actions.js: an input or output without an address shows nothing
+  caught by (1): an input or output without an address is shown by its script, beside an output with an address
+[M76] actions.js: the cost beyond the fee is always none
+  caught by (1): Vault path on mainnet: the seller's key is outside the page, the buyer's wallet funds the KAS cash vault from the page, the page settles, and the decoder reads the trade back
+[M77] actions.js: an output that pays a key held only in the page is not marked
+  caught by (1): an input or output without an address is shown by its script, beside an output with an address
+[M78] actions.js: the notes of the review are not shown
+  caught by (1): Vault path on mainnet: the seller's key is outside the page, the buyer's wallet funds the KAS cash vault from the page, the page settles, and the decoder reads the trade back
+[M79] actions.js: the review does not show which trade it is for
+  caught by (1): an input or output without an address is shown by its script, beside an output with an address
+[M80] actions.js: the review does not say whose key a signature is for
+  caught by (1): Vault path on mainnet: the seller's key is outside the page, the buyer's wallet funds the KAS cash vault from the page, the page settles, and the decoder reads the trade back
+[M81] decoder.js: a block that left the chain still counts as accepting
+  caught by (1): a block that accepted the transaction and then left the chain no longer counts; the transaction accepted again elsewhere is read there, and one not accepted again is not found
+[M82] decoder.js: the chain walk moves on by the first block of a page, not the last
+  caught by (1): the walk follows the pages the node gives: each call starts from the last block of the page before, and the transaction in a later page is found
+[M83] decoder.js: the chain walk reads one page
+  caught by (1): the walk follows the pages the node gives: each call starts from the last block of the page before, and the transaction in a later page is found
+[M84] decoder.js: every transaction is decoded as a testnet one
+  caught by (1): Vault path on mainnet: the seller's key is outside the page, the buyer's wallet funds the KAS cash vault from the page, the page settles, and the decoder reads the trade back
+[M85] decoder.js: a walk that ran out of pages says the transaction is not there
+  caught by (1): the walk ends at the bound on pages: a transaction in the last page it reads is found, one in the page after is not, and the page says why
+[M86] actions.js: signing never makes the mainnet choice
+  caught by (1): after signatures are added the review is made at the node's score as it is now: a lock time that has passed reads as final, an expiry that has passed refuses the import, and a node that cannot be asked is said
+[M87] actions.js: the cash token's artifact is never given to the SDK
+  caught by (1): a KCC-20 cash trade goes through the page with the cash artifact filled, and without it the page cannot check the document
+[M88] actions.js: a build in flight is adopted whatever changed under it
+  caught by (1): a build in flight when the terms, the role or the node change is thrown away, and nothing is offered for the form as it now stands
+[M89] node.js: a node that fails the network or sync check is kept connected
+  caught by (1): the node client: a connection that closes or fails before it opens, a node that never answers, one that hangs up or sends a frame that is not text, and one that fails the check
+[M90] node.js: requests are not made one at a time
+  caught by (1): the node client: a connection that closes or fails before it opens, a node that never answers, one that hangs up or sends a frame that is not text, and one that fails the check
+[M91] decoder.js: the decoder leaves its socket open
+  caught by (1): the decoder closes the socket it opened when it is done, after a decode and after a refusal
+[M92] wallets.js: the browser is not asked before the page leaves with keys in it
+  caught by (1): a wallet that funded a cash vault is asked about before a wipe until the trade is settled or its cash refunded from this page, then not
+[M93] wallets.js: Wipe never asks, whatever the wallet held
+  caught by (1): wallet B can be wiped after it funded the cash vault, and wallet A settles the trade with no key of wallet B's
+[M94] wallets.js: the balance read is forgotten at once
+  caught by (1): Wipe asks first when the last balance read was above zero, and wipes at once when it was zero or never read
+[M95] actions.js: the decoder link opens in the tab that holds the keys
+  caught by (1): a node that hangs up on the funding while the terms are edited leaves the deposit remembered and the outcome unknown, with the transaction ID and a way to look, beside the same hang-up with the terms untouched
+[M96] actions.js: a lost answer is reported as a refusal
+  caught by (1): a funding whose outcome is unknown counts as a deposit: the wallet says so and Wipe asks, beside a funding the node refused, which does not
+[M97] node.js: an error after a request was sent does not say so
+  caught by (1): a funding whose outcome is unknown counts as a deposit: the wallet says so and Wipe asks, beside a funding the node refused, which does not
+[M98] app.js: the role check is not told which keys live only in the page
+  caught by (1): the role check comes first: a key that is not the buyer's, or a buyer destination that pays a key of the page on mainnet, offers no funding
+[M99] actions.js: a wallet is not told which keys live only in the page
+  caught by (1): on mainnet a wallet refuses a document that pays the other wallet of the page, which only the page can tell it of
+[M100] actions.js: a wallet is not told the change address the document pays
+  caught by (1): after signatures are added the review is made at the node's score as it is now: a lock time that has passed reads as final, an expiry that has passed refuses the import, and a node that cannot be asked is said
+[M101] actions.js: the builder is not told the change address
+  caught by (1): after signatures are added the review is made at the node's score as it is now: a lock time that has passed reads as final, an expiry that has passed refuses the import, and a node that cannot be asked is said
+[M102] actions.js: the other party's pins are given to no wallet
+  caught by (1): a Direct trade between two wallets of the page settles on mainnet when each party's pins and the change are addresses elsewhere
+[M103] actions.js: the review is not told which keys live only in the page
+  caught by (2): Vault path on mainnet: the seller's key is outside the page, the buyer's wallet funds the KAS cash vault from the page, the page settles, and the decoder reads the trade back | Vault path on testnet: the same sequence with both wallets of the page as the parties, no pins and no change address needed
+[M104] actions.js: the limits the person sets are not given to the wallet
+  caught by (1): a counterparty who funds the authorizer below its minimum cannot make the fee wallet pay for it unseen: the review shows the cost, the wallet refuses it, and a limit the person sets lets it through
+[M105] config.js: the page's cap is lower than the default, too low for a Direct trade's token carrier
+  caught by (1): the cash is not funded before the seller's asset leg is on the node, and not twice: each refusal beside the funding that builds
+[M106] index.html: CSP: the IPv6 loopback literal is named
+  caught by (1): an input or output without an address is shown by its script, beside an output with an address
+[M107] index.html: CSP: localhost is not allowed over ws
+  caught by (1): each page carries exactly its Content-Security-Policy and no referrer
+[M108] actions.js: the funding asks the node about the addresses of the settle, in the settle's order
+  caught by (1): terms whose token is no pinned kcc20.sil build offer no funding, and a funding forced through the page's build is refused by the SDK before the node is asked, beside the pinned control
+[M109] actions.js: the funding is offered to everyone, for every trade
+  caught by (1): Direct path on mainnet: the page builds the transaction, wallets A and B sign their inputs, the key holder signs the token outside the page, the page adds that signature and submits
+[M110] app.js: the funding is never offered
+  caught by (1): terms whose token is no pinned kcc20.sil build offer no funding, and a funding forced through the page's build is refused by the SDK before the node is asked, beside the pinned control
+[M111] actions.js: the pasted document is taken in place of the one under review
+  caught by (1): signatures are added only to the document the node was asked about: if the terms are edited, or another signature is made, while the node's score is read, nothing is added; beside the same import with nothing changed
+[M112] actions.js: a pasted document that adds no signature is accepted
+  caught by (1): Direct path on mainnet: the page builds the transaction, wallets A and B sign their inputs, the key holder signs the token outside the page, the page adds that signature and submits
+[M113] actions.js: signatures are taken with no document under review
+  caught by (1): a signature is added only to a document the page built: with none under review the import is refused, and the same text is taken once one is
+[M114] actions.js: the document with the added signatures is not reviewed again
+  caught by (1): after signatures are added the review is made at the node's score as it is now: a lock time that has passed reads as final, an expiry that has passed refuses the import, and a node that cannot be asked is said
+[M115] actions.js: the pasted text stays in the box after it was taken
+  caught by (1): Direct path on mainnet: the page builds the transaction, wallets A and B sign their inputs, the key holder signs the token outside the page, the page adds that signature and submits
+[M116] actions.js: a change under the review leaves the pasted text and its status behind
+  caught by (1): a signature is added only to a document the page built: with none under review the import is refused, and the same text is taken once one is
+[M117] actions.js: the copy puts nothing on the clipboard and says it copied
+  caught by (2): Direct path on mainnet: the page builds the transaction, wallets A and B sign their inputs, the key holder signs the token outside the page, the page adds that signature and submits | Direct path, the other order: the key holder signs the exported document first, the page adds that signature, and then its wallets sign
+[M118] actions.js: a funding is not told to wait for the deposit to be listed
+  caught by (1): Vault path on mainnet: the seller's key is outside the page, the buyer's wallet funds the KAS cash vault from the page, the page settles, and the decoder reads the trade back
+[M119] actions.js: the funding is offered to the seller
+  caught by (1): the funding of the cash leg is offered to the buyer of a Vault trade with KAS cash and to nobody else
+[M120] actions.js: the funding is offered for a cash leg that is not native KAS
+  caught by (1): the funding of the cash leg is offered to the buyer of a Vault trade with KAS cash and to nobody else
+[M121] actions.js: the funding is offered for a Direct trade
+  caught by (1): Direct path on mainnet: the page builds the transaction, wallets A and B sign their inputs, the key holder signs the token outside the page, the page adds that signature and submits
+[M122] actions.js: the funding button builds a settle
+  caught by (2): terms whose token is no pinned kcc20.sil build offer no funding, and a funding forced through the page's build is refused by the SDK before the node is asked, beside the pinned control | flipping the network while a connection is still opening leaves no node attached: the score is not read from it and nothing is built
+[M123] actions.js: a submission the node accepted is reported as a failure when the terms were edited meanwhile
+  caught by (1): a funding the node accepts while the terms are edited under the page is still reported as submitted, not as a failure
+[M124] actions.js: the funding is built at DAA score 0, not the node's
+  caught by (1): the funding is built at the node's score: nothing is built at the expiry, and a funding signed in time is refused after the expiry with nothing sent
+[M125] actions.js: a copy the browser refused is reported as made
+  caught by (1): when the browser refuses the copy the page opens the text and says so, beside a copy that works; a new build or an edit of the terms closes it again
+[M126] actions.js: a refused copy points at text that stays closed
+  caught by (1): when the browser refuses the copy the page opens the text and says so, beside a copy that works; a new build or an edit of the terms closes it again
+[M127] actions.js: a new build or an edit leaves the exported text open
+  caught by (1): when the browser refuses the copy the page opens the text and says so, beside a copy that works; a new build or an edit of the terms closes it again
+[M128] actions.js: a new build or an edit leaves the status of the last copy behind
+  caught by (1): when the browser refuses the copy the page opens the text and says so, beside a copy that works; a new build or an edit of the terms closes it again
+[M129] actions.js: the review after an import is made at the score of the build
+  caught by (1): after signatures are added the review is made at the node's score as it is now: a lock time that has passed reads as final, an expiry that has passed refuses the import, and a node that cannot be asked is said
+[M130] actions.js: a funding is not remembered as a deposit when its request is written
+  caught by (1): wallet B can be wiped after it funded the cash vault, and wallet A settles the trade with no key of wallet B's
+[M131] actions.js: a submission whose document is gone while it is in flight says nothing of its unknown outcome
+  caught by (1): a node that hangs up on the funding while the terms are edited leaves the deposit remembered and the outcome unknown, with the transaction ID and a way to look, beside the same hang-up with the terms untouched
+[M132] actions.js: any submission ends the escrow of its trade
+  caught by (1): wallet B can be wiped after it funded the cash vault, and wallet A settles the trade with no key of wallet B's
+[M133] actions.js: a settle does not end the escrow
+  caught by (1): a wallet that funded a cash vault is asked about before a wipe until the trade is settled or its cash refunded from this page, then not
+[M134] actions.js: a refund of the asset leg ends the escrow of the cash leg
+  caught by (1): a wallet that funded a cash vault is asked about before a wipe until the trade is settled or its cash refunded from this page, then not
+[M135] actions.js: the deposit is remembered for wallet A, whichever wallet funded it
+  caught by (1): wallet B can be wiped after it funded the cash vault, and wallet A settles the trade with no key of wallet B's
+[M136] wallets.js: Wipe does not ask about a wallet that funded a cash vault
+  caught by (1): wallet B can be wiped after it funded the cash vault, and wallet A settles the trade with no key of wallet B's
+[M137] wallets.js: the wipe question leaves out how the deposit comes back
+  caught by (1): Vault path on mainnet: the seller's key is outside the page, the buyer's wallet funds the KAS cash vault from the page, the page settles, and the decoder reads the trade back
+[M138] wallets.js: a wiped wallet still says it holds a deposit
+  caught by (1): wallet B can be wiped after it funded the cash vault, and wallet A settles the trade with no key of wallet B's
+[M139] index.html: the page no longer says to fund after the seller's asset leg
+  caught by (1): the funding's safety sentences are on the page: the order of the legs, what the SDK refuses, the way out and its loss, and what has not been observed
+[M140] index.html: the page no longer says to wait for the node to list the deposit
+  caught by (1): the funding's safety sentences are on the page: the order of the legs, what the SDK refuses, the way out and its loss, and what has not been observed
+[M141] actions.js: the submit note states the node's behaviour as known
+  caught by (1): Vault path on mainnet: the seller's key is outside the page, the buyer's wallet funds the KAS cash vault from the page, the page settles, and the decoder reads the trade back
+[M142] index.html: the funding button no longer names what it builds
+  caught by (1): Vault path on mainnet: the seller's key is outside the page, the buyer's wallet funds the KAS cash vault from the page, the page settles, and the decoder reads the trade back
+[M143] index.html: the page no longer says what its automatic fee is
+  caught by (1): the funding's safety sentences are on the page: the order of the legs, what the SDK refuses, the way out and its loss, and what has not been observed
+[M144] index.html: the page says it funds a token that is no pinned build
+  caught by (1): the funding's safety sentences are on the page: the order of the legs, what the SDK refuses, the way out and its loss, and what has not been observed
+[M145] index.html: the funding hint no longer says that closing the page destroys the refund key
+  caught by (1): the funding's safety sentences are on the page: the order of the legs, what the SDK refuses, the way out and its loss, and what has not been observed
+[M146] wallets.js: any settle ends every wallet's escrow
+  caught by (1): funding a second trade from the same wallet adds to the deposit it remembers and forgets nothing: the card and the question list both, a settle ends one, and Wipe asks until both are settled
+[M147] wallets.js: a wallet's card never says it holds a deposit
+  caught by (1): a wallet that funded a cash vault is asked about before a wipe until the trade is settled or its cash refunded from this page, then not
+[M148] wallets.js: remembering a deposit offers the submit button again for the funding the node took
+  caught by (1): a wallet that funded a cash vault is asked about before a wipe until the trade is settled or its cash refunded from this page, then not
+[M149] wallets.js: ending an escrow offers the submit button again for the settle the node took
+  caught by (1): a wallet that funded a cash vault is asked about before a wipe until the trade is settled or its cash refunded from this page, then not
+[M150] actions.js: the import adds signatures to a document that is no longer the one under review
+  caught by (1): signatures are added only to the document the node was asked about: if the terms are edited, or another signature is made, while the node's score is read, nothing is added; beside the same import with nothing changed
+[M151] actions.js: the import does not see another document under review, made by a signature meanwhile
+  caught by (1): signatures are added only to the document the node was asked about: if the terms are edited, or another signature is made, while the node's score is read, nothing is added; beside the same import with nothing changed
+[M152] actions.js: the node's own refusal is read as an unknown outcome
+  caught by (1): a funding whose outcome is unknown counts as a deposit: the wallet says so and Wipe asks, beside a funding the node refused, which does not
+[M153] actions.js: an answer the page cannot read or match is read as a refusal
+  caught by (1): a funding the node took but whose answer the page cannot match to its request is a deposit with an unknown outcome and not a refusal, beside the node's own refusal, which is one
+[M154] actions.js: a refusal by the node leaves the deposit remembered
+  caught by (1): a funding whose outcome is unknown counts as a deposit: the wallet says so and Wipe asks, beside a funding the node refused, which does not
+[M155] actions.js: a refusal of a second submission forgets the deposit the first one made
+  caught by (1): a deposit remembered after an unknown outcome is kept when a later submission of the same funding is refused by the node, which says it already has it
+[M156] wallets.js: funding a second trade from the same wallet forgets the first deposit
+  caught by (1): funding a second trade from the same wallet adds to the deposit it remembers and forgets nothing: the card and the question list both, a settle ends one, and Wipe asks until both are settled
+[M157] wallets.js: a transaction submitted again is remembered as a second deposit
+  caught by (1): a deposit remembered after an unknown outcome is kept when a later submission of the same funding is refused by the node, which says it already has it
+[M158] wallets.js: a settle ends every deposit of the trade, though it spends one
+  caught by (1): two fundings of the same trade that the node took before it listed the first are two deposits: a settle spends one, and the other is still asked about
+[M159] wallets.js: the node's refusal of one funding forgets every deposit of the wallet
+  caught by (1): funding a second trade from the same wallet adds to the deposit it remembers and forgets nothing: the card and the question list both, a settle ends one, and Wipe asks until both are settled
+[M160] index.html: the page no longer says that a settle is refused at the expiry
+  caught by (1): the funding's safety sentences are on the page: the order of the legs, what the SDK refuses, the way out and its loss, and what has not been observed
+[M161] node.js: closing does not abandon a connection still opening
+  caught by (1): flipping the network while a connection is still opening leaves no node attached: the score is not read from it and nothing is built
+[M162] node.js: a request goes out on a connection checked for the other network
+  caught by (1): the node client: a connection that closes or fails before it opens, a node that never answers, one that hangs up or sends a frame that is not text, and one that fails the check
+[M163] app.js: the switch closes only an open connection, not one still opening
+  caught by (1): flipping the network while a connection is still opening leaves no node attached: the score is not read from it and nothing is built
+
+result: 162 of 163 mutants caught by the browser tests, 1 survived as an edit no page can observe (named above)

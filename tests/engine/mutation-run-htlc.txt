@@ -1,0 +1,99 @@
+Mutation run, contracts/impulse_hashlock.sil (tests/engine/htlc_mutation.py)
+source sha256 31100635511b6840380a71bcbaf2d02c7564363a9b5061b362404e1c42af4820
+TEMPLATE_HASH_HASHLOCK 1e708d70c86ace8015778ccb693573b109dcd7135cf921366525a6f4aeef43d6
+requires 30, mutants 30, test targets htlc_settle, htlc_refund, htlc_foreign_covenant
+
+baseline: all tests pass
+
+[HF2] require(tx.inputs.length <= MAX_INPUTS);
+  expected flip: htlc_foreign_covenant::hf2_a_claim_with_13_inputs_is_refused_at_the_bound -> FLIPPED
+  also flipped (0): none
+[H1] require(this.activeInputIndex == 0);
+  expected flip: htlc_settle::h1_second_vault_utxo_cannot_claim_off_input_0 -> FLIPPED
+  also flipped (0): none
+[H2] require(secret.length == SECRET_LEN);
+  expected flip: htlc_settle::h2_secret_of_33_bytes -> FLIPPED
+  also flipped (3): htlc_settle::h2_empty_secret, htlc_settle::h2_secret_of_31_bytes, htlc_settle::h2_secret_of_64_bytes
+[H3] require(sha256(secret) == hashLock);
+  expected flip: htlc_settle::h3_wrong_secret -> FLIPPED
+  also flipped (2): htlc_settle::h3_hash_lock_as_secret, htlc_settle::h3_secret_one_bit_off
+[HE1] require(OpCovInputCount(assetCovenantId) == 1);
+  expected flip: htlc_settle::he1_second_escrow_deposit_cannot_ride_along -> FLIPPED
+  also flipped (1): htlc_settle::he1_escrow_without_covenant_binding
+[HE2] require(OpCovInputIdx(assetCovenantId, 0) == TOKEN_INPUT);
+  expected flip: htlc_foreign_covenant::he2_escrow_without_a_covenant_real_asset_elsewhere -> FLIPPED
+  also flipped (0): none
+[HE3] require(escrowed.identifierType == IDENTIFIER_SCRIPT_HASH);
+  expected flip: htlc_settle::he3_escrow_owner_type_pubkey -> FLIPPED
+  also flipped (0): none
+[HE4] require(this.activeScriptPubKey == byte[](new ScriptPubKeyP2SH(escrowed.ownerIdentifier)));
+  expected flip: htlc_settle::he4_escrow_owned_by_another_vault -> FLIPPED
+  also flipped (0): none
+[HE5] require(escrowed.amount == amount);
+  expected flip: htlc_settle::he5_escrow_over_funded -> FLIPPED
+  also flipped (1): htlc_settle::he5_escrow_under_funded
+[HE6] require(!escrowed.isMinter);
+  expected flip: htlc_settle::he6_minter_escrow_cannot_hand_minting_to_a_stranger -> FLIPPED
+  also flipped (0): none
+[HF1] require(c == zero || c == assetCov);
+  expected flip: htlc_foreign_covenant::hf1_claim_refuses_a_token_of_another_covenant -> FLIPPED
+  also flipped (1): htlc_foreign_covenant::hf1_hf3_a_fee_input_with_a_covenant_id_is_refused
+[HD1] require(OpOutputCovenantId(0) == assetCovenantId);
+  expected flip: htlc_foreign_covenant::hd1_output0_without_a_covenant_escrow_to_a_stranger -> FLIPPED
+  also flipped (0): none
+[HD2] require(tx.outputs[0].value >= tx.inputs[TOKEN_INPUT].value);
+  expected flip: htlc_settle::hd2_delivery_carrier_kas_short -> FLIPPED
+  also flipped (0): none
+[HS8] require(tx.outputs[1].scriptPubKey == byte[](new ScriptPubKeyP2PK(sellerKey)));
+  expected flip: htlc_settle::hs8_authorizer_return_to_stranger -> FLIPPED
+  also flipped (2): htlc_settle::hs8_authorizer_return_omitted, htlc_settle::hs8_authorizer_return_to_the_buyer
+[HS9] require(tx.outputs[1].value >= tx.inputs[0].value);
+  expected flip: htlc_settle::hs9_authorizer_return_short -> FLIPPED
+  also flipped (0): none
+[HF4] require(tx.inputs.length <= MAX_INPUTS);
+  expected flip: htlc_foreign_covenant::hf4_a_refund_with_13_inputs_is_refused_at_the_bound -> FLIPPED
+  also flipped (0): none
+[HR1] require(signer == sellerKey || signer == buyerKey);
+  expected flip: htlc_refund::hr1_stranger_signer -> FLIPPED
+  also flipped (2): htlc_foreign_covenant::hf4_a_refund_with_13_inputs_is_refused_at_the_bound, htlc_refund::hr1_no_authority
+[HR2] require(checkSig(s, signer));
+  expected flip: htlc_refund::hr2_seller_cannot_pose_as_the_buyer_before_expiry -> FLIPPED
+  also flipped (1): htlc_refund::hr2_seller_named_stranger_signs
+[HR3] require(tx.daa >= expiryDaa);
+  expected flip: htlc_refund::hr3_seller_refund_one_daa_before_expiry -> FLIPPED
+  also flipped (4): htlc_refund::hr3_seller_authorizer_alone_before_expiry, htlc_refund::hr3_seller_refund_at_lock_time_0, htlc_refund::hr3_seller_refund_with_finalized_input, htlc_refund::hr3_seller_refund_with_timestamp_lock_time
+[HR4] require(this.activeInputIndex == 0);
+  expected flip: htlc_refund::hr4_second_vault_utxo_cannot_refund_off_input_0 -> FLIPPED
+  also flipped (0): none
+[HR5] require(tx.outputs[0].value == tx.inputs[0].value);
+  expected flip: htlc_refund::hr5_authorizer_kas_short -> FLIPPED
+  also flipped (1): htlc_refund::hr5_authorizer_kas_over
+[HR7] require(tx.outputs[0].scriptPubKey == byte[](new ScriptPubKeyP2PK(sellerKey)));
+  expected flip: htlc_refund::hr7_authorizer_kas_to_stranger -> FLIPPED
+  also flipped (1): htlc_refund::hr7_authorizer_kas_to_the_buyer
+[HF3] require(c == zero || c == assetCov);
+  expected flip: htlc_foreign_covenant::hf3_refund_refuses_a_token_of_another_covenant -> FLIPPED
+  also flipped (2): htlc_foreign_covenant::hf1_hf3_a_fee_input_with_a_covenant_id_is_refused, htlc_foreign_covenant::hf3_authorizer_alone_refuses_a_token_of_another_covenant_at_input_1
+[HR11] require(tokenInputs == 1);
+  expected flip: htlc_refund::hr11_buyer_cannot_refund_the_authorizer_without_the_token -> FLIPPED
+  also flipped (0): none
+[HR8] require(tokenInputs == 1);
+  expected flip: htlc_refund::hr8_second_escrow_deposit_cannot_ride_along_a_seller_refund -> FLIPPED
+  also flipped (0): none
+[HR9] require(OpCovInputIdx(assetCovenantId, 0) == TOKEN_INPUT);
+  expected flip: htlc_foreign_covenant::hr9_covenant_less_copy_at_input_1_real_escrow_at_input_2 -> FLIPPED
+  also flipped (0): none
+[HR12] require(this.activeScriptPubKey == byte[](new ScriptPubKeyP2SH(escrowed.ownerIdentifier)));
+  expected flip: htlc_refund::hr12_buyer_cannot_substitute_a_foreign_token -> FLIPPED
+  also flipped (0): none
+[HR14] require(escrowed.amount == amount);
+  expected flip: htlc_refund::hr14_decoy_amount_0 -> FLIPPED
+  also flipped (3): htlc_refund::hr14_decoy_amount_1, htlc_refund::hr14_decoy_amount_minus_1, htlc_refund::hr14_decoy_amount_plus_1
+[HR10] require(OpOutputCovenantId(TOKEN_OUTPUT) == assetCovenantId);
+  expected flip: htlc_foreign_covenant::hr10_home_output_without_a_covenant_escrow_to_a_stranger -> FLIPPED
+  also flipped (0): none
+[HR13] require(tx.outputs[TOKEN_OUTPUT].value >= tx.inputs[TOKEN_INPUT].value);
+  expected flip: htlc_refund::hr13_token_carrier_kas_short -> FLIPPED
+  also flipped (0): none
+
+result: 30 of 30 requires caught by their named test

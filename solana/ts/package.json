@@ -1,0 +1,16 @@
+{
+  "name": "impulse-solana-crosscheck",
+  "private": true,
+  "description": "I19 cross-check: one Impulse term sheet derives the Kaspa vault addresses (impulse-wasm SDK) and the impulse-solana escrow PDA (@solana/kit).",
+  "license": "Apache-2.0",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "tsc -p tsconfig.json && node --test \"test/*.test.ts\""
+  },
+  "devDependencies": {
+    "@solana/kit": "3.0.3",
+    "@types/node": "22.20.5",
+    "typescript": "5.9.3"
+  }
+}

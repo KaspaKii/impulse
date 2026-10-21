@@ -1,0 +1,164 @@
+{
+  "name": "01-repo-token-for-kas",
+  "description": "A repurchase shape: party 0 sells a token to party 1 for KAS and buys it back later for one percent more KAS. Authority present, revocable funding, mainnet. The KAS leg is refunded to a P2SH.",
+  "sheet": {
+    "link_version": 1,
+    "opening": {
+      "version": 2,
+      "network": "mainnet",
+      "nonce": "1279872587",
+      "authority_key": "4a90052e5c90a8b21e84a231dd14be0ea3b5ba32eda078aca4419b891af63427",
+      "legs": [
+        {
+          "depositor_key": "3688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c",
+          "asset": {
+            "kind": "kcc20",
+            "covenant_id": "1010101010101010101010101010101010101010101010101010101010101010",
+            "template_hash": "2a5713a61a2c350c9f76583746d95054ef6bb4160e1c338239249549929b9c9c",
+            "template_prefix_len": 1,
+            "template_suffix_len": 1460,
+            "amount": "1000"
+          },
+          "delivery": {
+            "identifier_type": "pubkey",
+            "identifier": "624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f"
+          },
+          "refund": {
+            "identifier_type": "pubkey",
+            "identifier": "3688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c"
+          }
+        },
+        {
+          "depositor_key": "624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f",
+          "asset": {
+            "kind": "kas",
+            "amount": "100000000"
+          },
+          "delivery": {
+            "identifier_type": "pubkey",
+            "identifier": "3688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c"
+          },
+          "refund": {
+            "identifier_type": "script_hash",
+            "identifier": "6511b5280f1cebe32de116c06c4c68f8d6f3cee94ac028df8b3f57bbb8fa0e74"
+          }
+        }
+      ],
+      "earliest_daa": "1000000",
+      "expiry_daa": "2000000",
+      "funding_mode": "revocable",
+      "partial": null,
+      "trade_ref": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "return_amounts": [
+      "1000",
+      "101000000"
+    ],
+    "return_earliest_daa": "2500000",
+    "return_expiry_daa": "3500000"
+  },
+  "canonical": "017d0102004b4e494c00000000014a90052e5c90a8b21e84a231dd14be0ea3b5ba32eda078aca4419b891af63427023688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c0110101010101010101010101010101010101010101010101010101010101010102a5713a61a2c350c9f76583746d95054ef6bb4160e1c338239249549929b9c9c01000000b4050000e80300000000000000624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f003688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f0000e1f50500000000003688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c016511b5280f1cebe32de116c06c4c68f8d6f3cee94ac028df8b3f57bbb8fa0e740140420f000000000080841e000000000000000000000000000000000000000000000000000000000000000000000000000000e8030000000000004023050600000000a025260000000000e067350000000000",
+  "linked_hash": "9b858d403b58a55887023cceb65c64624df83458bb8029955a9cd76507098890",
+  "opening_trade": {
+    "terms": {
+      "version": 2,
+      "network": "mainnet",
+      "nonce": "1279872587",
+      "authority_key": "4a90052e5c90a8b21e84a231dd14be0ea3b5ba32eda078aca4419b891af63427",
+      "legs": [
+        {
+          "depositor_key": "3688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c",
+          "asset": {
+            "kind": "kcc20",
+            "covenant_id": "1010101010101010101010101010101010101010101010101010101010101010",
+            "template_hash": "2a5713a61a2c350c9f76583746d95054ef6bb4160e1c338239249549929b9c9c",
+            "template_prefix_len": 1,
+            "template_suffix_len": 1460,
+            "amount": "1000"
+          },
+          "delivery": {
+            "identifier_type": "pubkey",
+            "identifier": "624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f"
+          },
+          "refund": {
+            "identifier_type": "pubkey",
+            "identifier": "3688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c"
+          }
+        },
+        {
+          "depositor_key": "624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f",
+          "asset": {
+            "kind": "kas",
+            "amount": "100000000"
+          },
+          "delivery": {
+            "identifier_type": "pubkey",
+            "identifier": "3688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c"
+          },
+          "refund": {
+            "identifier_type": "script_hash",
+            "identifier": "6511b5280f1cebe32de116c06c4c68f8d6f3cee94ac028df8b3f57bbb8fa0e74"
+          }
+        }
+      ],
+      "earliest_daa": "1000000",
+      "expiry_daa": "2000000",
+      "funding_mode": "revocable",
+      "partial": null,
+      "trade_ref": "9b858d403b58a55887023cceb65c64624df83458bb8029955a9cd76507098890"
+    },
+    "canonical": "02004b4e494c00000000014a90052e5c90a8b21e84a231dd14be0ea3b5ba32eda078aca4419b891af63427023688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c0110101010101010101010101010101010101010101010101010101010101010102a5713a61a2c350c9f76583746d95054ef6bb4160e1c338239249549929b9c9c01000000b4050000e80300000000000000624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f003688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f0000e1f50500000000003688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c016511b5280f1cebe32de116c06c4c68f8d6f3cee94ac028df8b3f57bbb8fa0e740140420f000000000080841e000000000000009b858d403b58a55887023cceb65c64624df83458bb8029955a9cd76507098890",
+    "terms_hash": "3ed593faf1f3093f290cd2efc141d7481040ff7aba434a2cb599126c77449978"
+  },
+  "return_trade": {
+    "terms": {
+      "version": 2,
+      "network": "mainnet",
+      "nonce": "1279872587",
+      "authority_key": "4a90052e5c90a8b21e84a231dd14be0ea3b5ba32eda078aca4419b891af63427",
+      "legs": [
+        {
+          "depositor_key": "624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f",
+          "asset": {
+            "kind": "kcc20",
+            "covenant_id": "1010101010101010101010101010101010101010101010101010101010101010",
+            "template_hash": "2a5713a61a2c350c9f76583746d95054ef6bb4160e1c338239249549929b9c9c",
+            "template_prefix_len": 1,
+            "template_suffix_len": 1460,
+            "amount": "1000"
+          },
+          "delivery": {
+            "identifier_type": "pubkey",
+            "identifier": "3688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c"
+          },
+          "refund": {
+            "identifier_type": "pubkey",
+            "identifier": "624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f"
+          }
+        },
+        {
+          "depositor_key": "3688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c",
+          "asset": {
+            "kind": "kas",
+            "amount": "101000000"
+          },
+          "delivery": {
+            "identifier_type": "script_hash",
+            "identifier": "6511b5280f1cebe32de116c06c4c68f8d6f3cee94ac028df8b3f57bbb8fa0e74"
+          },
+          "refund": {
+            "identifier_type": "pubkey",
+            "identifier": "3688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c"
+          }
+        }
+      ],
+      "earliest_daa": "2500000",
+      "expiry_daa": "3500000",
+      "funding_mode": "revocable",
+      "partial": null,
+      "trade_ref": "9b858d403b58a55887023cceb65c64624df83458bb8029955a9cd76507098890"
+    },
+    "canonical": "02004b4e494c00000000014a90052e5c90a8b21e84a231dd14be0ea3b5ba32eda078aca4419b891af6342702624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f0110101010101010101010101010101010101010101010101010101010101010102a5713a61a2c350c9f76583746d95054ef6bb4160e1c338239249549929b9c9c01000000b4050000e803000000000000003688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c00624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f3688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c004023050600000000016511b5280f1cebe32de116c06c4c68f8d6f3cee94ac028df8b3f57bbb8fa0e74003688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c01a025260000000000e06735000000000000009b858d403b58a55887023cceb65c64624df83458bb8029955a9cd76507098890",
+    "terms_hash": "318b4b206d8dd95770eb8cd87e3d10dd2a7d8c603ca737422f6a6a89137b7685"
+  }
+}

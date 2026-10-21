@@ -1,0 +1,45 @@
+# Copyright (c) 2026 the Impulse authors. A KiiLabs product. Licensed under the Apache License, Version 2.0.
+# The I20 circuits workspace (spec/V3-ZK.md section 5.5, decision D60). Its own cargo workspace,
+# excluded from the root workspace. The host crates build with the root's Rust 1.94.0
+# (rust-toolchain.toml here); the guests build inside RISC Zero's guest-builder Docker image,
+# pinned by digest in methods/build.rs, with the RISC Zero Rust toolchain 1.91.1.
+[workspace]
+resolver = "2"
+members = ["list-core", "terms-core", "methods", "prover"]
+# Guests are built by risc0-build in Docker, each its own workspace with its own Cargo.lock.
+exclude = ["list-guest", "terms-guest", "test-guests/forge-guest"]
+
+[workspace.package]
+version = "0.3.0-alpha"
+edition = "2021"
+license = "Apache-2.0"
+
+[workspace.dependencies]
+# RISC Zero, at the versions the pinned rusty-kaspa a41a333 workspace pins (its Cargo.toml lines
+# 306-312), so the prover and the Kaspa precompile's verifier parameters are the same release.
+risc0-zkvm = { version = "=3.0.4", default-features = false }
+risc0-groth16 = { version = "=3.0.4", default-features = false }
+risc0-build = { version = "=3.0.4" }
+# The Kaspa side, at the pinned rev (rule 3, docs/ENGINEERING-RULES.md): the zk-sdk maps a Groth16 receipt to the
+# 128-byte compressed proof and provides the verifier fragment; the engine runs it in tests.
+kaspa-txscript-zk-sdk = { git = "https://github.com/kaspanet/rusty-kaspa", rev = "a41a333b08848f41bf737b72592e463a6011b8ac" }
+kaspa-txscript = { git = "https://github.com/kaspanet/rusty-kaspa", rev = "a41a333b08848f41bf737b72592e463a6011b8ac" }
+kaspa-txscript-errors = { git = "https://github.com/kaspanet/rusty-kaspa", rev = "a41a333b08848f41bf737b72592e463a6011b8ac" }
+kaspa-consensus-core = { git = "https://github.com/kaspanet/rusty-kaspa", rev = "a41a333b08848f41bf737b72592e463a6011b8ac" }
+kaspa-hashes = { git = "https://github.com/kaspanet/rusty-kaspa", rev = "a41a333b08848f41bf737b72592e463a6011b8ac" }
+sha2 = "0.10.9"
+hex = "0.4.3"
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = "1.0.145"
+
+# Proving and the executor are far too slow without optimisation.
+[profile.dev]
+opt-level = 3
+
+[profile.release]
+debug = 1
+
+# risc0-zkvm 3.0.4 with its `prove` feature fixed to compile against risc0-zkp 3.0.4 (see
+# scripts/vendor-risc0.sh and circuits/patches). Same version, two added `?`. Run the script first.
+[patch.crates-io]
+risc0-zkvm = { path = "vendor/risc0-zkvm-3.0.4" }

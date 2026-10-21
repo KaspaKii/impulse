@@ -1,0 +1,32 @@
+== rerun 1
+Mutation run, crates/impulse-watch/src (scripts/watch-mutation.py)
+source sha256 6ec432a08e7d78b5d635fb79917c773019405b301d154c9f25da0cb0d826dc9c
+script sha256 2fe4e071d46f6b53d6192e5b55067814775e477a8f9b27120c4074a9b41ae805
+mutants 210, test target impulse-watch --lib (and --test e2e for node.rs)
+skipped in every run (too slow to repeat for each mutant): random_operations_leave_a_state_that_restarts_and_resumes_the_same
+
+baseline: all tests pass
+
+[C10] node.rs: any transaction's 'already in the mempool' is taken for ours
+  caught by (2): tests::phase2::a_node_that_has_the_transaction_in_its_mempool_has_done_what_a_rebroadcast_is_for, the_adapter_reads_the_nodes_duplicate_answers_a_wrong_id_and_a_silent_node
+[W48] watcher.rs: a round that reported nothing is counted too (review round 5)
+  caught by (5): tests::phase2::a_round_polls_then_rebroadcasts_and_drive_prints_then_saves, tests::review::a_run_waits_the_interval_between_polls, tests::round::a_round_replayed_after_a_crash_keeps_its_number_and_the_next_one_moves_on, tests::round::a_settle_rebroadcast_after_each_of_two_reorgs_has_a_key_each_time, tests::round::a_transaction_accepted_again_after_a_reorg_has_keys_of_its_own
+
+result: 2 of 2 mutants caught
+exit 0
+== rerun 2
+Mutation run, crates/impulse-watch/src (scripts/watch-mutation.py)
+source sha256 6ec432a08e7d78b5d635fb79917c773019405b301d154c9f25da0cb0d826dc9c
+script sha256 2fe4e071d46f6b53d6192e5b55067814775e477a8f9b27120c4074a9b41ae805
+mutants 210, test target impulse-watch --lib (and --test e2e for node.rs)
+skipped in every run (too slow to repeat for each mutant): random_operations_leave_a_state_that_restarts_and_resumes_the_same
+
+baseline: all tests pass
+
+[C10] node.rs: any transaction's 'already in the mempool' is taken for ours
+  caught by (2): tests::phase2::a_node_that_has_the_transaction_in_its_mempool_has_done_what_a_rebroadcast_is_for, the_adapter_reads_the_nodes_duplicate_answers_a_wrong_id_and_a_silent_node
+[W48] watcher.rs: a round that reported nothing is counted too (review round 5)
+  caught by (5): tests::phase2::a_round_polls_then_rebroadcasts_and_drive_prints_then_saves, tests::review::a_run_waits_the_interval_between_polls, tests::round::a_round_replayed_after_a_crash_keeps_its_number_and_the_next_one_moves_on, tests::round::a_settle_rebroadcast_after_each_of_two_reorgs_has_a_key_each_time, tests::round::a_transaction_accepted_again_after_a_reorg_has_keys_of_its_own
+
+result: 2 of 2 mutants caught
+exit 0

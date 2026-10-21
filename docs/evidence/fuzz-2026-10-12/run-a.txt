@@ -1,0 +1,33 @@
+    Blocking waiting for file lock on package cache
+    Finished `release` profile [optimized + debuginfo] target(s) in 1.08s
+    Blocking waiting for file lock on package cache
+warning: the following packages contain code that will be rejected by a future version of Rust: block v0.1.6
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 1`
+==> terms_decode
+Done 1593167 runs in 601 second(s)
+stat::number_of_executed_units: 1593167
+stat::average_exec_per_sec:     2650
+stat::new_units_added:          481
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              155
+==> template_decode
+Done 2470710 runs in 601 second(s)
+stat::number_of_executed_units: 2470710
+stat::average_exec_per_sec:     4110
+stat::new_units_added:          938
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              434
+==> tx_decode
+Done 3039827 runs in 601 second(s)
+stat::number_of_executed_units: 3039827
+stat::average_exec_per_sec:     5057
+stat::new_units_added:          1290
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              118
+==> ipst_parse
+Done 1442970 runs in 601 second(s)
+stat::number_of_executed_units: 1442970
+stat::average_exec_per_sec:     2400
+stat::new_units_added:          6299
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              566

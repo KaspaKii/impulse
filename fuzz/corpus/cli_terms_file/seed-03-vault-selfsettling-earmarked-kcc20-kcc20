@@ -1,0 +1,53 @@
+{
+  "terms": {
+    "version": 1,
+    "network": "mainnet",
+    "settlement_mode": "vault",
+    "nonce": "13770691826639568749",
+    "seller_key": "95e2f4e4fe97ed99e78ac44930508f03b408bde943a16d35bd8f1d0228a8bc3e",
+    "buyer_key": "67b2e7c8dfe143ccdad9cdd0929b9bfff2ed9039ef21a146a2caab1c2b542de3",
+    "authority_key": null,
+    "asset_leg": {
+      "kind": "kcc20",
+      "covenant_id": "fe904de9baa7fe17d441105dd757e7911e192998e4e096d3c84f4711c6b3dd0d",
+      "template_hash": "a227fc3aa2f3d922b7f8d7dfdca462660dbe51bd1735508f9dda9a656100c794",
+      "template_prefix_len": 40,
+      "template_suffix_len": 1420,
+      "amount": "250"
+    },
+    "cash_leg": {
+      "kind": "kcc20",
+      "covenant_id": "ed65a319f14088ebd1d5acb4b61afb66962ad692880e255d48047a013793682c",
+      "template_hash": "a227fc3aa2f3d922b7f8d7dfdca462660dbe51bd1735508f9dda9a656100c794",
+      "template_prefix_len": 40,
+      "template_suffix_len": 1420,
+      "amount": "1000000"
+    },
+    "buyer_delivery": {
+      "kind": "kcc20",
+      "identifier_type": "covenant_id",
+      "identifier": "e5dbd5857f3606e777beab0e0e556114c745c1f31400cac0d56dc3cfc4ebf436"
+    },
+    "seller_proceeds": {
+      "kind": "kcc20",
+      "identifier_type": "script_hash",
+      "identifier": "41676ec30d33948991f4bb2356f437abfa0efb1c9845a7ddff7b2cafb29bf774"
+    },
+    "seller_refund": {
+      "kind": "kcc20",
+      "identifier_type": "pubkey",
+      "identifier": "95e2f4e4fe97ed99e78ac44930508f03b408bde943a16d35bd8f1d0228a8bc3e"
+    },
+    "buyer_refund": {
+      "kind": "kcc20",
+      "identifier_type": "pubkey",
+      "identifier": "67b2e7c8dfe143ccdad9cdd0929b9bfff2ed9039ef21a146a2caab1c2b542de3"
+    },
+    "earliest_daa": "400864000",
+    "expiry_daa": "477760000",
+    "funding_mode": "earmarked",
+    "trade_ref": "053f587758c666c490269ff70dccd1eca76e6c611bfb3b0d00a3d6486dbb964a"
+  },
+  "canonical": "0100016dff398e41531bbf95e2f4e4fe97ed99e78ac44930508f03b408bde943a16d35bd8f1d0228a8bc3e67b2e7c8dfe143ccdad9cdd0929b9bfff2ed9039ef21a146a2caab1c2b542de30001fe904de9baa7fe17d441105dd757e7911e192998e4e096d3c84f4711c6b3dd0da227fc3aa2f3d922b7f8d7dfdca462660dbe51bd1735508f9dda9a656100c794280000008c050000fa0000000000000001ed65a319f14088ebd1d5acb4b61afb66962ad692880e255d48047a013793682ca227fc3aa2f3d922b7f8d7dfdca462660dbe51bd1735508f9dda9a656100c794280000008c05000040420f00000000000102e5dbd5857f3606e777beab0e0e556114c745c1f31400cac0d56dc3cfc4ebf436010141676ec30d33948991f4bb2356f437abfa0efb1c9845a7ddff7b2cafb29bf774010095e2f4e4fe97ed99e78ac44930508f03b408bde943a16d35bd8f1d0228a8bc3e010067b2e7c8dfe143ccdad9cdd0929b9bfff2ed9039ef21a146a2caab1c2b542de30100b3e41700000000000a7a1c0000000001053f587758c666c490269ff70dccd1eca76e6c611bfb3b0d00a3d6486dbb964a",
+  "terms_hash": "502db3ec4efd17f0960978a4b50158598d0b9c3e46f22ea328f8cbb50c542dce"
+}

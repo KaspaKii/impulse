@@ -1,0 +1,9 @@
+// Copyright (c) 2026 the Impulse authors. A KiiLabs product. Licensed under the Apache License, Version 2.0.
+pragma silverscript ^0.1.0;
+// Feasibility probe for spec/V2.md only: what int(byte[8](...)) of a state slice compiles to.
+contract IntCastProbe(byte[] initB) {
+    byte[] b = initB;
+    entry e(int x) {
+        require(int(byte[8](b.slice(0, 8))) == x);
+    }
+}

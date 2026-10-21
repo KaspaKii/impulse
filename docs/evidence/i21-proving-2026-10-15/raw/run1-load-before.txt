@@ -1,0 +1,10 @@
+20:26  up 1 day, 12:30, 1 user, load averages: 19.45 17.70 22.73
+ %CPU COMM
+ 99.5 /System/Library/PrivateFrameworks/FileProvider.framework/Support/fileproviderd
+ 83.2 /System/Library/PrivateFrameworks/XprotectFramework.framework/Versions/A/XPCServices/XprotectService.xpc/Contents/MacOS/XprotectService
+ 62.4 /usr/sbin/spindump
+ 45.6 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer
+ 27.4 /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/Metadata.framework/Versions/A/Support/mds_stores
+ 12.1 <desktop app helper>
+ 10.1 <desktop app helper (renderer)>
+running containers: 0

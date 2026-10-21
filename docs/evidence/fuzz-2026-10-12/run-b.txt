@@ -1,0 +1,70 @@
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on build directory
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.81s
+warning: the following packages contain code that will be rejected by a future version of Rust: block v0.1.6
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 1`
+==> kcc20_template
+Done 1364449 runs in 601 second(s)
+stat::number_of_executed_units: 1364449
+stat::average_exec_per_sec:     2270
+stat::new_units_added:          11328
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              398
+==> threshold_public
+fuzz.sh: threshold_public FAILED, log ~/impulse/docs/evidence/fuzz-2026-10-12/logs/threshold_public.log, artifacts artifacts/threshold_public/
+    #24 0x000104758b60 in fuzzer::Fuzzer::Loop(std::__1::vector<fuzzer::SizedFile, std::__1::allocator<fuzzer::SizedFile>>&)+0x354 (threshold_public:arm64+0x10000cb60)
+    #25 0x000104777e28 in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long))+0x1a3c (threshold_public:arm64+0x10002be28)
+    #26 0x0001047859cc in main+0x24 (threshold_public:arm64+0x1000399cc)
+    #27 0x000181743e7c in start+0x1a1c (dyld:arm64e+0x31e7c)
+
+NOTE: libFuzzer has rudimentary signal handlers.
+      Combine libFuzzer with AddressSanitizer or similar for better crash reports.
+SUMMARY: libFuzzer: deadly signal
+MS: 2 PersAutoDict-CopyPart- DE: "\377\377\377\377\377\377\377\377"-; base unit: be4cda9c5186c7a032a26ff0da8c743e0071d557
+0x0,0x0,0x2,0x3,0x35,0x40,0xc0,0x77,0xa3,0xd3,0x1f,0x24,0x40,0x43,0x8a,0xb0,0xfc,0x1c,0x17,0xcb,0x32,0x39,0x3a,0x6d,0x2b,0x5,0x75,0x85,0xb6,0xe2,0xc,0xf1,0x53,0x8d,0xf0,0x2b,0x5,0x75,0x85,0xb6,0xe2,0xc,0xf1,0x53,0x8d,0xf0,0x47,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xc5,0xf0,0x2a,0xf0,0xd7,0xaa,0xc,0x83,0x95,0xc7,0x4e,0xab,0x13,0xcf,0x2d,0x6a,0xeb,0x6f,0xe1,0x2,0xd6,0x61,0x48,0x1,0x3d,0xb6,0x85,0xd6,0x8,0xe,0xc9,0x78,0xd2,0x8a,0xb7,0x35,0x1d,0x66,0x7c,0xac,0x1f,0xa4,0x58,0x46,0xb7,0x35,0x1d,0x66,0x7c,0xac,0x1f,0xa4,0x58,0x46,0x9e,0x9c,0x5f,0x93,0x3e,0xed,0x6e,0xb9,0x90,0xcd,0x9c,0x81,0x23,0x95,0x30,0xd8,0x38,0xbc,0x1,0xf,0xa7,0xb,0xdc,0x66,
+\000\000\002\0035@\300w\243\323\037$@C\212\260\374\034\027\31329:m+\005u\205\266\342\014\361S\215\360+\005u\205\266\342\014\361S\215\360G\377\377\377\377\377\377\377\377\305\360*\360\327\252\014\203\225\307N\253\023\317-j\353o\341\002\326aH\001=\266\205\326\010\016\311x\322\212\2675\035f|\254\037\244XF\2675\035f|\254\037\244XF\236\234_\223>\355n\271\220\315\234\201#\2250\3308\274\001\017\247\013\334f
+artifact_prefix='artifacts/threshold_public/'; Test unit written to artifacts/threshold_public/crash-c51614166bdbd9bdf28f2fd9086b3fdccbc1fd49
+Base64: AAACAzVAwHej0x8kQEOKsPwcF8syOTptKwV1hbbiDPFTjfArBXWFtuIM8VON8Ef//////////8XwKvDXqgyDlcdOqxPPLWrrb+EC1mFIAT22hdYIDsl40oq3NR1mfKwfpFhGtzUdZnysH6RYRp6cX5M+7W65kM2cgSOVMNg4vAEPpwvcZg==
+stat::number_of_executed_units: 161122
+stat::average_exec_per_sec:     2983
+stat::new_units_added:          136
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              106
+
+────────────────────────────────────────────────────────────────────────────────
+
+Failing input:
+
+	artifacts/threshold_public/crash-c51614166bdbd9bdf28f2fd9086b3fdccbc1fd49
+
+Output of `std::fmt::Debug`:
+
+	[0, 0, 2, 3, 53, 64, 192, 119, 163, 211, 31, 36, 64, 67, 138, 176, 252, 28, 23, 203, 50, 57, 58, 109, 43, 5, 117, 133, 182, 226, 12, 241, 83, 141, 240, 43, 5, 117, 133, 182, 226, 12, 241, 83, 141, 240, 71, 255, 255, 255, 255, 255, 255, 255, 255, 197, 240, 42, 240, 215, 170, 12, 131, 149, 199, 78, 171, 19, 207, 45, 106, 235, 111, 225, 2, 214, 97, 72, 1, 61, 182, 133, 214, 8, 14, 201, 120, 210, 138, 183, 53, 29, 102, 124, 172, 31, 164, 88, 70, 183, 53, 29, 102, 124, 172, 31, 164, 88, 70, 158, 156, 95, 147, 62, 237, 110, 185, 144, 205, 156, 129, 35, 149, 48, 216, 56, 188, 1, 15, 167, 11, 220, 102]
+
+Reproduce with:
+
+	cargo fuzz run -O threshold_public artifacts/threshold_public/crash-c51614166bdbd9bdf28f2fd9086b3fdccbc1fd49
+
+Minimize test case with:
+
+	cargo fuzz tmin -O threshold_public artifacts/threshold_public/crash-c51614166bdbd9bdf28f2fd9086b3fdccbc1fd49
+
+────────────────────────────────────────────────────────────────────────────────
+
+Error: Fuzz target exited with exit status: 77
+==> threshold_secret
+Done 3288594 runs in 601 second(s)
+stat::number_of_executed_units: 3288594
+stat::average_exec_per_sec:     5471
+stat::new_units_added:          34
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              344
+==> cli_json
+Done 1337251 runs in 601 second(s)
+stat::number_of_executed_units: 1337251
+stat::average_exec_per_sec:     2225
+stat::new_units_added:          8360
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              490

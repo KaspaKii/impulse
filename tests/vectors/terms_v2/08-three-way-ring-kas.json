@@ -1,0 +1,64 @@
+{
+  "name": "08-three-way-ring-kas",
+  "description": "Three parties, three KAS legs in a ring (party 0 pays party 1, 1 pays 2, 2 pays 0), with a settlement authority, revocable funding, earliest settlement set. The shape of the mainnet demo, with no token. Mainnet.",
+  "terms": {
+    "version": 2,
+    "network": "mainnet",
+    "nonce": "1313754702",
+    "authority_key": "4a90052e5c90a8b21e84a231dd14be0ea3b5ba32eda078aca4419b891af63427",
+    "legs": [
+      {
+        "depositor_key": "3688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c",
+        "asset": {
+          "kind": "kas",
+          "amount": "100000000"
+        },
+        "delivery": {
+          "identifier_type": "pubkey",
+          "identifier": "624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f"
+        },
+        "refund": {
+          "identifier_type": "script_hash",
+          "identifier": "eb74f9c8fc678e76839deffb02459f2edfc1875b9c431c9ee2a74fcbafc8488d"
+        }
+      },
+      {
+        "depositor_key": "624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f",
+        "asset": {
+          "kind": "kas",
+          "amount": "200000000"
+        },
+        "delivery": {
+          "identifier_type": "pubkey",
+          "identifier": "2d085d24c2b33fd2a1761fd6994d546e72b131ff55c0c296d223956bc5a87db8"
+        },
+        "refund": {
+          "identifier_type": "script_hash",
+          "identifier": "6511b5280f1cebe32de116c06c4c68f8d6f3cee94ac028df8b3f57bbb8fa0e74"
+        }
+      },
+      {
+        "depositor_key": "2d085d24c2b33fd2a1761fd6994d546e72b131ff55c0c296d223956bc5a87db8",
+        "asset": {
+          "kind": "kas",
+          "amount": "300000000"
+        },
+        "delivery": {
+          "identifier_type": "pubkey",
+          "identifier": "3688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c"
+        },
+        "refund": {
+          "identifier_type": "script_hash",
+          "identifier": "d993433bbc1c0038866cffeb6a7ffc94e22b26abd5370fe1717f62022a0175fd"
+        }
+      }
+    ],
+    "earliest_daa": "1000000",
+    "expiry_daa": "2000000",
+    "funding_mode": "revocable",
+    "partial": null,
+    "trade_ref": "2a5495227823385a86971651a3b6b68ed71311d73f43e9fd3a92ab53f1c4d7ce"
+  },
+  "canonical": "02004e4e4e4e00000000014a90052e5c90a8b21e84a231dd14be0ea3b5ba32eda078aca4419b891af63427033688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c0000e1f5050000000000624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f01eb74f9c8fc678e76839deffb02459f2edfc1875b9c431c9ee2a74fcbafc8488d624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f0000c2eb0b00000000002d085d24c2b33fd2a1761fd6994d546e72b131ff55c0c296d223956bc5a87db8016511b5280f1cebe32de116c06c4c68f8d6f3cee94ac028df8b3f57bbb8fa0e742d085d24c2b33fd2a1761fd6994d546e72b131ff55c0c296d223956bc5a87db80000a3e11100000000003688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c01d993433bbc1c0038866cffeb6a7ffc94e22b26abd5370fe1717f62022a0175fd0140420f000000000080841e000000000000002a5495227823385a86971651a3b6b68ed71311d73f43e9fd3a92ab53f1c4d7ce",
+  "terms_hash": "433cae9567c9d7780bff703772d4977a1b03ab47179d0c777dd496bf7443eb2b"
+}

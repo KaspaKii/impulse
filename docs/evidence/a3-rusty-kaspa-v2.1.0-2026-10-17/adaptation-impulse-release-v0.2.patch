@@ -1,0 +1,306 @@
+diff --git a/Cargo.toml b/Cargo.toml
+index 5abbb5a..448c2c3 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -85,3 +85,37 @@ sha2 = "0.10.9"
+ reqwest = { version = "0.12.28", default-features = false, features = ["rustls-tls-webpki-roots"] }
+ bs58 = "0.5.1"
+ base64 = "0.22.1"
++
++# A3 evidence only (scratch)
++[patch."https://github.com/kaspanet/rusty-kaspa"]
++kaspa-addresses = { path = "~/scratch/rk/crypto/addresses" }
++kaspa-consensus = { path = "~/scratch/rk/consensus" }
++kaspa-consensus-client = { path = "~/scratch/rk/consensus/client" }
++kaspa-consensus-core = { path = "~/scratch/rk/consensus/core" }
++kaspa-consensus-notify = { path = "~/scratch/rk/consensus/notify" }
++kaspa-consensus-wasm = { path = "~/scratch/rk/consensus/wasm" }
++kaspa-consensusmanager = { path = "~/scratch/rk/components/consensusmanager" }
++kaspa-core = { path = "~/scratch/rk/core" }
++kaspa-database = { path = "~/scratch/rk/database" }
++kaspa-hashes = { path = "~/scratch/rk/crypto/hashes" }
++kaspa-index-core = { path = "~/scratch/rk/indexes/core" }
++kaspa-math = { path = "~/scratch/rk/math" }
++kaspa-merkle = { path = "~/scratch/rk/crypto/merkle" }
++kaspa-mining-errors = { path = "~/scratch/rk/mining/errors" }
++kaspa-muhash = { path = "~/scratch/rk/crypto/muhash" }
++kaspa-notify = { path = "~/scratch/rk/notify" }
++kaspa-pow = { path = "~/scratch/rk/consensus/pow" }
++kaspa-rpc-core = { path = "~/scratch/rk/rpc/core" }
++kaspa-rpc-macros = { path = "~/scratch/rk/rpc/macros" }
++kaspa-seq-commit = { path = "~/scratch/rk/consensus/seq-commit" }
++kaspa-smt = { path = "~/scratch/rk/crypto/smt" }
++kaspa-smt-store = { path = "~/scratch/rk/consensus/smt-store" }
++kaspa-txscript = { path = "~/scratch/rk/crypto/txscript" }
++kaspa-txscript-errors = { path = "~/scratch/rk/crypto/txscript/errors" }
++kaspa-txscript-zk-sdk = { path = "~/scratch/rk/crypto/txscript/zk-sdk" }
++kaspa-utils = { path = "~/scratch/rk/utils" }
++kaspa-wasm-core = { path = "~/scratch/rk/wasm/core" }
++kaspa-wrpc-client = { path = "~/scratch/rk/rpc/wrpc/client" }
++[patch."https://github.com/kaspanet/silverscript"]
++silverscript-abi = { path = "~/scratch/ss/silverscript-abi" }
++silverscript-lang = { path = "~/scratch/ss/silverscript-lang" }
+diff --git a/crates/impulse-cli/src/sim.rs b/crates/impulse-cli/src/sim.rs
+index 1a7c2ab..024825e 100644
+--- a/crates/impulse-cli/src/sim.rs
++++ b/crates/impulse-cli/src/sim.rs
+@@ -230,7 +230,6 @@ fn run_engine(tx: &Transaction, entries: &[UtxoEntry], network: Network) -> Resu
+         Network::Testnet => &TESTNET_PARAMS,
+     };
+     let flags = EngineFlags {
+-        covenants_enabled: true,
+         sigop_script_units: Gram(params.mass_per_sig_op).into(),
+     };
+     let populated = PopulatedTransaction::new(tx, entries.to_vec());
+diff --git a/crates/impulse-cli/tests/frost.rs b/crates/impulse-cli/tests/frost.rs
+index 76481c5..61539a6 100644
+--- a/crates/impulse-cli/tests/frost.rs
++++ b/crates/impulse-cli/tests/frost.rs
+@@ -478,7 +478,6 @@ fn aggregate_args<'a>(
+ // runner (docs/reference/BORROW-MAP.md); no WarpCore type remains.
+ fn engine_flags() -> EngineFlags {
+     EngineFlags {
+-        covenants_enabled: true,
+         sigop_script_units: Gram(MAINNET_PARAMS.mass_per_sig_op).into(),
+     }
+ }
+diff --git a/crates/impulse-core/src/htlc/tx.rs b/crates/impulse-core/src/htlc/tx.rs
+index cc2cd60..da43d36 100644
+--- a/crates/impulse-core/src/htlc/tx.rs
++++ b/crates/impulse-core/src/htlc/tx.rs
+@@ -825,7 +825,7 @@ fn compute_masses(sized: &Transaction, entries: &[UtxoEntry], network: Network)
+     let storage = calculator
+         .calc_contextual_masses(&populated)
+         .map_or(u64::MAX, |m| m.storage_mass);
+-    let cofactors = params.mempool_block_mass_cofactors().raw_post();
++    let cofactors = params.block_mass_cofactors();
+     let fee_mass = non_contextual
+         .compute_mass
+         .max(non_contextual.normalized_transient(&cofactors));
+diff --git a/crates/impulse-core/src/terms/validate.rs b/crates/impulse-core/src/terms/validate.rs
+index 64130a2..19f4af8 100644
+--- a/crates/impulse-core/src/terms/validate.rs
++++ b/crates/impulse-core/src/terms/validate.rs
+@@ -11,7 +11,7 @@ use super::{
+ use kaspa_consensus_core::constants::{LOCK_TIME_THRESHOLD, MAX_SOMPI};
+ use kaspa_consensus_core::tx::ScriptPublicKey;
+ use kaspa_txscript::script_class::ScriptClass;
+-use kaspa_txscript::MAX_SCRIPTS_SIZE_POST_TOCCATA;
++use kaspa_txscript::MAX_SCRIPTS_SIZE;
+ use secp256k1::{PublicKey, XOnlyPublicKey};
+ 
+ /// About one year of DAA score: 365 days at 10 DAA per second. Modelled, not measured: it
+@@ -20,7 +20,7 @@ pub const DEFAULT_MAX_EXPIRY_HORIZON_DAA: u64 = 365 * 24 * 60 * 60 * 10;
+ 
+ /// Upper bound on a KCC-20 template's prefix plus suffix length: the post-Toccata consensus
+ /// script size limit (rusty-kaspa a41a333), since the template is part of one script.
+-pub const MAX_TEMPLATE_LEN: u64 = MAX_SCRIPTS_SIZE_POST_TOCCATA as u64;
++pub const MAX_TEMPLATE_LEN: u64 = MAX_SCRIPTS_SIZE as u64;
+ 
+ /// What the creation checks compare the terms with.
+ #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+diff --git a/crates/impulse-core/src/tx/mod.rs b/crates/impulse-core/src/tx/mod.rs
+index daa0755..be9bf7e 100644
+--- a/crates/impulse-core/src/tx/mod.rs
++++ b/crates/impulse-core/src/tx/mod.rs
+@@ -145,7 +145,6 @@ pub(crate) fn last_push(script: &[u8]) -> Option<Vec<u8>> {
+ /// One data push, as the engine reads it (covenant-era limits, as silverscript-abi builds).
+ pub(crate) fn push_data(data: &[u8]) -> Result<Vec<u8>, TxError> {
+     let mut builder = ScriptBuilder::with_flags(EngineFlags {
+-        covenants_enabled: true,
+         ..Default::default()
+     });
+     builder.add_data(data).map_err(|e| TxError::Encoding {
+diff --git a/crates/impulse-core/src/tx/rules.rs b/crates/impulse-core/src/tx/rules.rs
+index 1291e92..0b857af 100644
+--- a/crates/impulse-core/src/tx/rules.rs
++++ b/crates/impulse-core/src/tx/rules.rs
+@@ -195,7 +195,7 @@ pub(crate) fn compute_masses(
+     let storage = calculator
+         .calc_contextual_masses(&populated)
+         .map_or(u64::MAX, |m| m.storage_mass);
+-    let cofactors = params.mempool_block_mass_cofactors().raw_post();
++    let cofactors = params.block_mass_cofactors();
+     let fee_mass = non_contextual
+         .compute_mass
+         .max(non_contextual.normalized_transient(&cofactors));
+diff --git a/crates/impulse-core/src/v2/tx.rs b/crates/impulse-core/src/v2/tx.rs
+index 9405ec1..27e2eab 100644
+--- a/crates/impulse-core/src/v2/tx.rs
++++ b/crates/impulse-core/src/v2/tx.rs
+@@ -70,7 +70,7 @@ pub struct MassCaps {
+ /// CAP_V2 of a network: `Params::block_mass_limits().after()` of the pinned rusty-kaspa less the
+ /// D37 reserve (450,000, 450,000 and 900,000 grams on mainnet and testnet at a41a333).
+ pub fn caps(network: Network) -> MassCaps {
+-    let limits = params(network).block_mass_limits().after();
++    let limits = params(network).block_mass_limits;
+     let less = |x: u64| x - x * CAP_V2_RESERVE_PERCENT / 100;
+     MassCaps {
+         compute: less(limits.compute),
+diff --git a/crates/impulse-watch/src/entry.rs b/crates/impulse-watch/src/entry.rs
+index 1db6b7e..09d1f58 100644
+--- a/crates/impulse-watch/src/entry.rs
++++ b/crates/impulse-watch/src/entry.rs
+@@ -156,7 +156,6 @@ mod tests {
+         ];
+         // Covenant-era limits, under which a 3,000-byte redeem script push is canonical.
+         let mut builder = ScriptBuilder::with_flags(EngineFlags {
+-            covenants_enabled: true,
+             ..Default::default()
+         });
+         for d in &data {
+diff --git a/crates/impulse-watch/src/tests.rs b/crates/impulse-watch/src/tests.rs
+index 2fbb696..ffbd610 100644
+--- a/crates/impulse-watch/src/tests.rs
++++ b/crates/impulse-watch/src/tests.rs
+@@ -86,7 +86,6 @@ const SIG: [u8; 65] = [0x5a; 65];
+ 
+ fn push_all(items: &[&[u8]]) -> Vec<u8> {
+     let mut b = ScriptBuilder::with_flags(EngineFlags {
+-        covenants_enabled: true,
+         ..Default::default()
+     });
+     for item in items {
+@@ -1827,7 +1826,6 @@ async fn a_forged_reveal_that_spends_another_utxo_is_not_a_vault_spend() {
+             &entries[0],
+             EngineCtx::new(&cache).with_reused(&reused),
+             EngineFlags {
+-                covenants_enabled: true,
+                 ..Default::default()
+             },
+         );
+diff --git a/crates/impulse-watch/tests/e2e.rs b/crates/impulse-watch/tests/e2e.rs
+index e0b4760..f4b1bd6 100644
+--- a/crates/impulse-watch/tests/e2e.rs
++++ b/crates/impulse-watch/tests/e2e.rs
+@@ -656,7 +656,6 @@ const SIG: [u8; 65] = [0x5a; 65];
+ 
+ fn push_all(items: &[&[u8]]) -> Vec<u8> {
+     let mut b = ScriptBuilder::with_flags(EngineFlags {
+-        covenants_enabled: true,
+         ..Default::default()
+     });
+     for item in items {
+diff --git a/tests/engine/builders.rs b/tests/engine/builders.rs
+index afbca28..1cb03d9 100644
+--- a/tests/engine/builders.rs
++++ b/tests/engine/builders.rs
+@@ -1405,11 +1405,8 @@ mod builders {
+             .iter()
+             .find(|p| p["name"] == "kaspa-consensus-core")
+             .expect("kaspa-consensus-core in the build");
+-        let source = core["source"].as_str().unwrap();
+-        assert!(
+-            source.ends_with("#a41a333b08848f41bf737b72592e463a6011b8ac"),
+-            "{source}"
+-        );
++        // A3 evidence only: the crate is a path patch to v2.1.0, so it has no git source.
++        let _ = core["source"].as_str();
+         // .../consensus/core/Cargo.toml -> .../consensus/src/processes/transaction_validator
+         let validator = std::path::Path::new(core["manifest_path"].as_str().unwrap())
+             .parent()
+diff --git a/tests/engine/harness.rs b/tests/engine/harness.rs
+index c525fb9..893e2e7 100644
+--- a/tests/engine/harness.rs
++++ b/tests/engine/harness.rs
+@@ -421,7 +421,6 @@ pub fn sign(tx: &Transaction, entries: &[UtxoEntry], idx: usize, keypair: &Keypa
+ /// Engine flags as consensus sets them after Toccata on mainnet.
+ pub fn engine_flags() -> EngineFlags {
+     EngineFlags {
+-        covenants_enabled: true,
+         sigop_script_units: Gram(MAINNET_PARAMS.mass_per_sig_op).into(),
+     }
+ }
+@@ -489,7 +488,7 @@ pub fn compute_mass(tx: &Transaction) -> u64 {
+ 
+ /// Mainnet per-block compute mass limit in grams.
+ pub fn block_compute_mass_limit() -> u64 {
+-    MAINNET_PARAMS.prior_block_mass_limits.compute
++    MAINNET_PARAMS.block_mass_limits.compute
+ }
+ 
+ /// Smallest compute budget whose allowance (budget units plus the free per-input allowance) covers `used`.
+diff --git a/tests/engine/htlc_builders.rs b/tests/engine/htlc_builders.rs
+index 139ffe1..ddf9dcf 100644
+--- a/tests/engine/htlc_builders.rs
++++ b/tests/engine/htlc_builders.rs
+@@ -40,7 +40,7 @@ use kaspa_consensus_core::tx::{
+ };
+ use kaspa_consensus_core::Hash;
+ use kaspa_txscript::opcodes::codes::{OpCheckSig, OpData32};
+-use kaspa_txscript::post_toccata_p2sh_sig_scanner;
++use kaspa_txscript::p2sh_sig_scanner;
+ use secp256k1::{Keypair, Message};
+ use silverscript_abi::ArtifactValue;
+ 
+@@ -361,7 +361,7 @@ impl Signed {
+ 
+     /// The signature operations of input `i` under the pinned standardness scanner.
+     fn sig_ops(&self, i: usize) -> u64 {
+-        post_toccata_p2sh_sig_scanner(
++        p2sh_sig_scanner(
+             &self.tx.inputs[i].signature_script,
+             &self.entries()[i].script_public_key,
+         )
+diff --git a/tests/engine/htlc_measure.rs b/tests/engine/htlc_measure.rs
+index 5ba90f0..0bae55b 100644
+--- a/tests/engine/htlc_measure.rs
++++ b/tests/engine/htlc_measure.rs
+@@ -2,7 +2,7 @@
+ //! ImpulseHashlock measurements in the real engine (I18): script size, script units per vault
+ //! input, the exact covering compute budget (proven: accepted at it, ExceededCommittedScriptUnits
+ //! one unit below), the transaction's compute mass, and the signature-operation count of every
+-//! hashlock and escrow input under the pinned `post_toccata_p2sh_sig_scanner`, which must be at
++//! hashlock and escrow input under the pinned `p2sh_sig_scanner`, which must be at
+ //! most MAX_STANDARD_P2SH_SIG_OPS = 15 (spec/V2.md sections 3.1 and 11.3).
+ //!
+ //!     cargo test -p impulse-engine-tests --test htlc_measure -- --nocapture
+@@ -13,7 +13,7 @@ mod harness;
+ mod htlc_harness;
+ use harness::*;
+ use htlc_harness::*;
+-use kaspa_txscript::post_toccata_p2sh_sig_scanner;
++use kaspa_txscript::p2sh_sig_scanner;
+ use kaspa_txscript_errors::TxScriptError;
+ 
+ /// `MAX_STANDARD_P2SH_SIG_OPS` in kaspa-mining (mining/src/mempool/check_transaction_standard.rs
+@@ -36,7 +36,7 @@ fn prove(w: &HtlcWorld, spec: &HtlcTx, idx: usize, label: &str) -> Row {
+     let unbounded = measure(&tx, &entries, idx);
+     assert_accepted(&unbounded, label);
+     let budget = covering_budget(unbounded.used);
+-    let sig_ops = post_toccata_p2sh_sig_scanner(
++    let sig_ops = p2sh_sig_scanner(
+         &tx.inputs[idx].signature_script,
+         &entries[idx].script_public_key,
+     );
+diff --git a/tests/engine/v2_measure.rs b/tests/engine/v2_measure.rs
+index 6600429..a4a6e4c 100644
+--- a/tests/engine/v2_measure.rs
++++ b/tests/engine/v2_measure.rs
+@@ -24,7 +24,7 @@ mod v2_harness;
+ use harness::*;
+ use kaspa_consensus_core::config::params::MAINNET_PARAMS;
+ use kaspa_consensus_core::mass::{utxo_plurality, ScriptUnits};
+-use kaspa_txscript::post_toccata_p2sh_sig_scanner;
++use kaspa_txscript::p2sh_sig_scanner;
+ use v2_harness::*;
+ 
+ /// Padding lines for the three token template lengths of spec/V2.md 9.2.
+@@ -493,7 +493,7 @@ fn refund_units_are_measured() {
+ 
+ /// CAP_V2 per dimension: the pinned mainnet block limits after Toccata less the D37 reserve.
+ fn cap_v2() -> (u64, u64, u64) {
+-    let limits = MAINNET_PARAMS.block_mass_limits().after();
++    let limits = MAINNET_PARAMS.block_mass_limits;
+     let less = |x: u64| x - x / 10;
+     (
+         less(limits.compute),
+@@ -591,7 +591,7 @@ fn point(shape: Shape, pad: usize, n: usize) -> Point {
+     for (i, input) in tx.inputs.iter().enumerate() {
+         let sig = &t.inputs[i].signature_script;
+         if !input.is_plain() {
+-            let ops = post_toccata_p2sh_sig_scanner(sig, &e[i].script_public_key);
++            let ops = p2sh_sig_scanner(sig, &e[i].script_public_key);
+             max_sig_ops = max_sig_ops.max(ops);
+             assert!(sig.len() < MAX_SIGNATURE_SCRIPT, "signature script length");
+         }

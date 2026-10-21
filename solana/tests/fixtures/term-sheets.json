@@ -1,0 +1,74 @@
+{
+  "description": "Impulse I19 cross-check: each term sheet is one set of Impulse terms (the golden vector named by terms_vector, tests/vectors/terms/, JSON form per spec/ENCODING.md) plus the Solana escrow parameters. The impulse-wasm SDK derives the terms hash and the Kaspa vault addresses; the Solana SwapDvp PDA is derived from the Solana parameters and that terms hash. Solana addresses are base58(SHA-256(\"impulse/solana-vectors/<name>/<role>\")): public labels, nobody holds a key for them. Checked by solana/ts (TypeScript, @solana/kit) and impulse-solana-tests (Rust, solana-pubkey).",
+  "seeds": "[b\"dvp\", settlement_authority, user_a, user_b, mint_a, mint_b, terms_hash, nonce u64 LE]",
+  "term_sheets": [
+    {
+      "name": "external-cash",
+      "description": "Kaspa KCC-20 asset in an ImpulseVault (vault, external cash, earmarked); the cash leg is off Kaspa (external) and the Solana escrow is bound to the same terms hash.",
+      "terms_vector": "05-vault-external-earmarked-kcc20",
+      "solana": {
+        "program_id": "BE6CXjt5yfu2NWLon5kBVE4prTqMN9udAV9yKqAdrmTj",
+        "settlement_authority": "CN7TAD9Kuzc6sUBfxsDx61bVXkvzWPSSzk2ALUqmkZh",
+        "user_a": "BeSybuvAXf7MJktxHwC4v5ostghfif8AHfDKa7WqMcyQ",
+        "user_b": "3G55pUbHMs9uoYjmNV3gzhD86AcX78Eief3TwdmnP1v5",
+        "mint_a": "4ukSVaoDr5XkHnuEdjKWsw7nNfjncXYtb2nJFSHSeSny",
+        "mint_b": "C2Wx4gp5PmHwNrp2jGruzi979fiyfUDgo1YGWmWKwHVT",
+        "token_program_a": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "token_program_b": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "nonce": "7"
+      },
+      "expected": {
+        "terms_hash": "a573bee279b5f70f9226ee34f8480947d19ec0a79939a8f8f78c231ec0d04927",
+        "kaspa": {
+          "asset_vault": {
+            "address": "kaspa:prpluxa2hctwpkz8r6uter25e26r9j6xsvvj9vz0pqxzrpkfk3l2x37xncvl4"
+          },
+          "cash_vault": {
+            "refused": "TEMPLATE_NO_VAULT"
+          }
+        },
+        "solana": {
+          "swap_dvp": "E4SXKzPB7ooWV9X1AhtR6mxrKPLSqee4bZ44zvjjAarr",
+          "bump": 255,
+          "nonce_tombstone": "2zESVovoJYiNDm65iUsH9yktJsyJ9LDTsL7ZPXJ9NUdW",
+          "dvp_ata_a": "AjscNfqqW4zoXVkRLPPuQZM9eqGRWzw8TVUArBMm6eq6",
+          "dvp_ata_b": "52nq75Ean4WizYv2B7vePcdU7fkwEVnTbV7gH8Q17DxJ"
+        }
+      }
+    },
+    {
+      "name": "two-kaspa-vaults",
+      "description": "Both legs in ImpulseVaults on Kaspa (vault, authority, earmarked); a Solana escrow bound to the same terms hash, to show two Kaspa vault addresses and one Solana PDA from one term sheet.",
+      "terms_vector": "01-vault-authority-earmarked-kcc20-kcc20",
+      "solana": {
+        "program_id": "BE6CXjt5yfu2NWLon5kBVE4prTqMN9udAV9yKqAdrmTj",
+        "settlement_authority": "G4DcAU6BFpmMwunsGoGGCMn5wBrwWvdKo6LqwKFiVuWz",
+        "user_a": "5PFSreZ9D3Ng6LH23GBXMXEBhG8QAVD6Ve1gdSCNYg5c",
+        "user_b": "4ff1o6iRuLMgYKGRe3VnKpbfa13WJNcNsnSBVuCWRyqL",
+        "mint_a": "3iik6s3jtJQzAtXF4spAGVHMD21NMirg76ARVdShedD8",
+        "mint_b": "F37yrBhUpj9L7urTKQp8n8T4LCVYxaHtbEQjnBU8YQGJ",
+        "token_program_a": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "token_program_b": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+        "nonce": "7"
+      },
+      "expected": {
+        "terms_hash": "a893ed5e7dfd3558159a58f449b0d7b562901c5edeb7c79a38283787aa652b34",
+        "kaspa": {
+          "asset_vault": {
+            "address": "kaspa:pr9zqdygy85uf47da7yu7wycza9f3r4smaawwvwej8cv5rcclu3j2wpf2rrer"
+          },
+          "cash_vault": {
+            "address": "kaspa:pqzh2wa6atsmqxyx36s2882evmk687qdll6pgk63enyardaue2jez3eze53h5"
+          }
+        },
+        "solana": {
+          "swap_dvp": "4DwStVBa8fy61Dz32osjnc68bM1xZrG5dRWcqGk7i9i7",
+          "bump": 255,
+          "nonce_tombstone": "6usTjHDrvhoEpEHYMgsyKFvUMMgKHf2LRboReNX7TDKY",
+          "dvp_ata_a": "4oGe26EzHKNWGiH2zYCNNfxcN8u38y3qy31JLwpiYuWk",
+          "dvp_ata_b": "BwqfgKpYE8uUNhyLZcp9RaHKBanBSnPwQkefzCjA3SJE"
+        }
+      }
+    }
+  ]
+}

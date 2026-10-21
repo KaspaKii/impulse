@@ -1,0 +1,10 @@
+{
+  "name": "01-leaf-p2pk",
+  "description": "The leaf of a Schnorr P2PK owner (the x coordinate of G) under a fixed salt.",
+  "leaf_tag": "Impulse/zk/leaf/v1",
+  "salt": "489268f22e0d6973bfb617d8c3efd464db181b721bc8dc56831cb7bc9a4e697c",
+  "owner_type": "pubkey",
+  "owner_id": "79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798",
+  "owner_spk": "00002079be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798ac",
+  "leaf": "6ca35b2f68be9544e8f6c9dfabd0fcc6b43bbc06e0a43b7f1f105700975142eb"
+}

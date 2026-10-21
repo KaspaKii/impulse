@@ -1,0 +1,53 @@
+{
+  "name": "08-v3-upper-bounds",
+  "description": "Terms v3 from v1 vector 09: the upper bounds of every v1 numeric field; the v1 covenant ID delivery owner is a SCRIPT_HASH owner here.",
+  "terms": {
+    "version": 3,
+    "network": "mainnet",
+    "settlement_mode": "vault",
+    "nonce": "18446744073709551615",
+    "seller_key": "95e2f4e4fe97ed99e78ac44930508f03b408bde943a16d35bd8f1d0228a8bc3e",
+    "buyer_key": "67b2e7c8dfe143ccdad9cdd0929b9bfff2ed9039ef21a146a2caab1c2b542de3",
+    "authority_key": "146c937a7572d914e7cfec44a313b3a0327926634f78d81134d4c671c43ec50d",
+    "asset_leg": {
+      "kind": "kcc20",
+      "covenant_id": "fe904de9baa7fe17d441105dd757e7911e192998e4e096d3c84f4711c6b3dd0d",
+      "template_hash": "a227fc3aa2f3d922b7f8d7dfdca462660dbe51bd1735508f9dda9a656100c794",
+      "template_prefix_len": 40,
+      "template_suffix_len": 1420,
+      "amount": "9223372036854775807"
+    },
+    "cash_leg": {
+      "kind": "kas",
+      "amount": "2900000000000000000"
+    },
+    "buyer_delivery": {
+      "kind": "kcc20",
+      "identifier_type": "script_hash",
+      "identifier": "e5dbd5857f3606e777beab0e0e556114c745c1f31400cac0d56dc3cfc4ebf436"
+    },
+    "seller_proceeds": {
+      "kind": "kas",
+      "version": 0,
+      "script": "2095e2f4e4fe97ed99e78ac44930508f03b408bde943a16d35bd8f1d0228a8bc3eac"
+    },
+    "seller_refund": {
+      "kind": "kcc20",
+      "identifier_type": "script_hash",
+      "identifier": "41676ec30d33948991f4bb2356f437abfa0efb1c9845a7ddff7b2cafb29bf774"
+    },
+    "buyer_refund": {
+      "kind": "kas",
+      "version": 0,
+      "script": "2067b2e7c8dfe143ccdad9cdd0929b9bfff2ed9039ef21a146a2caab1c2b542de3ac"
+    },
+    "earliest_daa": "715360000",
+    "expiry_daa": "715360000",
+    "funding_mode": "earmarked",
+    "list_issuer_key": "96cd1e229e7c0be53d731d693582316294a5899cd403b9f1af3bc0996631aab8",
+    "list_root": "2ea098e635de07e22171cb8046bf60581317c14809fd6f2e36702ff274891124",
+    "trade_ref": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+  },
+  "canonical": "030001ffffffffffffffff95e2f4e4fe97ed99e78ac44930508f03b408bde943a16d35bd8f1d0228a8bc3e67b2e7c8dfe143ccdad9cdd0929b9bfff2ed9039ef21a146a2caab1c2b542de301146c937a7572d914e7cfec44a313b3a0327926634f78d81134d4c671c43ec50d01fe904de9baa7fe17d441105dd757e7911e192998e4e096d3c84f4711c6b3dd0da227fc3aa2f3d922b7f8d7dfdca462660dbe51bd1735508f9dda9a656100c794280000008c050000ffffffffffffff7f000000a298a2de3e280101e5dbd5857f3606e777beab0e0e556114c745c1f31400cac0d56dc3cfc4ebf436000000220000002095e2f4e4fe97ed99e78ac44930508f03b408bde943a16d35bd8f1d0228a8bc3eac010141676ec30d33948991f4bb2356f437abfa0efb1c9845a7ddff7b2cafb29bf774000000220000002067b2e7c8dfe143ccdad9cdd0929b9bfff2ed9039ef21a146a2caab1c2b542de3ac010087a32a000000000087a32a000000000196cd1e229e7c0be53d731d693582316294a5899cd403b9f1af3bc0996631aab82ea098e635de07e22171cb8046bf60581317c14809fd6f2e36702ff274891124ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+  "terms_hash": "3dc6470ce90f3d75b1915b056ba4a5c18d1fdc4893c33553de41518c72e9aa05"
+}

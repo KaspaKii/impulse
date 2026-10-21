@@ -1,0 +1,6 @@
+ImpulseVault: 2938 bytes, template prefix 1, state 508, suffix 2429
+build-template: ok, TEMPLATE_HASH 1877344751ca7b4491ba6d19e20139995c83321b3106e539f1c1be4384a65fcd
+ImpulseVaultV2: 7582 bytes, template prefix 1, state 516 (374 of legs), suffix 7065
+build-template-v2: ok, TEMPLATE_HASH_V2 1a1239083ca68bdf7ef38e74409edf10c0cdc54ae0d5a4d881593b871ff54703
+ImpulseHashlock: 1635 bytes, template prefix 1, state 350, suffix 1284
+build-template-hashlock: ok, TEMPLATE_HASH_HASHLOCK aa9e7e2ddeccc1d94d559767d7eb89c26ff1d19c3a53be99948673c3ed1f59dc

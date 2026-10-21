@@ -1,0 +1,19 @@
+    Blocking waiting for file lock on package cache
+   Compiling impulse-fuzz v0.0.0 (~/impulse/fuzz)
+    Finished `release` profile [optimized + debuginfo] target(s) in 9.82s
+warning: the following packages contain code that will be rejected by a future version of Rust: block v0.1.6
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 1`
+==> threshold_public
+Done 1639860 runs in 601 second(s)
+stat::number_of_executed_units: 1639860
+stat::average_exec_per_sec:     2728
+stat::new_units_added:          226
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              330
+==> threshold_secret
+Done 2369768 runs in 601 second(s)
+stat::number_of_executed_units: 2369768
+stat::average_exec_per_sec:     3943
+stat::new_units_added:          32
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              118

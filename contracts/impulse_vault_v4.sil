@@ -1,0 +1,104 @@
+// Copyright (c) 2026 the Impulse authors. A KiiLabs product. Licensed under the Apache License, Version 2.0.
+// ImpulseVault v4: the hashed-terms vault. One template, two entries (settle, refund), instantiated
+// per trade leg. The state is a commitment to the terms and the authority's key and nothing else;
+// every check of the v1 vault that reads the terms runs in the terms guest (circuits/terms-guest),
+// and the vault verifies a RISC Zero Groth16 receipt (r0.g16.verify, Kaspa ZK precompile, KIP-16)
+// over a journal J that it builds itself from the spending transaction.
+// Design: spec/V3-ZK.md section 22. Increment: I21.
+// Both entries also check the covenant ID of every input of the transaction ([T10], [T11],
+// spec/V3-ZK.md 22.15), so no token rides along in a vault spend except the escrows the guest
+// checks. In a settle the guest also requires the other leg's vault of the same terms at its input
+// slot ([H5], spec/V3-ZK.md 22.16), from this vault's own redeem script, so a settle with a cash
+// vault spends both vaults.
+//
+// J layout (section 22.3), every field fixed width:
+//   "Impulse/zk/ht/v1" 16 | mode 1 | vault spk 37 | commit 32 | authority 32 | leg 1 | input index 1
+//   | lock time 8 | signer 32 | cov_a 32 | cov_c 32 | count_a 1 | count_c 1 | n_in 1 | n_out 1
+//   | n_in x (value 8, sha256(spk) 32, covenant ID 32) | n_out x (value 8, sha256(spk) 32, covenant ID 32)
+// Integers are little-endian (OpNum2Bin), covenant IDs of plain inputs and outputs are 32 zero bytes
+// (OpInputCovenantId and OpOutputCovenantId at rusty-kaspa a41a333).
+//
+// Settle layout is v1's: asset authorizer at input 0, cash authorizer at input 1. The view is the
+// first nIn inputs and nOut outputs; fee inputs and change come after it and are not in the view.
+pragma silverscript ^0.1.0; // language version of the silverscript v1.0.0 compiler
+
+contract ImpulseVaultV4(
+    byte[32] initTermsCommit,
+    pubkey initAuthorityKey
+) {
+    byte[32] termsCommit = initTermsCommit;
+    pubkey authorityKey = initAuthorityKey;
+
+    // The terms guest (circuits/IMAGE_ID_V4) and the journal tag "Impulse/zk/ht/v1" (spec 22.3).
+    byte[32] constant IMAGE_ID = byte[32](0xffaa95f97b44a9209e245579361b81baaa45bd414f11446f11d8d7a1903916a3);
+    byte[16] constant JOURNAL_TAG = byte[16](0x496d70756c73652f7a6b2f68742f7631);
+    byte[1] constant MODE_SETTLE = byte[1](0x01);
+    byte[1] constant MODE_REFUND = byte[1](0x02);
+    byte[32] constant ZERO32 = byte[32](0x0000000000000000000000000000000000000000000000000000000000000000);
+    int constant MAX_VIEW = 4;
+    int constant MAX_INPUTS = 8;
+
+    // The view items of the first nIn inputs and nOut outputs: value (8 bytes, little-endian),
+    // sha256 of the scriptPubKey, covenant ID.
+    function viewItems(int nIn, int nOut): byte[] {
+        byte[] items = byte[](0x);
+        for(i, 0, nIn, MAX_VIEW) {
+            items = items + byte[](tx.inputs[i].value as byte[8]) + sha256(tx.inputs[i].scriptPubKey) + OpInputCovenantId(i);
+        }
+        for(k, 0, nOut, MAX_VIEW) {
+            items = items + byte[](tx.outputs[k].value as byte[8]) + sha256(tx.outputs[k].scriptPubKey) + OpOutputCovenantId(k);
+        }
+        return items;
+    }
+
+    entry settle(sig authSig, byte[] proof, int nIn, int nOut, byte[32] covA, byte[32] covC) {
+        require(this.activeInputIndex <= 1); // [T1]
+        require(nIn >= 2 && nIn <= 4 && nIn <= tx.inputs.length); // [T2]
+        require(nOut >= 2 && nOut <= 4 && nOut <= tx.outputs.length); // [T3]
+        require(checkSig(authSig, authorityKey)); // [T4]
+        int lockTime = OpTxLockTime();
+        require(tx.daa >= lockTime); // [T8]
+        // Covenant IDs of every input (spec 22.15): the asset escrow slot carries covA, slot 3
+        // carries covC (zero unless the cash is KCC-20, which the guest checks, [H4]), every other
+        // input none. The loop's compiled range check refuses more than MAX_INPUTS inputs.
+        int assetSlot = 2;
+        if (nIn == 2) {
+            assetSlot = 1;
+        }
+        byte[32] none = ZERO32;
+        for(i, 0, tx.inputs.length, MAX_INPUTS) {
+            byte[32] want = none;
+            if (i == assetSlot) {
+                want = covA;
+            }
+            if (i == 3) {
+                want = covC;
+            }
+            require(OpInputCovenantId(i) == want); // [T10]
+        }
+        byte[] items = viewItems(nIn, nOut);
+        byte[] head = JOURNAL_TAG + MODE_SETTLE + this.activeScriptPubKey + termsCommit + byte[](authorityKey) + byte[](this.activeInputIndex as byte[1]) + byte[](this.activeInputIndex as byte[1]) + byte[](lockTime as byte[8]) + ZERO32 + covA + covC + byte[](OpCovInputCount(covA) as byte[1]) + byte[](OpCovInputCount(covC) as byte[1]) + byte[](nIn as byte[1]) + byte[](nOut as byte[1]);
+        r0.g16.verify(sha256(head + items), proof, IMAGE_ID);
+    }
+
+    entry refund(sig s, pubkey signer, byte leg, byte[] proof, int nIn, int nOut, byte[32] cov) {
+        require(checkSig(s, signer)); // [T5]
+        require(unsigned(leg) <= 1); // [T6]
+        require(nIn >= 1 && nIn <= 2 && nIn <= tx.inputs.length && nOut >= 1 && nOut <= 2 && nOut <= tx.outputs.length); // [T7]
+        int lockTime = OpTxLockTime();
+        require(tx.daa >= lockTime); // [T9]
+        // Covenant IDs of every input (spec 22.15): input 1 of a two-input view carries cov, every
+        // other input none. The loop's compiled range check refuses more than MAX_INPUTS inputs.
+        byte[32] none = ZERO32;
+        for(i, 0, tx.inputs.length, MAX_INPUTS) {
+            byte[32] want = none;
+            if (i == 1 && nIn == 2) {
+                want = cov;
+            }
+            require(OpInputCovenantId(i) == want); // [T11]
+        }
+        byte[] items = viewItems(nIn, nOut);
+        byte[] head = JOURNAL_TAG + MODE_REFUND + this.activeScriptPubKey + termsCommit + byte[](authorityKey) + byte[1](leg) + byte[](this.activeInputIndex as byte[1]) + byte[](lockTime as byte[8]) + byte[](signer) + cov + ZERO32 + byte[](OpCovInputCount(cov) as byte[1]) + byte[1](0x00) + byte[](nIn as byte[1]) + byte[](nOut as byte[1]);
+        r0.g16.verify(sha256(head + items), proof, IMAGE_ID);
+    }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "08-manifest-mainnet",
+  "description": "A list manifest for the three-entry fixture list, mainnet. M and its keyed BLAKE2b-256 digest; the issuer signs the digest with its own signer.",
+  "network": "mainnet",
+  "list_id": "fixture-list-3",
+  "list_version": 1,
+  "issued_at": 1760000000,
+  "list_root": "a864dee9ceffae07ba81ad8f25bc472c107ddfa4f4f260c31a6462709c962721",
+  "manifest": "01000e666978747572652d6c6973742d33000000010000000068e77800a864dee9ceffae07ba81ad8f25bc472c107ddfa4f4f260c31a6462709c962721",
+  "digest_key": "Impulse/zk/manifest/v1",
+  "manifest_digest": "bd87efc510364a2bb26b4f2d55a765ce258b5ee180708874eb916cebd692d401"
+}

@@ -1,0 +1,18 @@
+{
+  "name": "impulse-demo-tests",
+  "version": "0.4.0",
+  "description": "Headless browser tests of the static Impulse demo. Nothing in this package ships: the site is demo/dist, built by build.sh.",
+  "license": "Apache-2.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "node --test \"test/*.test.ts\""
+  },
+  "devDependencies": {
+    "@types/node": "22.20.5",
+    "jsqr": "1.4.0",
+    "playwright-core": "1.64.0",
+    "typescript": "5.9.3"
+  }
+}

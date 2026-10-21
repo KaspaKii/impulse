@@ -1,0 +1,82 @@
+diff crates/impulse-cli/src/sim.rs
+--- a/crates/impulse-cli/src/sim.rs
++++ b/crates/impulse-cli/src/sim.rs
+@@ -222,8 +222,16 @@
+             flags,
+             input.compute_commit.allowed_script_units(),
+         );
+-        vm.execute()
+-            .map_err(|e| format!("input {i} refused by the script engine: {e}"))?;
++        let result = vm.execute();
++        // D5 instrumentation (scratch copy only): log every engine run when impulse_d5_log is set.
++        if let Some(path) = std::env::var_os("impulse_d5_log") {
++            use std::io::Write;
++            let test = std::thread::current().name().unwrap_or("?").to_string();
++            let mut f = std::fs::OpenOptions::new().create(true).append(true).open(path).expect("log");
++            let line = format!("{}::{}\tinput {}\tlimit {}\tunits {}\t{:?}\n", module_path!(), test, i, input.compute_commit.allowed_script_units().0, vm.used_script_units().0, result);
++            f.write_all(line.as_bytes()).expect("log");
++        }
++        result.map_err(|e| format!("input {i} refused by the script engine: {e}"))?;
+     }
+     Ok(())
+ }
+diff crates/impulse-cli/tests/frost.rs
+--- a/crates/impulse-cli/tests/frost.rs
++++ b/crates/impulse-cli/tests/frost.rs
+@@ -489,7 +489,16 @@
+         engine_flags(),
+         tx.inputs[idx].compute_commit.allowed_script_units(),
+     );
+-    vm.execute().map_err(|e| format!("{e:?}"))
++    let result = vm.execute();
++    // D5 instrumentation (scratch copy only): log every engine run when impulse_d5_log is set.
++    if let Some(path) = std::env::var_os("impulse_d5_log") {
++        use std::io::Write;
++        let test = std::thread::current().name().unwrap_or("?").to_string();
++        let mut f = std::fs::OpenOptions::new().create(true).append(true).open(path).expect("log");
++        let line = format!("{}::{}\tinput {}\tlimit {}\tunits {}\t{:?}\n", module_path!(), test, idx, tx.inputs[idx].compute_commit.allowed_script_units().0, vm.used_script_units().0, result);
++        f.write_all(line.as_bytes()).expect("log");
++    }
++    result.map_err(|e| format!("{e:?}"))
+ }
+ 
+ /// The node's view in a block of DAA score `daa`: finality of the lock time, the sequence lock,
+diff crates/impulse-watch/src/tests.rs
+--- a/crates/impulse-watch/src/tests.rs
++++ b/crates/impulse-watch/src/tests.rs
+@@ -1830,7 +1830,16 @@
+                 ..Default::default()
+             },
+         );
+-        assert_eq!(vm.execute(), Ok(()), "consensus accepts the forged input");
++        let result = vm.execute();
++        // D5 instrumentation (scratch copy only): log every engine run when impulse_d5_log is set.
++        if let Some(path) = std::env::var_os("impulse_d5_log") {
++            use std::io::Write;
++            let test = std::thread::current().name().unwrap_or("?").to_string();
++            let mut f = std::fs::OpenOptions::new().create(true).append(true).open(path).expect("log");
++            let line = format!("{}::{}\tinput {}\tlimit {}\tunits {}\t{:?}\n", module_path!(), test, 0, "default", vm.used_script_units().0, result);
++            f.write_all(line.as_bytes()).expect("log");
++        }
++        assert_eq!(result, Ok(()), "consensus accepts the forged input");
+     }
+ 
+     for f in [settle, refund] {
+diff tests/engine/harness.rs
+--- a/tests/engine/harness.rs
++++ b/tests/engine/harness.rs
+@@ -459,6 +459,14 @@
+         limit,
+     );
+     let result = vm.execute();
++    // D5 instrumentation (scratch copy only): log every engine run when impulse_d5_log is set.
++    if let Some(path) = std::env::var_os("impulse_d5_log") {
++        use std::io::Write;
++        let test = std::thread::current().name().unwrap_or("?").to_string();
++        let mut f = std::fs::OpenOptions::new().create(true).append(true).open(path).expect("log");
++        let line = format!("{}::{}\tinput {}\tlimit {}\tunits {}\t{:?}\n", module_path!(), test, idx, limit.0, vm.used_script_units().0, result);
++        f.write_all(line.as_bytes()).expect("log");
++    }
+     Run {
+         result,
+         used: vm.used_script_units(),

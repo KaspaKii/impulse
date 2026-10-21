@@ -1,0 +1,9 @@
+# Re-run of the one test that asserted the git source of the pinned crate, after the A3 scratch
+# patch relaxed only that source assertion (the rest of the test, which compares the ported node
+# rules with the transaction_validator source of the crate actually built, is unchanged).
+# release/v0.2 tree: cargo test -p impulse-engine-tests --test builders node_rule_ports
+test builders::node_rule_ports_follow_the_pinned_source ... ok
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 29 filtered out; finished in 6.07s
+# v0.3 scratch copy, same command:
+test builders::node_rule_ports_follow_the_pinned_source ... ok
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 29 filtered out; finished in 4.10s

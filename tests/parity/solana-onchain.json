@@ -1,0 +1,101 @@
+{
+  "format": 1,
+  "about": "Raw JSON-RPC responses from Solana mainnet-beta about the program ID that program/src/lib.rs declares at the pinned commit of solana-foundation/dvp (EDGE-24; spec head-to-head rows 'On mainnet' and 'Program upgrade authority to trust'). Measured once by the maintainers in I10 review round 1 with curl from a MacBook Pro (M1 Max): plain HTTPS POSTs of the requests below, no key and no signature involved. scripts/gen-parity.sh decodes these responses and renders what they show in PARITY.md; it never queries the network. Not measured: whether the deployed bytecode matches the pinned source.",
+  "measured_at": "2026-10-07T01:17:26Z",
+  "endpoint": "https://api.mainnet-beta.solana.com",
+  "queries": [
+    {
+      "request": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "method": "getAccountInfo",
+        "params": [
+          "dvp34bdbcEm4f4FCUjGV4mDAkDshaQR4LkK8fdcsyZq",
+          {
+            "encoding": "jsonParsed"
+          }
+        ]
+      },
+      "response": {
+        "jsonrpc": "2.0",
+        "result": {
+          "context": {
+            "apiVersion": "4.3.0",
+            "slot": 454072801
+          },
+          "value": {
+            "data": {
+              "parsed": {
+                "info": {
+                  "programData": "3Xc2eYEXUQMGSX96hbNwv2cj1aRgGbYpvrqDfx6H6xc1"
+                },
+                "type": "program"
+              },
+              "program": "bpf-upgradeable-loader",
+              "space": 36
+            },
+            "executable": true,
+            "lamports": 833120,
+            "owner": "BPFLoaderUpgradeab1e11111111111111111111111",
+            "rentEpoch": 18446744073709551615,
+            "space": 36
+          }
+        },
+        "id": 1
+      }
+    },
+    {
+      "request": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "method": "getAccountInfo",
+        "params": [
+          "3Xc2eYEXUQMGSX96hbNwv2cj1aRgGbYpvrqDfx6H6xc1",
+          {
+            "encoding": "base64",
+            "dataSlice": {
+              "offset": 0,
+              "length": 45
+            }
+          }
+        ]
+      },
+      "response": {
+        "jsonrpc": "2.0",
+        "result": {
+          "context": {
+            "apiVersion": "4.3.0",
+            "slot": 454072833
+          },
+          "value": {
+            "data": [
+              "AwAAAAbd8RoAAAAAAbo1n0hYqmXBXARlBwKDlb9bZ7Uc2DjXAv0eFvzEmWm9",
+              "base64"
+            ],
+            "executable": false,
+            "lamports": 706633080,
+            "owner": "BPFLoaderUpgradeab1e11111111111111111111111",
+            "rentEpoch": 18446744073709551615,
+            "space": 138973
+          }
+        },
+        "id": 1
+      }
+    },
+    {
+      "request": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "method": "getBlockTime",
+        "params": [
+          452058374
+        ]
+      },
+      "response": {
+        "jsonrpc": "2.0",
+        "result": 1790796432,
+        "id": 1
+      }
+    }
+  ]
+}

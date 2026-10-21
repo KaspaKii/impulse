@@ -1,0 +1,112 @@
+title = "Impulse gitleaks config"
+
+# Default ruleset plus key-material rules for rule 1, docs/ENGINEERING-RULES.md. Test keys live only under a
+# tests/**/fixtures/ path and are never real; only those paths are allowlisted, per rule.
+[extend]
+useDefault = true
+
+[[rules]]
+id = "impulse-extended-private-key"
+description = "BIP32-style extended private key (xprv, tprv, kprv, ...)"
+regex = '''\b[a-z]prv[1-9A-HJ-NP-Za-km-z]{100,}'''
+[[rules.allowlists]]
+paths = ['''(^|/)tests/(.*/)?fixtures/''']
+
+[[rules]]
+id = "impulse-hex-private-key"
+description = "32-byte hex value assigned to a secret, private or signing key identifier"
+regex = '''(?i)(secret|private|priv|signing|sk)[_-]?key[^\n]{0,40}?\b(0x)?[0-9a-f]{64}\b'''
+[[rules.allowlists]]
+paths = ['''(^|/)tests/(.*/)?fixtures/''']
+
+[[rules]]
+id = "impulse-mnemonic"
+description = "Quoted 12 or 24 lowercase-word phrase (BIP39-shaped seed phrase)"
+regex = '''["'](?:[a-z]{3,8} ){11}(?:(?:[a-z]{3,8} ){12})?[a-z]{3,8}["']'''
+[[rules.allowlists]]
+paths = ['''(^|/)tests/(.*/)?fixtures/''']
+
+# I20: the golden terms v3 vectors (tests/vectors/terms_v3/) carry the same fields and the list
+# issuer key, also an x-only public key; the same allowlist covers them.
+[[rules]]
+id = "impulse-solana-keypair"
+description = "Solana keypair file contents: a JSON array of 64 byte values (I19)"
+regex = '''\[\s*(?:[0-9]{1,3}\s*,\s*){63}[0-9]{1,3}\s*\]'''
+[[rules.allowlists]]
+paths = ['''(^|/)tests/(.*/)?fixtures/''']
+
+# I2: golden terms vectors carry x-only PUBLIC keys, derived from public labels so no private key
+# exists for them (spec/ENCODING.md, "Golden vectors"). The default generic-api-key rule reads
+# `"seller_key": "<64 hex>"` as a secret. Allowed for those three public-key fields only, in
+# tests/vectors/terms/*.json only; every other rule and line in those files is still scanned.
+[[allowlists]]
+description = "Public x-only keys in golden terms vectors"
+targetRules = ["generic-api-key"]
+condition = "AND"
+paths = ['''(^|/)tests/vectors/terms(_v3)?/[^/]+\.json$''']
+regexTarget = "line"
+regexes = ['''^\s*"(seller_key|buyer_key|authority_key|list_issuer_key)": "[0-9a-f]{64}",$''']
+
+# I16: golden terms v2 vectors carry each leg's depositor x-only PUBLIC key, label-derived so no
+# private key exists for it (spec/V2.md 5.4). Allowed for that field only, in
+# tests/vectors/terms_v2/*.json only; every other rule and line is still scanned.
+[[allowlists]]
+description = "Public x-only depositor keys in golden terms v2 vectors"
+targetRules = ["generic-api-key"]
+condition = "AND"
+paths = ['''(^|/)tests/vectors/terms_v2/[^/]+\.json$''']
+regexTarget = "line"
+regexes = ['''^\s*"depositor_key": "[0-9a-f]{64}",$''']
+
+# I18: the golden hashlock vectors carry the same label-derived public x-only keys
+# (tests/vectors/htlc/, spec/V2.md section 10.8; tests/vectors/htlc_r04/, an earlier copy of that
+# set which the history still holds). Allowed for those two fields only, in those files only; every
+# other rule and line in them is still scanned.
+[[allowlists]]
+description = "Public x-only keys in golden hashlock vectors"
+targetRules = ["generic-api-key"]
+condition = "AND"
+paths = ['''(^|/)tests/vectors/htlc(_r04)?/[^/]+\.json$''']
+regexTarget = "line"
+regexes = ['''^\s*"(seller_key|buyer_key)": "[0-9a-f]{64}",$''']
+
+# I22: the golden linked-trade vectors carry the same label-derived public x-only keys, in the
+# sheet's opening and in both derived trades (tests/vectors/linked/, spec/V2.md section 17.11).
+# Allowed for those two fields only, in those files only; every other rule and line is still scanned.
+[[allowlists]]
+description = "Public x-only keys in golden linked-trade vectors"
+targetRules = ["generic-api-key"]
+condition = "AND"
+paths = ['''(^|/)tests/vectors/linked/[^/]+\.json$''']
+regexTarget = "line"
+regexes = ['''^\s*"(depositor_key|authority_key)": "[0-9a-f]{64}",?$''']
+
+# Domain-separation key tags for keyed BLAKE2b digests (terms hash, receipts), e.g.
+# `key = "Impulse/receipt/v1"`. Public constants from the spec, never secrets.
+[[allowlists]]
+description = "Impulse BLAKE2b domain-separation key tags"
+targetRules = ["generic-api-key"]
+regexTarget = "match"
+regexes = ['''key\s*=\s*"Impulse/[a-z]+/v[0-9]+"''']
+
+# I20: the v3 proof fixtures name each vault by its P2SH scriptPubKey (`0000aa20<script hash>87`),
+# a public value derived from the vault bytecode; the default rule reads the `*_auth` names as a
+# key. Allowed for those lines in vaults.json only; every other line and rule there is scanned.
+[[allowlists]]
+description = "Public vault scriptPubKeys in the v3 proof fixtures"
+targetRules = ["generic-api-key"]
+condition = "AND"
+paths = ['''(^|/)tests/engine/fixtures/v3/proofs/vaults\.json$''']
+regexTarget = "line"
+regexes = ['''^\s*"[a-z0-9_]+": "0000aa20[0-9a-f]{64}87",?$''']
+
+# I14: the fuzz seeds for the terms and JSON targets are the golden terms vectors written out
+# again, so they carry the same x-only PUBLIC key fields. Same three fields, generic-api-key
+# only, seed files only; no key material is ever written under fuzz/corpus (scripts/fuzz.sh).
+[[allowlists]]
+description = "Public x-only keys in fuzz seeds"
+targetRules = ["generic-api-key"]
+condition = "AND"
+paths = ['''(^|/)fuzz/corpus/(cli_terms_file|cli_json)/seed-''']
+regexTarget = "line"
+regexes = ['''"(seller_key|buyer_key|authority_key)": "[0-9a-f]{64}",?''']

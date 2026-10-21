@@ -1,0 +1,133 @@
+# Copyright (c) 2026 the Impulse authors. A KiiLabs product. Licensed under the Apache License, Version 2.0.
+# cargo-fuzz targets for the untrusted-input parsers of impulse-core and impulse-cli (I14
+# hardening, fuzz track). Its own workspace, outside the stable one: it needs a nightly toolchain
+# (`cargo +nightly fuzz`, see scripts/fuzz.sh), is never built by scripts/ci-local.sh, and is no
+# dependency of any shipped crate. Every crate below is already in the root Cargo.lock at the same
+# version and source, except libfuzzer-sys (crates.io), which only this crate uses.
+
+[package]
+name = "impulse-fuzz"
+version = "0.0.0"
+edition = "2021"
+license = "Apache-2.0"
+publish = false
+
+[package.metadata]
+cargo-fuzz = true
+
+[workspace]
+members = ["."]
+
+[dependencies]
+libfuzzer-sys = "0.4.13"
+serde_json = "1.0.151"
+borsh = "1.8.1"
+impulse-core = { path = "../crates/impulse-core", features = ["threshold"] }
+impulse-cli = { path = "../crates/impulse-cli" }
+kaspa-addresses = { git = "https://github.com/kaspanet/rusty-kaspa", rev = "a41a333b08848f41bf737b72592e463a6011b8ac" }
+kaspa-consensus-core = { git = "https://github.com/kaspanet/rusty-kaspa", rev = "a41a333b08848f41bf737b72592e463a6011b8ac" }
+kaspa-rpc-core = { git = "https://github.com/kaspanet/rusty-kaspa", rev = "a41a333b08848f41bf737b72592e463a6011b8ac" }
+kaspa-txscript = { git = "https://github.com/kaspanet/rusty-kaspa", rev = "a41a333b08848f41bf737b72592e463a6011b8ac" }
+workflow-serializer = "0.18.0"
+
+# The seed generator: writes the starting corpus of every target from the golden vectors and
+# from values the crates build themselves. No key, share or secret is written (rule 1, docs/ENGINEERING-RULES.md).
+[[bin]]
+name = "seeds"
+path = "src/seeds.rs"
+test = false
+doc = false
+
+[profile.release]
+debug = 1
+
+[[bin]]
+name = "terms_decode"
+path = "fuzz_targets/terms_decode.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "template_decode"
+path = "fuzz_targets/template_decode.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "tx_decode"
+path = "fuzz_targets/tx_decode.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "ipst_parse"
+path = "fuzz_targets/ipst_parse.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "kcc20_template"
+path = "fuzz_targets/kcc20_template.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "threshold_public"
+path = "fuzz_targets/threshold_public.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "threshold_secret"
+path = "fuzz_targets/threshold_secret.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "cli_json"
+path = "fuzz_targets/cli_json.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "cli_terms_file"
+path = "fuzz_targets/cli_terms_file.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "cli_args"
+path = "fuzz_targets/cli_args.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "cli_receipt"
+path = "fuzz_targets/cli_receipt.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "cli_rpc_walk"
+path = "fuzz_targets/cli_rpc_walk.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "cli_rpc_wire"
+path = "fuzz_targets/cli_rpc_wire.rs"
+test = false
+doc = false
+bench = false

@@ -1,0 +1,362 @@
+help: Check that the patched package version and available features are compatible
+      with the dependency requirements. If the patch has a different version from
+      what is locked in the Cargo.lock file, run `cargo update` to use the new
+      version. This may also occur with an optional dependency that is not enabled.
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+   Compiling kaspa-utils v2.1.0 (~/scratch/rk/utils)
+   Compiling kaspa-addresses v2.1.0 (~/scratch/rk/crypto/addresses)
+   Compiling kaspa-hashes v2.1.0 (~/scratch/rk/crypto/hashes)
+   Compiling kaspa-math v2.1.0 (~/scratch/rk/math)
+   Compiling kaspa-merkle v2.1.0 (~/scratch/rk/crypto/merkle)
+   Compiling kaspa-smt v2.1.0 (~/scratch/rk/crypto/smt)
+   Compiling kaspa-txscript-errors v2.1.0 (~/scratch/rk/crypto/txscript/errors)
+   Compiling kaspa-muhash v2.1.0 (~/scratch/rk/crypto/muhash)
+   Compiling kaspa-consensus-core v2.1.0 (~/scratch/rk/consensus/core)
+   Compiling kaspa-txscript v2.1.0 (~/scratch/rk/crypto/txscript)
+   Compiling silverscript-abi v0.1.0 (~/scratch/ss/silverscript-abi)
+   Compiling impulse-core v0.1.0 (~/impulse-a3/crates/impulse-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3m 28s
+     Running unittests src/lib.rs (target/debug/deps/impulse_core-d509a79305281545)
+
+running 324 tests
+test address::tests::address_known_answer ... ok
+test address::tests::mainnet_and_testnet_addresses ... ok
+test decode::tests::a_vault_input_must_call_an_entry ... ok
+test decode::tests::a_transaction_without_a_vault_input_is_refused ... ok
+test decode::tests::a_transaction_whose_carried_id_is_not_its_own_is_refused ... ok
+test decode::tests::a_vault_script_impulse_refuses_keeps_its_code ... ok
+test decode::tests::a_swapped_signature_script_keeps_the_id_and_is_refused_when_bound ... ok
+test decode::tests::a_refund_names_its_signer_and_goes_home ... ok
+test decode::tests::a_vault_script_on_an_input_consensus_does_not_run_is_refused ... ok
+test decode::tests::decode_error_codes_are_frozen ... ok
+test address::tests::the_address_pays_the_vault_script ... ok
+test decode::tests::pushes_none_for_truncated_or_non_push_scripts ... ok
+test decode::tests::pushes_recovers_a_simple_push ... ok
+test decode::tests::pushes_recovers_the_final_of_several_pushes ... ok
+test decode::tests::pushes_at_every_length_boundary ... ok
+test decode::tests::pushes_handles_pushdata1_2_and_4 ... ok
+test decode::tests::revealed_script_is_the_last_data_push ... ok
+test decode::tests::a_vault_of_another_network_is_refused ... ok
+test decode::tests::an_input_that_is_not_push_only_is_not_a_vault_spend ... ok
+test htlc::golden::emit_vectors ... ignored, generator for scripts/vectors.sh
+test decode::tests::raw_bytes_that_are_not_one_transaction_are_refused ... ok
+test decode::tests::the_spent_script_public_keys_must_be_one_per_input ... ok
+test htlc::golden::golden_hashes_distinct ... ok
+test decode::tests::two_trades_mixed_in_one_settle_are_reported_apart ... ok
+test decode::tests::the_committed_raw_settle_decodes_to_vector_1 ... ok
+test htlc::golden::golden_set_covers_every_form ... ok
+test htlc::golden::golden_files_decode_hash_and_instantiate ... ok
+test htlc::tests::check_preimage_rules ... ok
+test htlc::golden::golden_files_match ... ok
+test htlc::tests::claim_layout ... ok
+test htlc::tests::creation_checks_v1_order ... ok
+test htlc::tests::daa_rate_burst_between_long_gaps ... ok
+test htlc::tests::creation_refuses_a_past_counterpart_timeout ... ok
+test htlc::tests::daa_rate_max_values ... ok
+test htlc::tests::decode_refusals ... ok
+test htlc::tests::daa_rate_sample_cases ... ok
+test htlc::tests::decode_refuses_unknown_bytes ... ok
+test htlc::tests::addresses_follow_the_network ... ok
+test htlc::tests::documents_state_the_finality_depth_of_the_code ... ok
+test htlc::tests::every_truncation_and_trailing_byte_is_refused ... ok
+test htlc::tests::every_vector_passes_the_creation_checks ... ok
+test htlc::tests::finality_depth_is_the_d18_decision ... ok
+test htlc::tests::from_parts_reads_back_and_refuses_what_does_not_hold ... ok
+test htlc::tests::claim_refusals ... ok
+test htlc::tests::fund_refusals ... ok
+test htlc::tests::fund_layout ... ok
+test htlc::tests::htlc_error_codes_are_frozen ... ok
+test htlc::tests::hash_known_answers ... ok
+test htlc::tests::layout_lengths ... ok
+test htlc::tests::mainnet_creation_is_accepted ... ok
+test htlc::tests::instantiate_and_decode_round_trip ... ok
+test htlc::tests::mainnet_exits_stay_open ... ok
+test htlc::tests::other_leg_kinds_decode_and_are_refused_by_structure ... ok
+test htlc::tests::pinned_networks_run_at_ten_blocks_per_second ... ok
+test decode::tests::a_poison_vault_input_beside_a_real_settle_hides_nothing ... ok
+test htlc::tests::margin_rule ... ok
+test htlc::tests::signature_slots ... ok
+test htlc::tests::refund_layouts ... ok
+test htlc::tests::refund_refusals ... ok
+test htlc::tests::template_startup_check ... ok
+test htlc::tests::structure_checks_run_in_order ... ok
+test htlc::tests::the_terms_check_refuses_any_change ... ok
+test htlc::tests::verify_address_refusals ... ok
+test htlc::tests::verify_funding_reads_mainnet_vaults ... ok
+test htlc::tests::structure_checks_each_code ... ok
+test locktime::tests::impulse_sequence_imposes_no_relative_lock ... ok
+test locktime::tests::lock_time_is_final_only_in_a_later_block ... ok
+test locktime::tests::lock_time_zero_is_always_final ... ok
+test locktime::tests::lock_times_follow_the_terms ... ok
+test locktime::tests::maximum_sequences_finalize_a_locked_transaction ... ok
+test locktime::tests::relative_lock_matures_at_utxo_plus_lock ... ok
+test locktime::tests::timestamp_domain_lock_time_compares_with_block_time ... ok
+test template::golden::emit_vectors ... ignored, generator for scripts/vectors.sh
+test htlc::tests::verify_revealed_scripts ... ok
+test template::golden::golden_files_decode_to_their_terms ... ok
+test template::golden::golden_files_match ... ok
+test htlc::tests::decoding_is_one_to_one ... ok
+test template::golden::golden_set_covers_every_vault_form ... ok
+test decode::tests::a_settle_of_every_vault_vector_decodes_to_its_trade ... ok
+test htlc::tests::encoding_round_trips ... ok
+test htlc::tests::verify_funding_accepts_only_the_agreed_escrow_and_an_authorizer ... ok
+test template::tests::a_template_that_fails_the_check_makes_and_accepts_nothing ... ok
+test template::tests::decode_refuses_a_malformed_state ... ok
+test template::tests::decode_refuses_non_canonical_states ... ok
+test template::tests::decode_refuses_scripts_of_another_template ... ok
+test template::tests::decode_refuses_state_values_outside_the_terms ... ok
+test template::tests::destinations_map_to_their_state_fields ... ok
+test template::tests::direct_terms_have_no_vault ... ok
+test template::tests::embedded_template_passes_the_startup_check ... ok
+test template::tests::every_vault_runs_the_checked_template ... ok
+test template::tests::every_vector_round_trips_through_its_redeem_scripts ... ok
+test template::tests::external_cash_has_no_cash_vault ... ok
+test template::tests::instantiation_is_deterministic_and_leg_specific ... ok
+test template::tests::leg_index_outside_0_and_1_is_refused ... ok
+test template::tests::refuses_an_authority_equal_to_a_party ... ok
+test template::tests::refuses_an_expiry_beyond_the_creation_horizon ... ok
+test template::tests::refuses_an_unknown_cash_kind ... ok
+test template::tests::refuses_asset_and_cash_of_one_token ... ok
+test template::tests::refuses_lock_times_in_the_timestamp_domain ... ok
+test template::tests::refuses_zero_amounts ... ok
+test template::tests::script_hash_is_the_p2sh_hash_of_the_redeem_script ... ok
+test template::tests::startup_check_refuses_a_tampered_artifact ... ok
+test template::tests::template_error_codes_are_frozen ... ok
+test template::tests::template_hash_of_instance_names_the_template ... ok
+test terms::golden::emit_vectors ... ignored, generator for scripts/vectors.sh
+test terms::golden::golden_files_decode_and_hash ... ok
+test terms::golden::golden_files_match ... ok
+test terms::golden::golden_hashes_distinct ... ok
+test terms::golden::golden_set_covers_every_mode_and_kind ... ok
+test terms::golden::golden_terms_validate ... ok
+test decode::tests::arbitrary_bytes_decode_to_a_frozen_code ... ok
+test decode::tests::pushes_never_panic_and_round_trip ... ok
+test htlc::tests::daa_rate_fixed_windows_are_spacing_independent ... ok
+test terms::proptests::arbitrary_bytes_never_panic ... ok
+test decode::tests::a_changed_byte_never_decodes_to_a_vault_not_spent ... ok
+test terms::proptests::byte_change_refused_or_canonical ... ok
+test terms::proptests::any_field_change_changes_hash ... ok
+test terms::proptests::hash_stable ... ok
+test terms::tests::amounts_have_an_upper_bound_per_kind ... ok
+test terms::tests::amounts_must_be_positive ... ok
+test terms::tests::asset_leg_cannot_be_external ... ok
+test terms::tests::authority_must_not_be_a_party ... ok
+test terms::tests::buyer_cannot_be_the_authority_of_an_external_cash_trade ... ok
+test terms::tests::decode_refuses_bad_presence_bytes ... ok
+test terms::tests::decode_refuses_empty_and_truncated ... ok
+test terms::tests::decode_refuses_trailing_bytes ... ok
+test terms::tests::decode_refuses_unknown_settlement_mode ... ok
+test terms::tests::decode_refuses_unknown_tags ... ok
+test terms::tests::destination_kind_must_match_leg_kind ... ok
+test terms::tests::direct_refuses_external_cash_and_earmarked_funding ... ok
+test terms::tests::display_leads_with_the_code ... ok
+test terms::tests::earliest_must_be_a_daa_score_lock_time ... ok
+test terms::tests::earliest_not_after_expiry ... ok
+test terms::tests::earliest_present_means_nonzero ... ok
+test terms::tests::error_codes_are_frozen ... ok
+test terms::tests::every_golden_vector_validates ... ok
+test terms::tests::every_variant_maps_to_its_listed_code ... ok
+test terms::tests::expired_trade_passes_the_structure_check ... ok
+test terms::tests::expiry_must_be_a_daa_score_lock_time ... ok
+test terms::tests::expiry_must_lie_after_creation ... ok
+test terms::tests::expiry_within_the_horizon ... ok
+test terms::tests::external_cash_needs_an_authority ... ok
+test terms::tests::invalid_terms_round_trip_and_hash ... ok
+test terms::tests::kas_destinations_must_be_standard ... ok
+test terms::tests::kcc20_identifiers_must_not_be_zero ... ok
+test terms::tests::keys_inside_destinations_must_be_valid ... ok
+test terms::tests::layout_fixed_order_little_endian ... ok
+test terms::tests::legs_must_be_different_tokens ... ok
+test terms::tests::network_must_match ... ok
+test terms::tests::optional_absent_and_present_zero_differ ... ok
+test terms::tests::parties_must_be_distinct ... ok
+test terms::tests::party_keys_must_be_valid_xonly_points ... ok
+test terms::tests::script_length_bound_is_exact ... ok
+test terms::tests::template_lengths_in_range ... ok
+test terms::tests::terms_hash_is_keyed_blake2b_256 ... ok
+test terms::tests::v1_asset_leg_must_be_kcc20 ... ok
+test terms::tests::validated_terms_carry_their_bytes_and_hash ... ok
+test terms::tests::validation_order_two_faults_per_adjacent_pair ... ok
+test terms::tests::vector_labels_are_public_derivations ... ok
+test terms::tests::version_other_than_1_refused_everywhere ... ok
+test tx::golden::emit_vectors ... ignored, generator for scripts/vectors.sh
+test tx::golden::golden_files_match ... ok
+test template::proptests::field_edits_decode_only_canonically has been running for over 60 seconds
+test tx::golden::golden_files_read_back ... ok
+test tx::golden::golden_set_covers_every_builder_and_mode ... ok
+test tx::ipst::tests::decimals_and_hex_are_canonical ... ok
+test tx::ipst::tests::reader_accepts_json_and_refuses_what_an_ipst_never_holds ... ok
+test template::proptests::instantiate_then_decode_is_identity has been running for over 60 seconds
+test tx::tests::a_fee_input_of_another_script_version ... ok
+test template::proptests::non_minimal_push_of_any_field_is_non_canonical has been running for over 60 seconds
+test template::proptests::properties_run_10000_cases has been running for over 60 seconds
+test template::proptests::single_byte_changes_decode_only_canonically has been running for over 60 seconds
+test tx::tests::at_the_minimum_the_worst_case_fits_the_cap ... ok
+test tx::tests::below_min_kas ... ok
+test tx::tests::budgets_follow_the_template_length ... ok
+test tx::tests::depositor_may_refund_the_authorizer_alone ... ok
+test tx::tests::direct_layout ... ok
+test tx::tests::duplicate_input ... ok
+test tx::tests::encoding ... ok
+test tx::tests::escrow_mismatch ... ok
+test tx::tests::every_mass_dimension_is_capped ... ok
+test tx::tests::expired ... ok
+test tx::tests::expired_when_earliest_equals_expiry ... ok
+test tx::tests::expired_without_earliest ... ok
+test tx::tests::external_cash_has_no_cash_vault_to_fund_or_refund ... ok
+test tx::tests::fee_too_low ... ok
+test tx::tests::fund_layouts ... ok
+test tx::tests::insufficient_funds_and_change ... ok
+test tx::tests::ipst_combine_refuses_any_difference_but_signatures ... ok
+test tx::tests::ipst_reader_refuses_values_outside_the_supply ... ok
+test tx::tests::ipst_reads_any_whitespace_and_key_order ... ok
+test tx::tests::ipst_refusals ... ok
+test tx::tests::ipst_round_trips ... ok
+test tx::tests::kas_input ... ok
+test tx::tests::kcc20_artifacts_refused_by_each_check ... ok
+test tx::tests::leg_amount ... ok
+test tx::tests::lock_time_and_sequences_follow_the_node_rule ... ok
+test tx::tests::mass_above_the_cap ... ok
+test tx::tests::masses_are_within_the_cap_in_every_mode ... ok
+test tx::tests::minimum_kas_is_derived_from_storage_mass ... ok
+test tx::tests::network_parameters_follow_the_terms ... ok
+test tx::tests::no_builder_exceeds_max_outputs ... ok
+test tx::tests::nonstandard_change ... ok
+test tx::tests::not_at_vault ... ok
+test terms::proptests::properties_run_10000_cases ... ok
+test tx::tests::refund_of_a_stray_token_by_the_depositor ... ok
+test tx::tests::refund_signer ... ok
+test tx::tests::refusal_order_direct ... ok
+test tx::tests::refusal_order_fund ... ok
+test tx::tests::refusal_order_refund ... ok
+test tx::tests::refusal_order_settle ... ok
+test tx::tests::refusal_order_shared_checks ... ok
+test tx::tests::refund_layout_for_every_leg_and_signer ... ok
+test tx::tests::settle_without_earliest_has_no_lock_time ... ok
+test tx::tests::sighash_refuses_a_missing_input ... ok
+test tx::tests::settle_layout_in_every_vault_mode ... ok
+test tx::tests::the_terms_check_keeps_the_builders_codes ... ok
+test tx::tests::the_terms_check_refuses_a_tampered_direct_ipst ... ok
+test tx::tests::the_terms_check_refuses_tampered_vault_ipsts ... ok
+test tx::tests::token_amounts_outside_the_script_integer_range ... ok
+test tx::tests::token_input ... ok
+test tx::tests::token_template ... ok
+test tx::tests::token_template_per_builder_and_field ... ok
+test tx::tests::tx_error_codes_are_frozen ... ok
+test tx::tests::under_funded_pass_through_outputs_are_topped_up ... ok
+test tx::tests::utxo_value ... ok
+test tx::tests::vault_mismatch ... ok
+test tx::tests::wrong_mode ... ok
+test v2::golden::emit_vectors ... ignored, generator for scripts/vectors.sh
+test v2::golden::golden_files_match ... ok
+test v2::golden::golden_ipsts_read_back_and_pass_the_terms_check ... ok
+test tx::tests::the_terms_check_accepts_every_builder_ipst ... ok
+test v2::golden::golden_terms_decode_hash_and_validate ... ok
+test v2::golden::golden_vaults_decode_to_their_terms ... ok
+test v2::tests::a_depositor_of_several_legs_is_each_legs_depositor ... ok
+test v2::tests::a_settle_transaction_states_its_facts ... ok
+test v2::tests::above_pre_toccata_cap_is_asserted_per_shape ... ok
+test v2::tests::addresses_follow_the_network ... ok
+test v2::tests::budgets_follow_the_measured_rules ... ok
+test v2::tests::cap_v2_is_the_pinned_block_limits_less_the_d37_reserve ... ok
+test v2::tests::creation_checks_are_v1s ... ok
+test v2::tests::decode_any_dispatches_on_the_version_byte ... ok
+test v2::golden::golden_set_covers_spec_5_4 ... ok
+test v2::tests::decode_refusals ... ok
+test v2::tests::decode_refusals_of_spec_8_2 ... ok
+test template::proptests::properties_run_10000_cases ... ok
+test v2::tests::encode_refusals ... ok
+test v2::tests::every_structure_check_in_spec_5_3_order ... ok
+test v2::tests::every_v2_variant_maps_to_its_listed_code ... ok
+test v2::tests::fixtures_round_trip_and_validate ... ok
+test v2::tests::fund_builders ... ok
+test v2::tests::hash_known_answers_of_spec_5_1 ... ok
+test v2::tests::instantiation_layout_and_decode_round_trip ... ok
+test v2::tests::ipst_refusals ... ok
+test v2::tests::ipst_round_trips_and_passes_the_terms_check ... ok
+test v2::tests::encode_inverts_decode ... ok
+test v2::tests::min_v2_follows_the_output_count ... ok
+test v2::tests::min_vault_v2_floors_partial_terms_at_two_units_and_the_spec_says_so ... ok
+test v2::tests::n2_settle_is_v1s_layout_position_for_position ... ok
+test v2::tests::partial_funding_makes_one_genesis_per_leg ... ok
+test v2::tests::ipst_terms_check_names_the_builder ... ok
+test v2::tests::quantities_state_settled_cumulative_and_total ... ok
+test v2::tests::partial_terms_settle_in_full_and_refuse_tranche_faults ... ok
+test v2::tests::refund_layouts_and_lock_times ... ok
+test v2::tests::refund_refusals ... ok
+test v2::tests::settle_lots_reads_only_the_settle_entry ... ok
+test v2::tests::settle_mass_above_cap_v2_is_refused ... ok
+test v2::tests::settle_refusals_in_order ... ok
+test v2::tests::startup_check_pins_template_hash_v2 ... ok
+test v2::tests::template_load_refuses_tampered_inputs_v2 ... ok
+test v2::tests::ten_leg_settle_fits_cap_v2_and_warns_above_100000 ... ok
+test v2::tests::the_settle_tag_is_the_artifact ... ok
+test v2::tests::tranche_budgets_are_the_committed_rule ... ok
+test v2::tests::tranche_chains_on_its_own_continuations ... ok
+test v2::tests::tranche_layout_of_spec_4_3 ... ok
+test terms::proptests::round_trip ... ok
+test v2::tests::v2_error_codes_are_frozen ... ok
+test v2::tests::vault_utxo_checks_and_warnings ... ok
+test v2::tests::settle_layout_of_spec_4_3 ... ok
+test v2::tests::verify_addresses_of_every_leg ... ok
+test v2::tests::verify_revealed_scripts_and_spent_inputs ... ok
+test verify::tests::a_funding_check_says_whether_every_token_leg_was_read ... ok
+test verify::tests::a_kcc20_token_reports_its_minter_branch_and_an_unread_leg_is_unassessed ... ok
+test verify::tests::a_leg_without_a_vault_reveals_nothing_to_verify ... ok
+test verify::tests::a_party_among_the_issuer_keys_is_reported_with_its_relation_to_the_leg ... ok
+test verify::tests::a_script_of_the_template_that_does_not_decode_keeps_its_code ... ok
+test verify::tests::a_spent_input_reveals_its_script ... ok
+test verify::tests::a_spent_input_verifies_only_against_the_utxo_whose_spend_runs_its_script ... ok
+test verify::tests::a_token_with_extended_state_is_refused ... ok
+test v2::tests::tranche_refusals_in_order ... ok
+test verify::tests::an_address_that_is_not_the_vault_p2sh_is_a_mismatch ... ok
+test verify::tests::an_artifact_longer_than_the_cap_is_refused_unread ... ok
+test verify::tests::an_artifact_that_expands_without_bound_is_refused_quickly ... ok
+test verify::tests::an_expired_trade_is_not_offered_for_funding_but_its_spends_verify ... ok
+test verify::tests::address_text_that_panics_the_address_parser_is_malformed ... ok
+test verify::tests::a_changed_artifact_reads_or_refuses_with_a_frozen_code ... ok
+test verify::tests::any_artifact_text_reads_or_refuses_with_a_frozen_code ... ok
+test verify::tests::before_funding_runs_both_checks ... ok
+test verify::tests::counterparty_text_never_reaches_a_message_unescaped ... ok
+test verify::tests::differing_fields_lists_every_field_in_field_order ... ok
+test verify::tests::differing_fields_names_every_changed_field_in_order ... ok
+test verify::tests::direct_terms_have_nothing_to_fund ... ok
+test verify::tests::entries_an_artifact_hides_under_the_same_template_are_flagged_unpinned ... ok
+test verify::tests::every_leg_with_a_vault_needs_an_address ... ok
+test verify::tests::evidence_for_a_leg_without_a_token_is_refused ... ok
+test verify::tests::exit_every_committed_vault_vector_passes ... ok
+test verify::tests::exit_reordered_legs_fail_closed ... ok
+test verify::tests::exit_swapped_template_fails_closed ... ok
+test verify::tests::exit_tampered_amount_fails_closed ... ok
+test verify::tests::exit_tampered_destination_fails_closed ... ok
+test verify::tests::exit_wrong_network_fails_closed ... ok
+test verify::tests::external_cash_has_no_cash_address_to_fund ... ok
+test verify::tests::extra_entries_are_reported_by_name ... ok
+test verify::tests::malformed_addresses_are_refused ... ok
+test verify::tests::no_issuer_keys_is_reported_as_issuers_unknown ... ok
+test verify::tests::the_creation_checks_hold_at_their_boundaries ... ok
+test verify::tests::the_token_template_triple_must_be_the_legs ... ok
+test verify::tests::token_evidence_refusals ... ok
+test verify::tests::token_warning_codes_are_frozen ... ok
+test verify::tests::verify_error_codes_are_frozen ... ok
+test v2::tests::decode_inverts_encode ... ok
+test verify::tests::any_checksummed_address_text_verifies_or_refuses_with_a_frozen_code ... ok
+test terms::proptests::trailing_bytes_refused ... ok
+test verify::tests::any_spent_input_verifies_or_refuses_with_a_frozen_code ... ok
+test terms::proptests::truncation_refused ... ok
+test template::proptests::single_byte_changes_decode_only_canonically ... ok
+test template::proptests::non_minimal_push_of_any_field_is_non_canonical ... ok
+test template::proptests::field_edits_decode_only_canonically ... ok
+test template::proptests::instantiate_then_decode_is_identity ... ok
+
+test result: ok. 319 passed; 0 failed; 5 ignored; 0 measured; 0 filtered out; finished in 118.75s
+
+   Doc-tests impulse_core
+
+running 2 tests
+test crates/impulse-core/src/address.rs - address::vault_address (line 39) - compile fail ... ok
+test crates/impulse-core/src/address.rs - address::vault_address (line 26) ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.14s
+

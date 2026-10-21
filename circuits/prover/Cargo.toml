@@ -1,0 +1,50 @@
+# Copyright (c) 2026 the Impulse authors. A KiiLabs product. Licensed under the Apache License, Version 2.0.
+# The host prover `impulse-zk-prove` (spec/V3-ZK.md section 5.5). Proves locally only: the
+# succinct receipt on this machine, the Groth16 step in RISC Zero's prover image pinned by digest
+# (circuits/GROTH16_PROVER_IMAGE), run with no network. Never a remote proving service.
+[package]
+name = "impulse-zk-prover"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lib]
+name = "impulse_zk_prover"
+
+[[bin]]
+name = "impulse-zk-prove"
+path = "src/bin/impulse-zk-prove.rs"
+
+# Proves the hashed-terms statement (template v4), spec/V3-ZK.md section 22.
+[[bin]]
+name = "impulse-zk-prove-terms"
+path = "src/bin/impulse-zk-prove-terms.rs"
+
+# Regenerates the committed proof fixtures, including the forging guest's (tests only).
+[[bin]]
+name = "impulse-zk-fixtures"
+path = "src/bin/impulse-zk-fixtures.rs"
+required-features = ["fixtures"]
+
+[features]
+fixtures = []
+
+[dependencies]
+impulse-list-core = { path = "../list-core", features = ["std"] }
+impulse-terms-core = { path = "../terms-core" }
+impulse-zk-methods = { path = "../methods" }
+# disable-dev-mode: RISC0_DEV_MODE can never turn a proof into a fake receipt in this binary.
+risc0-zkvm = { workspace = true, features = ["prove", "disable-dev-mode"] }
+risc0-groth16 = { workspace = true, features = ["prove"] }
+kaspa-txscript-zk-sdk.workspace = true
+kaspa-txscript.workspace = true
+kaspa-txscript-errors.workspace = true
+kaspa-consensus-core.workspace = true
+kaspa-hashes.workspace = true
+sha2.workspace = true
+hex.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+
+[dev-dependencies]
+impulse-list-core = { path = "../list-core", features = ["std", "test-hook"] }

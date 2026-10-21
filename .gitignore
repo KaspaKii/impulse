@@ -1,0 +1,22 @@
+/target
+**/target
+/node_modules
+**/node_modules
+/pkg
+# wasm-pack output of the npm package (I9), built by crates/impulse-wasm/ci.sh
+crates/impulse-wasm/npm/pkg/
+.env
+*.key
+*.keyfile
+*.pem
+.DS_Store
+.cargo-home/
+
+# Static site built by demo/build.sh (I11)
+demo/dist/
+circuits/vendor/
+
+# Solana workspace (I19): local validator ledgers and the codegen's node_modules (target/ and
+# node_modules/ are covered above). Program keypairs from cargo-build-sbf stay under target/.
+solana/**/test-ledger/
+.anchor/

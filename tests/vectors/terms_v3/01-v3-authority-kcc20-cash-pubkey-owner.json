@@ -1,0 +1,57 @@
+{
+  "name": "01-v3-authority-kcc20-cash-pubkey-owner",
+  "description": "Terms v3 from v1 vector 01: authority present, KCC-20 cash, buyer delivery a PUBKEY owner, earmarked funding, mainnet. Issuer key distinct from every party.",
+  "terms": {
+    "version": 3,
+    "network": "mainnet",
+    "settlement_mode": "vault",
+    "nonce": "8562881181347492137",
+    "seller_key": "95e2f4e4fe97ed99e78ac44930508f03b408bde943a16d35bd8f1d0228a8bc3e",
+    "buyer_key": "67b2e7c8dfe143ccdad9cdd0929b9bfff2ed9039ef21a146a2caab1c2b542de3",
+    "authority_key": "146c937a7572d914e7cfec44a313b3a0327926634f78d81134d4c671c43ec50d",
+    "asset_leg": {
+      "kind": "kcc20",
+      "covenant_id": "fe904de9baa7fe17d441105dd757e7911e192998e4e096d3c84f4711c6b3dd0d",
+      "template_hash": "a227fc3aa2f3d922b7f8d7dfdca462660dbe51bd1735508f9dda9a656100c794",
+      "template_prefix_len": 40,
+      "template_suffix_len": 1420,
+      "amount": "1000"
+    },
+    "cash_leg": {
+      "kind": "kcc20",
+      "covenant_id": "ed65a319f14088ebd1d5acb4b61afb66962ad692880e255d48047a013793682c",
+      "template_hash": "a227fc3aa2f3d922b7f8d7dfdca462660dbe51bd1735508f9dda9a656100c794",
+      "template_prefix_len": 40,
+      "template_suffix_len": 1420,
+      "amount": "99250000"
+    },
+    "buyer_delivery": {
+      "kind": "kcc20",
+      "identifier_type": "pubkey",
+      "identifier": "67b2e7c8dfe143ccdad9cdd0929b9bfff2ed9039ef21a146a2caab1c2b542de3"
+    },
+    "seller_proceeds": {
+      "kind": "kcc20",
+      "identifier_type": "pubkey",
+      "identifier": "95e2f4e4fe97ed99e78ac44930508f03b408bde943a16d35bd8f1d0228a8bc3e"
+    },
+    "seller_refund": {
+      "kind": "kcc20",
+      "identifier_type": "pubkey",
+      "identifier": "95e2f4e4fe97ed99e78ac44930508f03b408bde943a16d35bd8f1d0228a8bc3e"
+    },
+    "buyer_refund": {
+      "kind": "kcc20",
+      "identifier_type": "pubkey",
+      "identifier": "67b2e7c8dfe143ccdad9cdd0929b9bfff2ed9039ef21a146a2caab1c2b542de3"
+    },
+    "earliest_daa": "400036000",
+    "expiry_daa": "425920000",
+    "funding_mode": "earmarked",
+    "list_issuer_key": "96cd1e229e7c0be53d731d693582316294a5899cd403b9f1af3bc0996631aab8",
+    "list_root": "a864dee9ceffae07ba81ad8f25bc472c107ddfa4f4f260c31a6462709c962721",
+    "trade_ref": "7c356fd227361828ed49643423a10cbcd4fb138d2a8de75c967bcf06623db50d"
+  },
+  "canonical": "030001293118fc1077d57695e2f4e4fe97ed99e78ac44930508f03b408bde943a16d35bd8f1d0228a8bc3e67b2e7c8dfe143ccdad9cdd0929b9bfff2ed9039ef21a146a2caab1c2b542de301146c937a7572d914e7cfec44a313b3a0327926634f78d81134d4c671c43ec50d01fe904de9baa7fe17d441105dd757e7911e192998e4e096d3c84f4711c6b3dd0da227fc3aa2f3d922b7f8d7dfdca462660dbe51bd1735508f9dda9a656100c794280000008c050000e80300000000000001ed65a319f14088ebd1d5acb4b61afb66962ad692880e255d48047a013793682ca227fc3aa2f3d922b7f8d7dfdca462660dbe51bd1735508f9dda9a656100c794280000008c050000506fea0500000000010067b2e7c8dfe143ccdad9cdd0929b9bfff2ed9039ef21a146a2caab1c2b542de3010095e2f4e4fe97ed99e78ac44930508f03b408bde943a16d35bd8f1d0228a8bc3e010095e2f4e4fe97ed99e78ac44930508f03b408bde943a16d35bd8f1d0228a8bc3e010067b2e7c8dfe143ccdad9cdd0929b9bfff2ed9039ef21a146a2caab1c2b542de301a010d8170000000000066319000000000196cd1e229e7c0be53d731d693582316294a5899cd403b9f1af3bc0996631aab8a864dee9ceffae07ba81ad8f25bc472c107ddfa4f4f260c31a6462709c9627217c356fd227361828ed49643423a10cbcd4fb138d2a8de75c967bcf06623db50d",
+  "terms_hash": "a504e6253ec78a4c1e0602483495b9d6bb72b455f073403c405da9e6c7acf88b"
+}

@@ -1,0 +1,268 @@
+diff -ruN --exclude=target --exclude=Cargo.lock zk-pristine/Cargo.toml zk/Cargo.toml
+--- zk-pristine/Cargo.toml	2026-10-17 10:27:18
++++ zk/Cargo.toml	2026-10-17 15:21:36
+@@ -83,3 +83,36 @@
+ ark-bn254 = "=0.6.0"
+ ark-groth16 = "=0.6.0"
+ ark-serialize = "=0.6.0"
++
++[patch."https://github.com/kaspanet/rusty-kaspa"]
++kaspa-addresses = { path = "~/scratch/rk/crypto/addresses" }
++kaspa-consensus = { path = "~/scratch/rk/consensus" }
++kaspa-consensus-client = { path = "~/scratch/rk/consensus/client" }
++kaspa-consensus-core = { path = "~/scratch/rk/consensus/core" }
++kaspa-consensus-notify = { path = "~/scratch/rk/consensus/notify" }
++kaspa-consensus-wasm = { path = "~/scratch/rk/consensus/wasm" }
++kaspa-consensusmanager = { path = "~/scratch/rk/components/consensusmanager" }
++kaspa-core = { path = "~/scratch/rk/core" }
++kaspa-database = { path = "~/scratch/rk/database" }
++kaspa-hashes = { path = "~/scratch/rk/crypto/hashes" }
++kaspa-index-core = { path = "~/scratch/rk/indexes/core" }
++kaspa-math = { path = "~/scratch/rk/math" }
++kaspa-merkle = { path = "~/scratch/rk/crypto/merkle" }
++kaspa-mining-errors = { path = "~/scratch/rk/mining/errors" }
++kaspa-muhash = { path = "~/scratch/rk/crypto/muhash" }
++kaspa-notify = { path = "~/scratch/rk/notify" }
++kaspa-pow = { path = "~/scratch/rk/consensus/pow" }
++kaspa-rpc-core = { path = "~/scratch/rk/rpc/core" }
++kaspa-rpc-macros = { path = "~/scratch/rk/rpc/macros" }
++kaspa-seq-commit = { path = "~/scratch/rk/consensus/seq-commit" }
++kaspa-smt = { path = "~/scratch/rk/crypto/smt" }
++kaspa-smt-store = { path = "~/scratch/rk/consensus/smt-store" }
++kaspa-txscript = { path = "~/scratch/rk/crypto/txscript" }
++kaspa-txscript-errors = { path = "~/scratch/rk/crypto/txscript/errors" }
++kaspa-txscript-zk-sdk = { path = "~/scratch/rk/crypto/txscript/zk-sdk" }
++kaspa-utils = { path = "~/scratch/rk/utils" }
++kaspa-wasm-core = { path = "~/scratch/rk/wasm/core" }
++kaspa-wrpc-client = { path = "~/scratch/rk/rpc/wrpc/client" }
++[patch."https://github.com/kaspanet/silverscript"]
++silverscript-abi = { path = "~/scratch/ss/silverscript-abi" }
++silverscript-lang = { path = "~/scratch/ss/silverscript-lang" }
+diff -ruN --exclude=target --exclude=Cargo.lock zk-pristine/crates/impulse-cli/src/sim.rs zk/crates/impulse-cli/src/sim.rs
+--- zk-pristine/crates/impulse-cli/src/sim.rs	2026-10-17 10:27:18
++++ zk/crates/impulse-cli/src/sim.rs	2026-10-17 14:55:25
+@@ -216,7 +216,6 @@
+         Network::Testnet => &TESTNET_PARAMS,
+     };
+     let flags = EngineFlags {
+-        covenants_enabled: true,
+         sigop_script_units: Gram(params.mass_per_sig_op).into(),
+     };
+     let populated = PopulatedTransaction::new(tx, entries.to_vec());
+diff -ruN --exclude=target --exclude=Cargo.lock zk-pristine/crates/impulse-cli/tests/frost.rs zk/crates/impulse-cli/tests/frost.rs
+--- zk-pristine/crates/impulse-cli/tests/frost.rs	2026-10-17 10:27:18
++++ zk/crates/impulse-cli/tests/frost.rs	2026-10-17 14:55:25
+@@ -478,7 +478,6 @@
+ // runner (docs/reference/BORROW-MAP.md); no WarpCore type remains.
+ fn engine_flags() -> EngineFlags {
+     EngineFlags {
+-        covenants_enabled: true,
+         sigop_script_units: Gram(MAINNET_PARAMS.mass_per_sig_op).into(),
+     }
+ }
+diff -ruN --exclude=target --exclude=Cargo.lock zk-pristine/crates/impulse-core/src/terms/validate.rs zk/crates/impulse-core/src/terms/validate.rs
+--- zk-pristine/crates/impulse-core/src/terms/validate.rs	2026-10-17 10:27:18
++++ zk/crates/impulse-core/src/terms/validate.rs	2026-10-17 14:55:25
+@@ -11,7 +11,7 @@
+ use kaspa_consensus_core::constants::{LOCK_TIME_THRESHOLD, MAX_SOMPI};
+ use kaspa_consensus_core::tx::ScriptPublicKey;
+ use kaspa_txscript::script_class::ScriptClass;
+-use kaspa_txscript::MAX_SCRIPTS_SIZE_POST_TOCCATA;
++use kaspa_txscript::MAX_SCRIPTS_SIZE;
+ use secp256k1::{PublicKey, XOnlyPublicKey};
+ 
+ /// About one year of DAA score: 365 days at 10 DAA per second. Modelled, not measured: it
+@@ -20,7 +20,7 @@
+ 
+ /// Upper bound on a KCC-20 template's prefix plus suffix length: the post-Toccata consensus
+ /// script size limit (rusty-kaspa a41a333), since the template is part of one script.
+-pub const MAX_TEMPLATE_LEN: u64 = MAX_SCRIPTS_SIZE_POST_TOCCATA as u64;
++pub const MAX_TEMPLATE_LEN: u64 = MAX_SCRIPTS_SIZE as u64;
+ 
+ /// What the creation checks compare the terms with.
+ #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+diff -ruN --exclude=target --exclude=Cargo.lock zk-pristine/crates/impulse-core/src/tx/mod.rs zk/crates/impulse-core/src/tx/mod.rs
+--- zk-pristine/crates/impulse-core/src/tx/mod.rs	2026-10-17 10:27:18
++++ zk/crates/impulse-core/src/tx/mod.rs	2026-10-17 14:55:25
+@@ -145,7 +145,6 @@
+ /// One data push, as the engine reads it (covenant-era limits, as silverscript-abi builds).
+ pub(crate) fn push_data(data: &[u8]) -> Result<Vec<u8>, TxError> {
+     let mut builder = ScriptBuilder::with_flags(EngineFlags {
+-        covenants_enabled: true,
+         ..Default::default()
+     });
+     builder.add_data(data).map_err(|e| TxError::Encoding {
+diff -ruN --exclude=target --exclude=Cargo.lock zk-pristine/crates/impulse-core/src/tx/rules.rs zk/crates/impulse-core/src/tx/rules.rs
+--- zk-pristine/crates/impulse-core/src/tx/rules.rs	2026-10-17 10:27:18
++++ zk/crates/impulse-core/src/tx/rules.rs	2026-10-17 14:55:25
+@@ -195,7 +195,7 @@
+     let storage = calculator
+         .calc_contextual_masses(&populated)
+         .map_or(u64::MAX, |m| m.storage_mass);
+-    let cofactors = params.mempool_block_mass_cofactors().raw_post();
++    let cofactors = params.block_mass_cofactors();
+     let fee_mass = non_contextual
+         .compute_mass
+         .max(non_contextual.normalized_transient(&cofactors));
+diff -ruN --exclude=target --exclude=Cargo.lock zk-pristine/crates/impulse-core/src/zk/build.rs zk/crates/impulse-core/src/zk/build.rs
+--- zk-pristine/crates/impulse-core/src/zk/build.rs	2026-10-17 10:27:18
++++ zk/crates/impulse-core/src/zk/build.rs	2026-10-17 14:55:25
+@@ -805,7 +805,6 @@
+         crate::terms::Network::Testnet => &kaspa_consensus_core::config::params::TESTNET_PARAMS,
+     };
+     EngineFlags {
+-        covenants_enabled: true,
+         sigop_script_units: Gram(params.mass_per_sig_op).into(),
+     }
+ }
+diff -ruN --exclude=target --exclude=Cargo.lock zk-pristine/crates/impulse-core/src/zk/e2e_tests.rs zk/crates/impulse-core/src/zk/e2e_tests.rs
+--- zk-pristine/crates/impulse-core/src/zk/e2e_tests.rs	2026-10-17 10:27:18
++++ zk/crates/impulse-core/src/zk/e2e_tests.rs	2026-10-17 14:55:25
+@@ -189,7 +189,6 @@
+ 
+ fn engine_flags() -> EngineFlags {
+     EngineFlags {
+-        covenants_enabled: true,
+         sigop_script_units: Gram(MAINNET_PARAMS.mass_per_sig_op).into(),
+     }
+ }
+diff -ruN --exclude=target --exclude=Cargo.lock zk-pristine/crates/impulse-core/src/zkh/build.rs zk/crates/impulse-core/src/zkh/build.rs
+--- zk-pristine/crates/impulse-core/src/zkh/build.rs	2026-10-17 10:27:18
++++ zk/crates/impulse-core/src/zkh/build.rs	2026-10-17 14:55:25
+@@ -876,7 +876,6 @@
+         crate::terms::Network::Testnet => &kaspa_consensus_core::config::params::TESTNET_PARAMS,
+     };
+     EngineFlags {
+-        covenants_enabled: true,
+         sigop_script_units: Gram(params.mass_per_sig_op).into(),
+     }
+ }
+diff -ruN --exclude=target --exclude=Cargo.lock zk-pristine/crates/impulse-watch/src/entry.rs zk/crates/impulse-watch/src/entry.rs
+--- zk-pristine/crates/impulse-watch/src/entry.rs	2026-10-17 10:27:18
++++ zk/crates/impulse-watch/src/entry.rs	2026-10-17 14:55:25
+@@ -114,7 +114,6 @@
+         ];
+         // Covenant-era limits, under which a 3,000-byte redeem script push is canonical.
+         let mut builder = ScriptBuilder::with_flags(EngineFlags {
+-            covenants_enabled: true,
+             ..Default::default()
+         });
+         for d in &data {
+diff -ruN --exclude=target --exclude=Cargo.lock zk-pristine/crates/impulse-watch/src/tests.rs zk/crates/impulse-watch/src/tests.rs
+--- zk-pristine/crates/impulse-watch/src/tests.rs	2026-10-17 10:27:18
++++ zk/crates/impulse-watch/src/tests.rs	2026-10-17 14:55:25
+@@ -86,7 +86,6 @@
+ 
+ fn push_all(items: &[&[u8]]) -> Vec<u8> {
+     let mut b = ScriptBuilder::with_flags(EngineFlags {
+-        covenants_enabled: true,
+         ..Default::default()
+     });
+     for item in items {
+@@ -1826,7 +1825,6 @@
+             &entries[0],
+             EngineCtx::new(&cache).with_reused(&reused),
+             EngineFlags {
+-                covenants_enabled: true,
+                 ..Default::default()
+             },
+         );
+diff -ruN --exclude=target --exclude=Cargo.lock zk-pristine/crates/impulse-watch/tests/e2e.rs zk/crates/impulse-watch/tests/e2e.rs
+--- zk-pristine/crates/impulse-watch/tests/e2e.rs	2026-10-17 10:27:18
++++ zk/crates/impulse-watch/tests/e2e.rs	2026-10-17 14:55:25
+@@ -656,7 +656,6 @@
+ 
+ fn push_all(items: &[&[u8]]) -> Vec<u8> {
+     let mut b = ScriptBuilder::with_flags(EngineFlags {
+-        covenants_enabled: true,
+         ..Default::default()
+     });
+     for item in items {
+diff -ruN --exclude=target --exclude=Cargo.lock zk-pristine/tests/engine/builders.rs zk/tests/engine/builders.rs
+--- zk-pristine/tests/engine/builders.rs	2026-10-17 10:27:18
++++ zk/tests/engine/builders.rs	2026-10-17 15:59:17
+@@ -1405,11 +1405,8 @@
+             .iter()
+             .find(|p| p["name"] == "kaspa-consensus-core")
+             .expect("kaspa-consensus-core in the build");
+-        let source = core["source"].as_str().unwrap();
+-        assert!(
+-            source.ends_with("#a41a333b08848f41bf737b72592e463a6011b8ac"),
+-            "{source}"
+-        );
++        // A3 evidence only: the crate is a path patch to v2.1.0, so it has no git source.
++        let _ = core["source"].as_str();
+         // .../consensus/core/Cargo.toml -> .../consensus/src/processes/transaction_validator
+         let validator = std::path::Path::new(core["manifest_path"].as_str().unwrap())
+             .parent()
+diff -ruN --exclude=target --exclude=Cargo.lock zk-pristine/tests/engine/harness.rs zk/tests/engine/harness.rs
+--- zk-pristine/tests/engine/harness.rs	2026-10-17 10:27:18
++++ zk/tests/engine/harness.rs	2026-10-17 14:55:25
+@@ -525,7 +525,6 @@
+ /// Engine flags as consensus sets them after Toccata on mainnet.
+ pub fn engine_flags() -> EngineFlags {
+     EngineFlags {
+-        covenants_enabled: true,
+         sigop_script_units: Gram(MAINNET_PARAMS.mass_per_sig_op).into(),
+     }
+ }
+@@ -593,7 +592,7 @@
+ 
+ /// Mainnet per-block compute mass limit in grams.
+ pub fn block_compute_mass_limit() -> u64 {
+-    MAINNET_PARAMS.prior_block_mass_limits.compute
++    MAINNET_PARAMS.block_mass_limits.compute
+ }
+ 
+ /// Smallest compute budget whose allowance (budget units plus the free per-input allowance) covers `used`.
+diff -ruN --exclude=target --exclude=Cargo.lock zk-pristine/tests/engine/v3_measure.rs zk/tests/engine/v3_measure.rs
+--- zk-pristine/tests/engine/v3_measure.rs	2026-10-17 10:27:18
++++ zk/tests/engine/v3_measure.rs	2026-10-17 14:55:25
+@@ -10,7 +10,7 @@
+ //! terms apart from the v3 fields, so the difference is what the gate costs. Masses:
+ //! `MassCalculator` under mainnet parameters, every input at its exact covering budget; storage
+ //! mass from `calc_contextual_masses` over the populated transaction. Sig-ops: the pinned
+-//! `post_toccata_p2sh_sig_scanner` over each vault input's signature script.
++//! `p2sh_sig_scanner` over each vault input's signature script.
+ 
+ mod harness;
+ mod v3_common;
+@@ -18,7 +18,7 @@
+ use kaspa_consensus_core::config::params::MAINNET_PARAMS;
+ use kaspa_consensus_core::mass::MassCalculator;
+ use kaspa_consensus_core::tx::PopulatedTransaction;
+-use kaspa_txscript::post_toccata_p2sh_sig_scanner;
++use kaspa_txscript::p2sh_sig_scanner;
+ use v3_common::*;
+ 
+ /// D63: the per-dimension caps of v3 (V2.md D37).
+@@ -57,7 +57,7 @@
+ 
+ fn sigops(w: &World, spec: &TxSpec, idx: usize) -> u64 {
+     let (tx, entries) = spec.build(w);
+-    post_toccata_p2sh_sig_scanner(
++    p2sh_sig_scanner(
+         &tx.inputs[idx].signature_script,
+         &entries[idx].script_public_key,
+     )
+diff -ruN --exclude=target --exclude=Cargo.lock zk-pristine/tests/engine/v4_live.rs zk/tests/engine/v4_live.rs
+--- zk-pristine/tests/engine/v4_live.rs	2026-10-17 10:27:18
++++ zk/tests/engine/v4_live.rs	2026-10-17 14:55:25
+@@ -23,7 +23,7 @@
+ use kaspa_consensus_core::config::params::MAINNET_PARAMS;
+ use kaspa_consensus_core::mass::MassCalculator;
+ use kaspa_consensus_core::tx::PopulatedTransaction;
+-use kaspa_txscript::post_toccata_p2sh_sig_scanner;
++use kaspa_txscript::p2sh_sig_scanner;
+ use std::io::Write;
+ use std::path::PathBuf;
+ use std::process::Command;
+@@ -193,7 +193,7 @@
+ 
+ fn sigops(w: &World, spec: &TxSpec, idx: usize) -> u64 {
+     let (tx, entries) = spec.build(w);
+-    post_toccata_p2sh_sig_scanner(
++    p2sh_sig_scanner(
+         &tx.inputs[idx].signature_script,
+         &entries[idx].script_public_key,
+     )

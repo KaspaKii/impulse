@@ -1,0 +1,85 @@
+# Copyright (c) 2026 the Impulse authors. A KiiLabs product. Licensed under the Apache License, Version 2.0.
+# cargo-deny policy (I14 supply chain), run by scripts/ci-local.sh as `cargo deny --locked check`.
+# It restates the rules ci-local already enforces in its own way (rules 2 and 3, docs/ENGINEERING-RULES.md), so a
+# change to one without the other fails: scripts/ci-local.sh checks that the advisory ignores
+# below are exactly those of .cargo/audit.toml.
+
+[graph]
+# The release targets and the WASM SDK's target. Every feature, so the test-only
+# `offline-fake-node` and the `threshold` feature are checked too.
+targets = ["aarch64-apple-darwin", "x86_64-unknown-linux-gnu", "wasm32-unknown-unknown"]
+all-features = true
+
+[advisories]
+# Same list and same reasons as .cargo/audit.toml (each is a transitive advisory through the
+# pinned rusty-kaspa or silverscript sources, unfixable without a pin change).
+ignore = [
+    "RUSTSEC-2025-0052",
+    "RUSTSEC-2024-0375",
+    "RUSTSEC-2021-0145",
+    "RUSTSEC-2024-0388",
+    "RUSTSEC-2024-0384",
+    "RUSTSEC-2024-0436",
+    "RUSTSEC-2024-0370",
+    "RUSTSEC-2026-0306",
+    "RUSTSEC-2025-0055",
+    "RUSTSEC-2024-0449",
+    "RUSTSEC-2026-0381",
+]
+unmaintained = "all"
+yanked = "deny"
+
+[licenses]
+# Permissive licences found in the locked tree on 2026-10-11. Anything else fails.
+allow = [
+    "0BSD",
+    "Apache-2.0",
+    "Apache-2.0 WITH LLVM-exception",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "BSL-1.0",
+    "CC0-1.0",
+    "CDLA-Permissive-2.0",
+    "ISC",
+    "MIT",
+    "MIT-0",
+    "MPL-2.0",
+    "Unicode-3.0",
+    "Unlicense",
+    "Zlib",
+]
+confidence-threshold = 0.93
+# LGPL-3.0-only is allowed for these two crates and nowhere else. rusty-kaspa's kaspa-math links
+# them into every shipped artifact (the CLI, the watcher and the WASM SDK); the conditions this
+# puts on a binary release are an open owner item (I14 supply-chain findings), not settled here.
+exceptions = [
+    { crate = "malachite-base", allow = ["LGPL-3.0-only"] },
+    { crate = "malachite-nz", allow = ["LGPL-3.0-only"] },
+]
+
+[bans]
+# rusty-kaspa a41a333 resolves several crates at more than one version; unfixable without a pin
+# change (rule 3, docs/ENGINEERING-RULES.md).
+multiple-versions = "allow"
+# The workspace crates name each other by path without a version. crates.io publication is
+# already blocked by the git dependencies (release gate B8), and ci-local refuses
+# a path dependency outside this repository. Revisit with B8.
+wildcards = "allow"
+deny = [
+    # rule 2, docs/ENGINEERING-RULES.md: no WarpCore crate (ci-local also refuses any package named *warpcore*).
+    { crate = "warpcore-pvp" },
+    { crate = "warpcore-kaspa" },
+    # frost-secp256k1-tr's default `serialization` feature pulls postcard with heapless 0.7 and
+    # atomic-polyfill (RUSTSEC-2023-0089); the feature is kept off (Cargo.toml).
+    { crate = "atomic-polyfill" },
+]
+
+[sources]
+# crates.io and the two pinned git sources only; ci-local checks the exact revisions.
+unknown-registry = "deny"
+unknown-git = "deny"
+required-git-spec = "tag"
+allow-git = [
+    "https://github.com/kaspanet/rusty-kaspa",
+    "https://github.com/kaspanet/silverscript",
+]

@@ -1,0 +1,10 @@
+ 9:08  up 1 day, 22:43, 1 user, load averages: 91.27 75.71 66.13
+ %CPU COMM
+186.1 ~/impulse/target/cli-mutation/debug/deps/impulse_cli-f4cdb21bb388b7a0
+165.2 ~/impulse/target/debug/deps/verify-8bb090366a1ddb3d
+ 86.7 /System/Library/PrivateFrameworks/AppleNeuralEngine.framework/XPCServices/ANECompilerService.xpc/Contents/MacOS/ANECompilerService
+ 40.0 ~/rusty-kaspa-v2.0.1/target/release/kaspad
+ 36.9 ~/.rustup/toolchains/1.94.0-aarch64-apple-darwin/bin/rustc
+ 23.5 ~/.rustup/toolchains/1.94.0-aarch64-apple-darwin/bin/rustc
+ 22.8 ~/.rustup/toolchains/1.94.0-aarch64-apple-darwin/bin/rustc
+running containers: 21

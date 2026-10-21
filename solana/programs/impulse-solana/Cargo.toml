@@ -1,0 +1,40 @@
+# Copyright (c) 2026 the Impulse authors. A KiiLabs product. Licensed under the Apache License, Version 2.0.
+# Derived from solana-foundation/dvp (commit df9919e), Copyright (c) 2026 Solana Foundation, MIT
+# licence in solana/LICENSE-MIT; the Impulse modifications are Apache-2.0.
+[package]
+name = "impulse-solana"
+version.workspace = true
+license = "Apache-2.0 AND MIT"
+description = "Impulse escrow on Solana: a fork of solana-foundation/dvp whose escrow PDA seeds bind the Impulse terms hash"
+edition.workspace = true
+
+[lib]
+crate-type = ["cdylib", "lib"]
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = [
+    'cfg(target_os, values("solana"))',
+] }
+
+[features]
+no-entrypoint = []
+idl = []
+devnet = []
+
+
+[dependencies]
+pinocchio = { workspace = true, features = ["cpi", "copy"] }
+solana-address = { version = "2.0", features = ["curve25519"] }
+pinocchio-associated-token-account = { workspace = true }
+pinocchio-log = { workspace = true }
+pinocchio-system = { workspace = true }
+pinocchio-token = { workspace = true }
+pinocchio-token-2022 = { workspace = true }
+solana-security-txt = { workspace = true }
+codama = { workspace = true }
+spl-token-2022 = { workspace = true }
+thiserror = { workspace = true }
+
+[build-dependencies]
+codama = { workspace = true }
+serde_json = { workspace = true }

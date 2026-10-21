@@ -1,0 +1,13 @@
+{
+  "execute_ms": 19,
+  "total_cycles": 262144,
+  "user_cycles": 117671,
+  "segments": 1,
+  "succinct_ms": 67347,
+  "succinct_receipt_bytes": 222668,
+  "identity_p254_ms": 84259,
+  "groth16_ms": 36072,
+  "groth16_container": "impulse-zk-measure-1-46708",
+  "proof_bytes": 128,
+  "total_ms": 187725
+}

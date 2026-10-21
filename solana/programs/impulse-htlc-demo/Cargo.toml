@@ -1,0 +1,37 @@
+# Copyright (c) 2026 the Impulse authors. A KiiLabs product. Licensed under the Apache License, Version 2.0.
+# The Solana side of demo/xchain-demo.sh (I11 live demo, I18) and of the cross-chain flow on mainnet:
+# set up a test USDC mint on a devnet or localnet cluster, open, claim and refund an impulse-htlc,
+# and print the ids the Kaspa side needs. Driven by the scripts, which pass key files by path only.
+# Acts on mainnet-beta only with --network mainnet, the pinned USDC mint, an explicit program ID and
+# the 10 USDC open cap. Reads keypair files the caller names; never prints, logs or writes a key.
+# The name says "demo" for history; renaming would touch every script and record that cites it.
+[package]
+name = "impulse-htlc-demo"
+version.workspace = true
+edition.workspace = true
+license = "Apache-2.0"
+publish = false
+
+[lib]
+name = "impulse_htlc_demo"
+path = "src/lib.rs"
+
+[[bin]]
+name = "impulse-htlc-demo"
+path = "src/main.rs"
+
+[dependencies]
+sha2 = "0.10.8"
+solana-client = "2.3.10"
+solana-sdk = "2.3.1"
+solana-system-interface = { version = "1.0.0", features = ["bincode"] }
+spl-associated-token-account = { version = "4.0.0", features = ["no-entrypoint"] }
+spl-token = { version = "6.0.0", features = ["no-entrypoint"] }
+
+[dev-dependencies]
+impulse-htlc = { path = "../impulse-htlc", features = ["no-entrypoint"] }
+litesvm = "=0.7.0"
+# The program's own state writer, so the claim check is tested against the layout the program writes.
+pinocchio = { workspace = true }
+solana-program = "2.3.0"
+solana-program-pack = "2.2.1"

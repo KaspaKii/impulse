@@ -1,0 +1,13 @@
+Note on this directory (I21, 2026-10-15)
+
+circuits/scripts/measure-proving-terms.sh was run with MAX_LOAD=24 and WAIT_S=900, on purpose. The
+machine was not idle: Spotlight indexing, the desktop and other work kept the 1-minute load average at
+15 to 23 at all times (raw/run*-load-before.txt, and results.txt line "1-minute load average at run
+start"). A first attempt with the default MAX_LOAD=4 stopped before its second run for that reason
+(exit 3, "not a checkpoint run"). The criteria of spec/V3-ZK.md 14.2 other than idleness are met by
+all five runs (every stage completed, the Groth16 step far inside 60 minutes, no container killed or
+at the Docker VM limit), so the go below holds for a machine under that background load. The times are
+therefore upper bounds for an idle machine, not an idle-machine checkpoint, and are quoted only with
+this note. The input is the largest view of the fixture plans (settle-kcc20-asset: four segments).
+The container peak memory is close to the Docker VM limit of this machine (see results.txt): give
+Docker at least 8 GiB.

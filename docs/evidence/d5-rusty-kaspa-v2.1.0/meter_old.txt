@@ -1,0 +1,44 @@
+pub struct RuntimeScriptUnitMeter {
+    used_sig_ops: u16,
+    sigop_script_units: ScriptUnits,
+    script_units_limit: ScriptUnits,
+    remaining_script_units: ScriptUnits,
+}
+impl RuntimeScriptUnitMeter {
+    pub fn new(sigop_script_units: ScriptUnits, script_units_limit: ScriptUnits) -> Self {
+        Self { used_sig_ops: 0, sigop_script_units, script_units_limit, remaining_script_units: script_units_limit }
+    }
+
+    pub fn used_sig_ops(&self) -> u16 {
+        self.used_sig_ops
+    }
+
+    pub fn used_script_units(&self) -> ScriptUnits {
+        self.script_units_limit - self.remaining_script_units
+    }
+
+    pub fn consume_script_units(&mut self, units: ScriptUnits) -> Result<(), TxScriptError> {
+        match self.remaining_script_units.checked_sub(units) {
+            Some(new_remaining) => {
+                self.remaining_script_units = new_remaining;
+                Ok(())
+            }
+            None => {
+                let overflow = units.0 - self.remaining_script_units.0;
+                let used_units = self.script_units_limit.0.saturating_add(overflow);
+                Err(TxScriptError::ExceededCommittedScriptUnits { used: used_units, limit: self.script_units_limit.0 })
+            }
+        }
+    }
+
+    pub fn consume_sig_op_cost(&mut self, count: u16) -> Result<(), TxScriptError> {
+        self.consume_script_units(ScriptUnits((count as u64).saturating_mul(self.sigop_script_units.0)))?;
+        self.used_sig_ops = self.used_sig_ops.saturating_add(count);
+        Ok(())
+    }
+
+    pub fn charge_newly_pushed_bytes(&mut self, pushed_bytes_delta: u64) -> Result<(), TxScriptError> {
+        // Pushed bytes are charged 1:1 as script units.
+        self.consume_script_units(pushed_bytes_delta.into())
+    }
+}

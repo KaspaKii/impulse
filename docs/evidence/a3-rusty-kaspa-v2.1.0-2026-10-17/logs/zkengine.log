@@ -1,0 +1,778 @@
+warning: ~/scratch/zk/tests/engine/Cargo.toml: file `~/scratch/zk/tests/engine/settle.rs` found to be present in multiple build targets:
+  * `integration-test` target `settle`
+  * `integration-test` target `v4d_settle`
+warning: ~/scratch/zk/tests/engine/Cargo.toml: file `~/scratch/zk/tests/engine/escrow_release.rs` found to be present in multiple build targets:
+  * `integration-test` target `escrow_release`
+  * `integration-test` target `v4d_escrow_release`
+warning: ~/scratch/zk/tests/engine/Cargo.toml: file `~/scratch/zk/tests/engine/refund.rs` found to be present in multiple build targets:
+  * `integration-test` target `refund`
+  * `integration-test` target `v4d_refund`
+warning: ~/scratch/zk/tests/engine/Cargo.toml: file `~/scratch/zk/tests/engine/locktime.rs` found to be present in multiple build targets:
+  * `integration-test` target `locktime`
+  * `integration-test` target `v4d_locktime`
+help: Check that the patched package version and available features are compatible
+      with the dependency requirements. If the patch has a different version from
+      what is locked in the Cargo.lock file, run `cargo update` to use the new
+      version. This may also occur with an optional dependency that is not enabled.
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.72s
+     Running builders.rs (target/debug/deps/builders-d2ed38480ec5244f)
+
+running 30 tests
+test builders::boundary_refund_before_expiry_is_refused ... ok
+test builders::assemble_from_signature_bytes ... ok
+test builders::add_signature_checks_the_slot ... ok
+test builders::a_transfer_beyond_the_tokens_max_cov_ins_is_refused_by_the_token ... ok
+test builders::boundary_refund_from_expiry_is_accepted ... ok
+test builders::boundary_settle_before_earliest_is_refused ... ok
+test builders::boundary_settle_from_earliest_is_accepted ... ok
+test builders::emit_kcc20_fixtures ... ignored, writes crates/impulse-core/src/tx/testdata/
+test builders::finalize_refuses_budgets_raised_after_signing ... ok
+test builders::direct_validates_in_the_engine ... ok
+test builders::fund_from_several_tokens_or_the_exact_amount_validates_in_the_engine ... ok
+test builders::ipst_combine ... ok
+test builders::kcc20_fixtures_are_the_pinned_compile ... ok
+test builders::budgets_follow_the_template_length ... ok
+test builders::kcc20_scripts_match_the_compiler ... ok
+test builders::node_rule_ports_follow_the_pinned_source ... FAILED
+test builders::budgets_cover_every_spend ... ok
+test builders::fund_builders_validate_in_the_engine ... ok
+test builders::refunds_of_stray_tokens_validate_in_the_engine ... ok
+test builders::per_byte_script_units_are_measured ... ok
+test builders::settle_without_earliest_validates_in_the_engine ... ok
+test builders::settle_masses ... ok
+test builders::refund_validates_in_the_engine_for_every_leg_and_signer ... ok
+test builders::the_ipst_reader_refuses_a_signature_that_does_not_verify ... ok
+test builders::settle_validates_in_the_engine_in_every_mode ... ok
+test builders::signed_ipsts_round_trip ... ok
+test builders::verify_schnorr_sig65_refuses_bad_signatures ... ok
+test builders::the_vault_refuses_what_the_builder_never_makes ... ok
+test builders::topped_up_outputs_validate_in_the_engine ... ok
+test builders::signatures_land_in_their_slots_and_verify ... ok
+
+failures:
+
+---- builders::node_rule_ports_follow_the_pinned_source stdout ----
+
+thread 'builders::node_rule_ports_follow_the_pinned_source' (6634159) panicked at tests/engine/builders.rs:1408:46:
+called `Option::unwrap()` on a `None` value
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    builders::node_rule_ports_follow_the_pinned_source
+
+test result: FAILED. 28 passed; 1 failed; 1 ignored; 0 measured; 0 filtered out; finished in 5.76s
+
+error: test failed, to rerun pass `-p impulse-engine-tests --test builders`
+     Running escrow_release.rs (target/debug/deps/escrow_release-c60d4d6876bb77a6)
+
+running 13 tests
+test escrow_cannot_move_with_witness_pointing_away_from_its_vault ... ok
+test refund_by_authority_cannot_send_asset_escrow_to_stranger ... ok
+test escrow_cannot_move_with_no_vault_input ... ok
+test refund_by_counterparty_cannot_send_asset_escrow_to_stranger ... ok
+test refund_by_counterparty_cannot_send_cash_escrow_to_stranger ... ok
+test escrow_cannot_move_with_another_vault_as_witness ... ok
+test refund_cannot_split_escrow_between_home_and_stranger ... ok
+test second_escrow_deposit_cannot_ride_along_a_counterparty_refund ... ok
+test second_escrow_deposit_cannot_ride_along_a_refund ... ok
+test second_vault_utxo_via_refund_at_input_2_cannot_release_escrow ... ok
+test second_escrow_deposit_cannot_ride_along_a_settle ... ok
+test second_vault_utxo_via_settle_at_input_2_cannot_release_escrow ... ok
+test second_vault_utxo_via_refund_cannot_release_escrow_held_at_another_index ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 6.16s
+
+     Running instantiate.rs (target/debug/deps/instantiate-043af034f35d0eca)
+
+running 7 tests
+test external_cash_vault_refunds_only_by_the_buyer ... ok
+test external_cash_vault_refunds_whole_as_kas_to_the_buyer_p2pk ... ok
+test self_settling_external_cash_has_no_real_terms ... ok
+test foreign_token_at_the_external_cash_vault_is_unprotected ... ok
+test the_engine_judges_the_core_terms ... ok
+test core_vaults_refund_in_the_engine_for_every_signer has been running for over 60 seconds
+test core_vaults_settle_in_the_engine_in_every_mode has been running for over 60 seconds
+test core_vaults_settle_in_the_engine_in_every_mode ... ok
+test core_vaults_refund_in_the_engine_for_every_signer ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 140.59s
+
+     Running locktime.rs (target/debug/deps/locktime-a19e1e318fb5f628)
+
+running 13 tests
+test r3_cash_depositor_earmarked_refund_one_daa_before_expiry ... ok
+test counterparty_earmarked_refund_one_daa_before_expiry ... ok
+test depositor_earmarked_refund_after_expiry ... ok
+test depositor_revocable_refund_needs_no_lock_time ... ok
+test r3_depositor_earmarked_refund_one_daa_before_expiry ... ok
+test r3_unknown_funding_mode_is_earmarked ... ok
+test r3_depositor_earmarked_refund_with_finalized_input ... ok
+test s3_settle_one_daa_before_earliest ... ok
+test s3_settle_with_finalized_vault_input ... ok
+test s3_settle_with_timestamp_lock_time ... ok
+test settle_after_earliest ... ok
+test settle_at_earliest ... ok
+test settle_without_earliest_needs_no_lock_time ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 49.97s
+
+     Running measure.rs (target/debug/deps/measure-1864f9317d659007)
+
+running 1 test
+test sizes_units_and_mass_per_entry_and_mode ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 17.86s
+
+     Running refund.rs (target/debug/deps/refund-45ea92ccbbf61895)
+
+running 46 tests
+test r11_authority_cannot_refund_cash_authorizer_without_token ... ok
+test r11_authority_cannot_refund_asset_authorizer_without_token ... ok
+test r10_home_output_under_decoy_covenant ... ok
+test a3_earmarked_counterparty_cancels_the_other_leg_before_expiry ... ok
+test r11_counterparty_cannot_refund_cash_authorizer_without_token ... ok
+test r11_counterparty_cannot_refund_asset_authorizer_without_token ... ok
+test r12_counterparty_cannot_substitute_a_foreign_token ... ok
+test r13_token_carrier_kas_short ... ok
+test r14_asset_decoy_amount_0 ... ok
+test r14_asset_decoy_amount_0_by_authority ... ok
+test r14_asset_decoy_amount_leg_minus_1 ... ok
+test r14_asset_decoy_amount_1 ... ok
+test r14_cash_decoy_amount_0 ... ok
+test r14_cash_decoy_amount_1 ... ok
+test r14_counterparty_cannot_refund_under_funded_escrow ... ok
+test r14_cash_decoy_amount_leg_minus_1 ... ok
+test r14_decoy_of_the_full_leg_amount_pays_the_depositor ... ok
+test r1_stranger_signer ... ok
+test r2_authority_named_counterparty_signs ... ok
+test r1_authority_key_without_authority_flag ... ok
+test r4_second_kas_cash_deposit_cannot_refund_off_input_0 ... ok
+test r2_depositor_named_stranger_signs ... ok
+test r5_authorizer_kas_short ... ok
+test r5_kas_cash_short ... ok
+test r6_kas_cash_to_stranger ... ok
+test r7_authorizer_kas_to_counterparty ... ok
+test r7_authorizer_kas_to_stranger ... ok
+test refund_authority_earmarked ... ok
+test r9_decoy_token_at_input_1_real_escrow_elsewhere ... ok
+test refund_authority_revocable ... ok
+test refund_authorizer_without_token_by_depositor ... ok
+test refund_counterparty_earmarked ... ok
+test refund_counterparty_revocable ... ok
+test refund_depositor_earmarked ... ok
+test refund_depositor_revocable ... ok
+test refund_escrow_sigscript_claims_a_state_its_utxo_does_not_hold ... ok
+test refund_external_cash_asset_leg ... ok
+test refund_external_cash_leg_vault_goes_home ... ok
+test refund_escrow_under_another_template ... ok
+test refund_kas_cash_leg ... ok
+test refund_home_output_wrong_owner_type ... ok
+test refund_kcc20_cash_leg ... ok
+test refund_self_settling_trade ... ok
+test refund_minter_escrow_cannot_lose_its_minter_flag ... ok
+test refund_minter_escrow_goes_home_as_minter ... ok
+test refund_under_funded_escrow_goes_home_whole ... ok
+
+test result: ok. 46 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 12.90s
+
+     Running settle.rs (target/debug/deps/settle-c96c1acef58ac58a)
+
+running 57 tests
+test d1_output0_under_decoy_covenant ... ok
+test authorizer_returns_may_exceed_the_authorizer_value ... ok
+test d1_cash_output1_under_decoy_covenant ... ok
+test d2_external_cash_asset_delivery_carrier_kas_short ... ok
+test d2_asset_delivery_carrier_kas_short ... ok
+test cross_trade_mixing_is_accepted ... ok
+test d2_cash_delivery_carrier_kas_short ... ok
+test e1_escrow_without_covenant_binding ... ok
+test e2_escrow_under_another_covenant_real_asset_elsewhere ... ok
+test e2_escrow_without_covenant_binding_real_asset_elsewhere ... ok
+test deliveries_may_carry_more_than_the_escrow_kas ... ok
+test e3_escrow_owner_type_pubkey ... ok
+test e4_escrow_owned_by_the_cash_vault ... ok
+test e5_cash_escrow_under_funded ... ok
+test e5_cash_escrow_over_funded ... ok
+test e5_escrow_over_funded ... ok
+test e4_escrow_owned_by_another_vault ... ok
+test e5_escrow_under_funded ... ok
+test e6_minter_escrow_cannot_hand_minting_to_a_stranger ... ok
+test escrow_read_with_wrong_prefix_len ... ok
+test escrow_read_with_wrong_suffix_len ... ok
+test escrow_sigscript_claims_a_state_its_utxo_does_not_hold ... ok
+test escrow_under_another_template ... ok
+test external_cash_leg_vault_never_settles ... ok
+test kcc20_proceeds_short ... ok
+test kcc20_proceeds_to_stranger ... ok
+test output0_is_minter ... ok
+test kcc20_proceeds_under_the_asset_template ... ok
+test output0_under_another_template ... ok
+test output0_short_amount ... ok
+test output0_wrong_owner ... ok
+test output0_wrong_owner_type ... ok
+test s1_asset_vault_refuses_input_1 ... ok
+test s1_second_kas_cash_deposit_cannot_settle_off_its_index ... ok
+test s2_kas_cash_vault_over_funded ... ok
+test s2_kas_cash_vault_under_funded ... ok
+test s4_kas_proceeds_to_stranger ... ok
+test s5_kas_proceeds_short ... ok
+test s6_authority_signature_from_stranger ... ok
+test s6_authority_signature_from_a_party ... ok
+test s6_authority_signature_missing ... ok
+test s7_self_settling_external_cash_never_settles ... ok
+test s7_external_cash_without_authority ... ok
+test s8_external_cash_seller_return_omitted ... ok
+test s8_buyer_authorizer_return_omitted ... ok
+test s8_seller_authorizer_return_omitted ... ok
+test s8_buyer_authorizer_return_to_stranger ... ok
+test s9_external_cash_seller_return_short ... ok
+test s9_buyer_return_short ... ok
+test s8_seller_authorizer_return_to_stranger ... ok
+test settle_authority_external_cash ... ok
+test s9_seller_return_short ... ok
+test settle_authority_kas_cash ... ok
+test settle_self_settling_kas_cash ... ok
+test settle_earmarked_funding ... ok
+test settle_authority_kcc20_cash ... ok
+test settle_self_settling_kcc20_cash ... ok
+
+test result: ok. 57 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 15.71s
+
+     Running template.rs (target/debug/deps/template-823880ba307fff12)
+
+running 3 tests
+test in_process_compile_reproduces_the_committed_artifact ... ok
+test every_term_and_the_leg_index_change_the_vault_address ... ok
+test every_test_vault_runs_the_committed_template ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 10.87s
+
+     Running threshold.rs (target/debug/deps/threshold-b700437f498dd3ff)
+
+running 6 tests
+test frost_library_gives_one_of_three_no_signature ... ok
+test frost_2_of_3_authority_settles_external_cash ... ok
+test frost_2_of_3_authority_settles_kas_cash ... ok
+test frost_2_of_3_authority_settles_kcc20_cash ... ok
+test s6_frost_another_groups_signature_cannot_settle ... ok
+test s6_frost_lone_share_cannot_settle has been running for over 60 seconds
+test s6_frost_lone_share_cannot_settle ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 112.07s
+
+     Running v3_journal.rs (target/debug/deps/v3_journal-d9be5eeccc93dcb7)
+
+running 3 tests
+test sha256_known_answers ... ok
+test v3_journal_accepted_for_pubkey_and_script_hash_owners ... ok
+test v3_journal_every_field_is_bound ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 17.44s
+
+     Running v3_live.rs (target/debug/deps/v3_live-debce3c0ff4e1941)
+
+running 2 tests
+test v3_live_authority_settle_external_cash ... ignored, makes a real Groth16 proof (minutes, Docker); run by scripts/ci-zk.sh
+test v3_live_authority_settle_kas_cash ... ignored, makes a real Groth16 proof (minutes, Docker); run by scripts/ci-zk.sh
+
+test result: ok. 0 passed; 0 failed; 2 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running v3_measure.rs (target/debug/deps/v3_measure-61359fd75c8c73b7)
+
+running 1 test
+test v3_units_sizes_and_mass ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 21.80s
+
+     Running v3_proofs.rs (target/debug/deps/v3_proofs-d72a1c1d40144849)
+
+running 13 tests
+test v3_a_proof_is_a_128_byte_witness_item ... ok
+test v3_forging_guest_refused ... ok
+test v3_fixture_receipt_accepted_kcc20_cash ... ok
+test v3_fixture_owner_types ... ok
+test v3_proof_for_cash_vault_refused ... ok
+test v3_list_size_does_not_change_cost ... ok
+test v3_fixture_receipt_accepted ... ok
+test v3_proof_bit_flip_refused ... ok
+test v3_proof_for_other_owner_refused ... ok
+test v3_proof_for_other_root_refused ... ok
+test v3_proof_length_refused ... ok
+test v3_proof_for_other_vault_refused ... ok
+test v3_proof_owner_type_swap_refused ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 7.81s
+
+     Running v3_refund.rs (target/debug/deps/v3_refund-2aa5ec292ee83dcb)
+
+running 46 tests
+test suite::r11_authority_cannot_refund_asset_authorizer_without_token ... ok
+test suite::r11_authority_cannot_refund_cash_authorizer_without_token ... ok
+test suite::r10_home_output_under_decoy_covenant ... ok
+test suite::a3_earmarked_counterparty_cancels_the_other_leg_before_expiry ... ok
+test suite::r11_counterparty_cannot_refund_asset_authorizer_without_token ... ok
+test suite::r11_counterparty_cannot_refund_cash_authorizer_without_token ... ok
+test suite::r13_token_carrier_kas_short ... ok
+test suite::r12_counterparty_cannot_substitute_a_foreign_token ... ok
+test suite::r14_asset_decoy_amount_0 ... ok
+test suite::r14_asset_decoy_amount_0_by_authority ... ok
+test suite::r14_asset_decoy_amount_1 ... ok
+test suite::r14_asset_decoy_amount_leg_minus_1 ... ok
+test suite::r14_cash_decoy_amount_1 ... ok
+test suite::r14_cash_decoy_amount_0 ... ok
+test suite::r14_cash_decoy_amount_leg_minus_1 ... ok
+test suite::r14_counterparty_cannot_refund_under_funded_escrow ... ok
+test suite::r14_decoy_of_the_full_leg_amount_pays_the_depositor ... ok
+test suite::r1_stranger_signer ... ok
+test suite::r2_authority_named_counterparty_signs ... ok
+test suite::r1_authority_key_without_authority_flag ... ok
+test suite::r4_second_kas_cash_deposit_cannot_refund_off_input_0 ... ok
+test suite::r2_depositor_named_stranger_signs ... ok
+test suite::r5_authorizer_kas_short ... ok
+test suite::r6_kas_cash_to_stranger ... ok
+test suite::r5_kas_cash_short ... ok
+test suite::r7_authorizer_kas_to_counterparty ... ok
+test suite::r7_authorizer_kas_to_stranger ... ok
+test suite::refund_authority_earmarked ... ok
+test suite::r9_decoy_token_at_input_1_real_escrow_elsewhere ... ok
+test suite::refund_authority_revocable ... ok
+test suite::refund_authorizer_without_token_by_depositor ... ok
+test suite::refund_counterparty_earmarked ... ok
+test suite::refund_counterparty_revocable ... ok
+test suite::refund_depositor_earmarked ... ok
+test suite::refund_escrow_sigscript_claims_a_state_its_utxo_does_not_hold ... ok
+test suite::refund_depositor_revocable ... ok
+test suite::refund_external_cash_asset_leg ... ok
+test suite::refund_escrow_under_another_template ... ok
+test suite::refund_external_cash_leg_vault_goes_home ... ok
+test suite::refund_kas_cash_leg ... ok
+test suite::refund_home_output_wrong_owner_type ... ok
+test suite::refund_kcc20_cash_leg ... ok
+test suite::refund_minter_escrow_goes_home_as_minter ... ok
+test suite::refund_self_settling_trade ... ok
+test suite::refund_minter_escrow_cannot_lose_its_minter_flag ... ok
+test suite::refund_under_funded_escrow_goes_home_whole ... ok
+
+test result: ok. 46 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 113.19s
+
+     Running v3_refund_guards.rs (target/debug/deps/v3_refund_guards-ef097987d4acee9d)
+
+running 6 tests
+test r3_cash_depositor_earmarked_refund_one_daa_before_expiry ... ok
+test r3_depositor_earmarked_refund_one_daa_before_expiry ... ok
+test r3_depositor_earmarked_refund_with_finalized_input ... ok
+test r3_unknown_funding_mode_is_earmarked ... ok
+test second_escrow_deposit_cannot_ride_along_a_counterparty_refund ... ok
+test second_escrow_deposit_cannot_ride_along_a_refund ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 15.82s
+
+     Running v3_settle.rs (target/debug/deps/v3_settle-c189e65483221498)
+
+running 27 tests
+test v3_checks_run_before_the_gate ... ok
+test v3_d1_output0_under_decoy_covenant ... ok
+test v3_d2_asset_delivery_carrier_kas_short ... ok
+test v3_d1_cash_output1_under_decoy_covenant ... ok
+test v3_delivery_short_amount ... ok
+test v3_delivery_to_the_wrong_owner ... ok
+test v3_e1_second_escrow_deposit_refused ... ok
+test v3_e2_escrow_under_another_covenant_real_asset_elsewhere ... ok
+test v3_e2_escrow_without_covenant_binding_real_asset_elsewhere ... ok
+test v3_e3_escrow_owner_type_pubkey ... ok
+test v3_e4_escrow_owned_by_another_vault ... ok
+test v3_e4_escrow_owned_by_the_cash_vault ... ok
+test v3_e5_escrow_over_funded ... ok
+test v3_e6_minter_escrow_cannot_hand_minting_to_a_stranger ... ok
+test v3_s1_asset_vault_refuses_input_1 ... ok
+test v3_s2_kas_cash_vault_under_funded ... ok
+test v3_s3_settle_before_earliest ... ok
+test v3_s4_kas_proceeds_to_stranger ... ok
+test v3_s5_kas_proceeds_short ... ok
+test v3_s6_authority_checked_after_the_gate ... ok
+test v3_s8_authorizer_return_to_stranger ... ok
+test v3_s9_authorizer_return_short ... ok
+test v3_s7_external_cash_without_authority ... ok
+test v3_substitution_v3_cash_vault_with_v1_asset_vault_settles_ungated ... ok
+test v3_settle_accepted_kas_and_kcc20 ... ok
+test v3_z2_cash_vault_nonempty_proof_refused ... ok
+test v3_z1_covenant_owner_refused ... ok
+
+test result: ok. 27 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 26.11s
+
+     Running v3_template.rs (target/debug/deps/v3_template-ca2fdd640b9eb1e0)
+
+running 6 tests
+test v3_image_id_in_the_source_is_the_circuits_image_id ... ok
+test v3_in_process_compile_reproduces_the_committed_artifact ... ok
+test v3_is_a_different_template_and_v1_is_unchanged ... ok
+test v3_size_is_recorded ... ok
+test v3_every_vault_runs_the_committed_template ... ok
+test v3_every_term_and_the_leg_index_change_the_vault_address ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 36.06s
+
+     Running v3_vaults.rs (target/debug/deps/v3_vaults-c32a8653e23fd40e)
+
+running 2 tests
+test v3_fixture_vault_map ... ok
+test v3_fixture_journal_matches_terms ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 15.51s
+
+     Running v3p_escrow_release.rs (target/debug/deps/v3p_escrow_release-67148e601edb471a)
+
+running 13 tests
+test suite::escrow_cannot_move_with_no_vault_input ... ok
+test suite::escrow_cannot_move_with_witness_pointing_away_from_its_vault ... ok
+test suite::refund_by_authority_cannot_send_asset_escrow_to_stranger ... ok
+test suite::refund_by_counterparty_cannot_send_asset_escrow_to_stranger ... ok
+test suite::refund_by_counterparty_cannot_send_cash_escrow_to_stranger ... ok
+test suite::escrow_cannot_move_with_another_vault_as_witness ... ok
+test suite::refund_cannot_split_escrow_between_home_and_stranger ... ok
+test suite::second_escrow_deposit_cannot_ride_along_a_counterparty_refund ... ok
+test suite::second_escrow_deposit_cannot_ride_along_a_refund ... ok
+test suite::second_vault_utxo_via_refund_at_input_2_cannot_release_escrow ... ok
+test suite::second_escrow_deposit_cannot_ride_along_a_settle ... ok
+test suite::second_vault_utxo_via_refund_cannot_release_escrow_held_at_another_index ... ok
+test suite::second_vault_utxo_via_settle_at_input_2_cannot_release_escrow ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.89s
+
+     Running v3p_gate.rs (target/debug/deps/v3p_gate-f1f9550744007af0)
+
+running 5 tests
+test z2_cash_vault_empty_proof_settles ... ok
+test z2_cash_vault_nonempty_proof_refused ... ok
+test z1_script_hash_owner_settles ... ok
+test z2_kcc20_cash_vault_nonempty_proof_refused ... ok
+test z1_covenant_owner_refused ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 27.03s
+
+     Running v3p_locktime.rs (target/debug/deps/v3p_locktime-fcb91069e7549ca2)
+
+running 13 tests
+test suite::r3_cash_depositor_earmarked_refund_one_daa_before_expiry ... ok
+test suite::depositor_earmarked_refund_after_expiry ... ok
+test suite::counterparty_earmarked_refund_one_daa_before_expiry ... ok
+test suite::depositor_revocable_refund_needs_no_lock_time ... ok
+test suite::r3_depositor_earmarked_refund_one_daa_before_expiry ... ok
+test suite::r3_unknown_funding_mode_is_earmarked ... ok
+test suite::r3_depositor_earmarked_refund_with_finalized_input ... ok
+test suite::s3_settle_one_daa_before_earliest ... ok
+test suite::s3_settle_with_finalized_vault_input ... ok
+test suite::settle_after_earliest ... ok
+test suite::s3_settle_with_timestamp_lock_time ... ok
+test suite::settle_at_earliest ... ok
+test suite::settle_without_earliest_needs_no_lock_time ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 73.24s
+
+     Running v3p_mode.rs (target/debug/deps/v3p_mode-cc1801b53462e6a3)
+
+running 1 test
+test v3p_worlds_are_template_v3_probes_carrying_sha256_of_j ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 12.04s
+
+     Running v3p_settle.rs (target/debug/deps/v3p_settle-37b83c06781dc9bc)
+
+running 57 tests
+test suite::d1_output0_under_decoy_covenant ... ok
+test suite::authorizer_returns_may_exceed_the_authorizer_value ... ok
+test suite::d1_cash_output1_under_decoy_covenant ... ok
+test suite::d2_asset_delivery_carrier_kas_short ... ok
+test suite::d2_external_cash_asset_delivery_carrier_kas_short ... ok
+test suite::d2_cash_delivery_carrier_kas_short ... ok
+test suite::cross_trade_mixing_is_accepted ... ok
+test suite::e1_escrow_without_covenant_binding ... ok
+test suite::deliveries_may_carry_more_than_the_escrow_kas ... ok
+test suite::e2_escrow_under_another_covenant_real_asset_elsewhere ... ok
+test suite::e2_escrow_without_covenant_binding_real_asset_elsewhere ... ok
+test suite::e3_escrow_owner_type_pubkey ... ok
+test suite::e4_escrow_owned_by_the_cash_vault ... ok
+test suite::e4_escrow_owned_by_another_vault ... ok
+test suite::e5_cash_escrow_over_funded ... ok
+test suite::e5_cash_escrow_under_funded ... ok
+test suite::e5_escrow_over_funded ... ok
+test suite::e5_escrow_under_funded ... ok
+test suite::escrow_read_with_wrong_prefix_len ... ok
+test suite::e6_minter_escrow_cannot_hand_minting_to_a_stranger ... ok
+test suite::escrow_read_with_wrong_suffix_len ... ok
+test suite::escrow_sigscript_claims_a_state_its_utxo_does_not_hold ... ok
+test suite::external_cash_leg_vault_never_settles ... ok
+test suite::escrow_under_another_template ... ok
+test suite::kcc20_proceeds_short ... ok
+test suite::output0_is_minter ... ok
+test suite::kcc20_proceeds_to_stranger ... ok
+test suite::kcc20_proceeds_under_the_asset_template ... ok
+test suite::output0_under_another_template ... ok
+test suite::output0_wrong_owner ... ok
+test suite::output0_short_amount ... ok
+test suite::output0_wrong_owner_type ... ok
+test suite::s1_second_kas_cash_deposit_cannot_settle_off_its_index ... ok
+test suite::s1_asset_vault_refuses_input_1 ... ok
+test suite::s2_kas_cash_vault_over_funded ... ok
+test suite::s2_kas_cash_vault_under_funded ... ok
+test suite::s4_kas_proceeds_to_stranger ... ok
+test suite::s5_kas_proceeds_short ... ok
+test suite::s6_authority_signature_from_stranger ... ok
+test suite::s6_authority_signature_from_a_party ... ok
+test suite::s6_authority_signature_missing ... ok
+test suite::s7_external_cash_without_authority ... ok
+test suite::s7_self_settling_external_cash_never_settles ... ok
+test suite::s8_external_cash_seller_return_omitted ... ok
+test suite::s8_buyer_authorizer_return_omitted ... ok
+test suite::s8_buyer_authorizer_return_to_stranger ... ok
+test suite::s8_seller_authorizer_return_omitted ... ok
+test suite::s9_external_cash_seller_return_short ... ok
+test suite::s8_seller_authorizer_return_to_stranger ... ok
+test suite::s9_buyer_return_short ... ok
+test suite::settle_authority_external_cash ... ok
+test suite::s9_seller_return_short ... ok
+test suite::settle_authority_kas_cash ... ok
+test suite::settle_self_settling_kas_cash ... ok
+test suite::settle_authority_kcc20_cash ... ok
+test suite::settle_earmarked_funding ... ok
+test suite::settle_self_settling_kcc20_cash ... ok
+
+test result: ok. 57 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 124.03s
+
+     Running v4_live.rs (target/debug/deps/v4_live-80ffe8e2a3d4e6e9)
+
+running 4 tests
+test v4_live_refund_earmarked_depositor_at_expiry ... ignored, makes a real Groth16 proof (minutes, Docker); run by scripts/ci-zk.sh
+test v4_live_settle_and_refund_kas_cash ... ignored, makes real Groth16 proofs (minutes each, Docker); run by scripts/ci-zk.sh
+test v4_live_settle_and_refund_kcc20_cash ... ignored, makes real Groth16 proofs (minutes each, Docker); run by scripts/ci-zk.sh
+test v4_live_settle_external_cash ... ignored, makes a real Groth16 proof (minutes, Docker); run by scripts/ci-zk.sh
+
+test result: ok. 0 passed; 0 failed; 4 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running v4_script.rs (target/debug/deps/v4_script-ef30c461ff1fb2c9)
+
+running 20 tests
+test v4_probe_settle_accepted_every_cash_kind ... ok
+test v4_journal_one_field_changes ... ok
+test v4_t1_vault_beyond_input_1_refused_probe ... ok
+test v4_probe_refund_accepted has been running for over 60 seconds
+test v4_probe_units_beside_v1 has been running for over 60 seconds
+test v4_t1_vault_beyond_input_1_refused_shipped ... ok
+test v4_t2_input_count_bounds_probe ... ok
+test v4_t3_output_count_bounds_probe ... ok
+test v4_t2_input_count_bounds_shipped ... ok
+test v4_t4_authority_signature_probe ... ok
+test v4_t3_output_count_bounds_shipped ... ok
+test v4_probe_refund_accepted ... ok
+test v4_t4_authority_signature_shipped ... ok
+test v4_t5_signer_signature_probe ... ok
+test v4_t5_signer_signature_shipped ... ok
+test v4_t6_leg_byte_probe ... ok
+test v4_t6_leg_byte_shipped ... ok
+test v4_probe_units_beside_v1 ... ok
+test v4_t8_t9_lock_time_finality_probe ... ok
+test v4_t8_t9_lock_time_finality_shipped ... ok
+test v4_t7_refund_view_bounds_probe ... ok
+test v4_t7_refund_view_bounds_shipped ... ok
+
+test result: ok. 20 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 206.20s
+
+     Running v4_template.rs (target/debug/deps/v4_template-5d76f65d045246c8)
+
+running 6 tests
+test v4_image_id_in_the_source_is_the_circuits_image_id_v4 ... ok
+test v4_in_process_compile_reproduces_the_committed_artifact ... ok
+test v4_size_is_recorded ... ok
+test v4_is_a_different_template_and_v1_v3_are_unchanged ... ok
+test v4_commitment_authority_and_leg_change_the_vault_address ... ok
+test v4_every_vault_runs_the_committed_template ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 52.41s
+
+     Running v4_verify.rs (target/debug/deps/v4_verify-54e65ecbda518368)
+
+running 7 tests
+test a_mutated_transaction_names_the_failing_tag ... ok
+test the_shipped_template_passes_its_startup_check_and_roundtrips ... ok
+test the_terms_file_refuses_a_wrong_version_and_non_hex ... ok
+test a_v1_vault_is_not_a_v4_vault ... ok
+test a_terms_file_differing_in_one_blind_byte_is_a_mismatch ... ok
+test without_terms_a_v4_input_is_reported_as_hidden ... ok
+test decode_with_terms_accepts_each_fixture has been running for over 60 seconds
+test decode_with_terms_accepts_each_fixture ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 96.99s
+
+     Running escrow_release.rs (target/debug/deps/v4d_escrow_release-244b9499dd93ae24)
+
+running 13 tests
+test escrow_cannot_move_with_no_vault_input ... ok
+test escrow_cannot_move_with_witness_pointing_away_from_its_vault ... ok
+test refund_by_authority_cannot_send_asset_escrow_to_stranger ... ok
+test refund_by_counterparty_cannot_send_asset_escrow_to_stranger ... ok
+test refund_by_counterparty_cannot_send_cash_escrow_to_stranger ... ok
+test escrow_cannot_move_with_another_vault_as_witness ... ok
+test refund_cannot_split_escrow_between_home_and_stranger ... ok
+test second_vault_utxo_via_refund_at_input_2_cannot_release_escrow ... ok
+test second_escrow_deposit_cannot_ride_along_a_counterparty_refund ... ok
+test second_escrow_deposit_cannot_ride_along_a_refund ... ok
+test second_escrow_deposit_cannot_ride_along_a_settle ... ok
+test second_vault_utxo_via_refund_cannot_release_escrow_held_at_another_index ... ok
+test second_vault_utxo_via_settle_at_input_2_cannot_release_escrow ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 39.06s
+
+     Running locktime.rs (target/debug/deps/v4d_locktime-9b71cfca3e8801ca)
+
+running 13 tests
+test r3_cash_depositor_earmarked_refund_one_daa_before_expiry ... ok
+test counterparty_earmarked_refund_one_daa_before_expiry ... ok
+test depositor_revocable_refund_needs_no_lock_time ... ok
+test depositor_earmarked_refund_after_expiry ... ok
+test r3_depositor_earmarked_refund_one_daa_before_expiry ... ok
+test r3_unknown_funding_mode_is_earmarked ... ok
+test r3_depositor_earmarked_refund_with_finalized_input ... ok
+test s3_settle_one_daa_before_earliest ... ok
+test s3_settle_with_finalized_vault_input ... ok
+test settle_after_earliest ... ok
+test settle_at_earliest ... ok
+test s3_settle_with_timestamp_lock_time ... ok
+test settle_without_earliest_needs_no_lock_time ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 24.48s
+
+     Running refund.rs (target/debug/deps/v4d_refund-9d4473b39eb31ecf)
+
+running 46 tests
+test r11_authority_cannot_refund_asset_authorizer_without_token ... ok
+test r11_authority_cannot_refund_cash_authorizer_without_token ... ok
+test r10_home_output_under_decoy_covenant ... ok
+test a3_earmarked_counterparty_cancels_the_other_leg_before_expiry ... ok
+test r11_counterparty_cannot_refund_asset_authorizer_without_token ... ok
+test r11_counterparty_cannot_refund_cash_authorizer_without_token ... ok
+test r13_token_carrier_kas_short ... ok
+test r12_counterparty_cannot_substitute_a_foreign_token ... ok
+test r14_asset_decoy_amount_0 ... ok
+test r14_asset_decoy_amount_0_by_authority ... ok
+test r14_asset_decoy_amount_1 ... ok
+test r14_asset_decoy_amount_leg_minus_1 ... ok
+test r14_cash_decoy_amount_1 ... ok
+test r14_cash_decoy_amount_0 ... ok
+test r14_counterparty_cannot_refund_under_funded_escrow ... ok
+test r14_cash_decoy_amount_leg_minus_1 ... ok
+test r1_stranger_signer ... ok
+test r14_decoy_of_the_full_leg_amount_pays_the_depositor ... ok
+test r2_authority_named_counterparty_signs ... ok
+test r1_authority_key_without_authority_flag ... ok
+test r2_depositor_named_stranger_signs ... ok
+test r4_second_kas_cash_deposit_cannot_refund_off_input_0 ... ok
+test r5_kas_cash_short ... ok
+test r5_authorizer_kas_short ... ok
+test r6_kas_cash_to_stranger ... ok
+test r7_authorizer_kas_to_counterparty ... ok
+test r7_authorizer_kas_to_stranger ... ok
+test refund_authority_earmarked ... ok
+test refund_authority_revocable ... ok
+test r9_decoy_token_at_input_1_real_escrow_elsewhere ... ok
+test refund_authorizer_without_token_by_depositor ... ok
+test refund_counterparty_earmarked ... ok
+test refund_counterparty_revocable ... ok
+test refund_depositor_earmarked ... ok
+test refund_depositor_revocable ... ok
+test refund_external_cash_asset_leg ... ok
+test refund_escrow_sigscript_claims_a_state_its_utxo_does_not_hold ... ok
+test refund_external_cash_leg_vault_goes_home ... ok
+test refund_escrow_under_another_template ... ok
+test refund_kas_cash_leg ... ok
+test refund_home_output_wrong_owner_type ... ok
+test refund_kcc20_cash_leg ... ok
+test refund_self_settling_trade ... ok
+test refund_minter_escrow_goes_home_as_minter ... ok
+test refund_minter_escrow_cannot_lose_its_minter_flag ... ok
+test refund_under_funded_escrow_goes_home_whole ... ok
+
+test result: ok. 46 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 28.06s
+
+     Running settle.rs (target/debug/deps/v4d_settle-9245e32729c79bcc)
+
+running 57 tests
+test d1_output0_under_decoy_covenant ... ok
+test authorizer_returns_may_exceed_the_authorizer_value ... ok
+test d1_cash_output1_under_decoy_covenant ... ok
+test d2_asset_delivery_carrier_kas_short ... ok
+test cross_trade_mixing_is_accepted ... ok
+test d2_external_cash_asset_delivery_carrier_kas_short ... ok
+test d2_cash_delivery_carrier_kas_short ... ok
+test e1_escrow_without_covenant_binding ... ok
+test deliveries_may_carry_more_than_the_escrow_kas ... ok
+test e2_escrow_under_another_covenant_real_asset_elsewhere ... ok
+test e2_escrow_without_covenant_binding_real_asset_elsewhere ... ok
+test e3_escrow_owner_type_pubkey ... ok
+test e4_escrow_owned_by_the_cash_vault ... ok
+test e5_cash_escrow_over_funded ... ok
+test e5_cash_escrow_under_funded ... ok
+test e5_escrow_over_funded ... ok
+test e4_escrow_owned_by_another_vault ... ok
+test e5_escrow_under_funded ... ok
+test e6_minter_escrow_cannot_hand_minting_to_a_stranger ... ok
+test escrow_read_with_wrong_prefix_len ... ok
+test escrow_read_with_wrong_suffix_len ... ok
+test escrow_sigscript_claims_a_state_its_utxo_does_not_hold ... ok
+test escrow_under_another_template ... ok
+test external_cash_leg_vault_never_settles ... ok
+test kcc20_proceeds_short ... ok
+test output0_is_minter ... ok
+test kcc20_proceeds_to_stranger ... ok
+test kcc20_proceeds_under_the_asset_template ... ok
+test output0_short_amount ... ok
+test output0_under_another_template ... ok
+test output0_wrong_owner ... ok
+test output0_wrong_owner_type ... ok
+test s1_asset_vault_refuses_input_1 ... ok
+test s1_second_kas_cash_deposit_cannot_settle_off_its_index ... ok
+test s2_kas_cash_vault_over_funded ... ok
+test s2_kas_cash_vault_under_funded ... ok
+test s4_kas_proceeds_to_stranger ... ok
+test s5_kas_proceeds_short ... ok
+test s6_authority_signature_from_stranger ... ok
+test s6_authority_signature_missing ... ok
+test s6_authority_signature_from_a_party ... ok
+test s7_external_cash_without_authority ... ok
+test s7_self_settling_external_cash_never_settles ... ok
+test s8_external_cash_seller_return_omitted ... ok
+test s8_buyer_authorizer_return_omitted ... ok
+test s8_buyer_authorizer_return_to_stranger ... ok
+test s8_seller_authorizer_return_omitted ... ok
+test s9_external_cash_seller_return_short ... ok
+test s8_seller_authorizer_return_to_stranger ... ok
+test settle_authority_external_cash ... ok
+test s9_buyer_return_short ... ok
+test s9_seller_return_short ... ok
+test settle_authority_kas_cash ... ok
+test settle_self_settling_kas_cash ... ok
+test settle_authority_kcc20_cash ... ok
+test settle_earmarked_funding ... ok
+test settle_self_settling_kcc20_cash ... ok
+
+test result: ok. 57 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 113.16s
+
+     Running verify.rs (target/debug/deps/verify-bdd657a78c612872)
+
+running 11 tests
+test a_pinned_kcc20_artifact_that_declares_other_entries_is_refused ... ok
+test a_swapped_signature_script_is_refused_by_the_engine_and_the_bound_decode ... ok
+test a_spent_input_verifies_only_against_the_utxo_whose_spend_runs_its_script ... ok
+test a_vault_of_tampered_terms_is_refused_by_the_engine_and_the_verifier ... ok
+test a_vault_script_revealed_where_the_engine_does_not_run_it_is_refused ... ok
+test a_kcc20_token_with_extended_state_cannot_settle_or_refund_and_is_refused ... ok
+test the_kcc20_minter_controller_is_not_a_kcc20_token ... ok
+test the_pinned_kcc20_template_reads_as_kcc20_with_its_minter_branch ... ok
+test the_pinned_kcc20_templates_are_kcc20_sil_built_with_the_pinned_compiler ... ok
+test accepted_settles_decode_to_their_trade_and_verify ... ok
+test accepted_refunds_decode_with_their_signer ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 45.83s
+
+error: 1 target failed:
+    `-p impulse-engine-tests --test builders`

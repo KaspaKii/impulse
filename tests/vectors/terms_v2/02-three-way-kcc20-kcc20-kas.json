@@ -1,0 +1,72 @@
+{
+  "name": "02-three-way-kcc20-kcc20-kas",
+  "description": "Three parties: two KCC-20 legs and a KAS leg last, self-settling, earmarked funding, no earliest bound. A SCRIPT_HASH refund owner, a COVENANT_ID delivery owner, a KAS P2PK delivery and a KAS P2SH refund. Testnet.",
+  "terms": {
+    "version": 2,
+    "network": "testnet",
+    "nonce": "1313754702",
+    "authority_key": null,
+    "legs": [
+      {
+        "depositor_key": "3688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c",
+        "asset": {
+          "kind": "kcc20",
+          "covenant_id": "1010101010101010101010101010101010101010101010101010101010101010",
+          "template_hash": "2a5713a61a2c350c9f76583746d95054ef6bb4160e1c338239249549929b9c9c",
+          "template_prefix_len": 1,
+          "template_suffix_len": 1460,
+          "amount": "1000"
+        },
+        "delivery": {
+          "identifier_type": "pubkey",
+          "identifier": "624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f"
+        },
+        "refund": {
+          "identifier_type": "script_hash",
+          "identifier": "8c7067548834de047fb51d65b56340380ee02b90ee0bc6d4a42c15e61898c5e3"
+        }
+      },
+      {
+        "depositor_key": "624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f",
+        "asset": {
+          "kind": "kcc20",
+          "covenant_id": "1111111111111111111111111111111111111111111111111111111111111111",
+          "template_hash": "2a5713a61a2c350c9f76583746d95054ef6bb4160e1c338239249549929b9c9c",
+          "template_prefix_len": 1,
+          "template_suffix_len": 1460,
+          "amount": "2000"
+        },
+        "delivery": {
+          "identifier_type": "covenant_id",
+          "identifier": "3eaebadf75f330db73bf645f702bd8392f1cee20a5a897b72512903cccfe1177"
+        },
+        "refund": {
+          "identifier_type": "pubkey",
+          "identifier": "624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f"
+        }
+      },
+      {
+        "depositor_key": "2d085d24c2b33fd2a1761fd6994d546e72b131ff55c0c296d223956bc5a87db8",
+        "asset": {
+          "kind": "kas",
+          "amount": "100000000"
+        },
+        "delivery": {
+          "identifier_type": "pubkey",
+          "identifier": "3688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c"
+        },
+        "refund": {
+          "identifier_type": "script_hash",
+          "identifier": "d993433bbc1c0038866cffeb6a7ffc94e22b26abd5370fe1717f62022a0175fd"
+        }
+      }
+    ],
+    "earliest_daa": null,
+    "expiry_daa": "2000000",
+    "funding_mode": "earmarked",
+    "partial": null,
+    "trade_ref": "2a5495227823385a86971651a3b6b68ed71311d73f43e9fd3a92ab53f1c4d7ce"
+  },
+  "canonical": "02014e4e4e4e0000000000033688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c0110101010101010101010101010101010101010101010101010101010101010102a5713a61a2c350c9f76583746d95054ef6bb4160e1c338239249549929b9c9c01000000b4050000e80300000000000000624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f018c7067548834de047fb51d65b56340380ee02b90ee0bc6d4a42c15e61898c5e3624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f0111111111111111111111111111111111111111111111111111111111111111112a5713a61a2c350c9f76583746d95054ef6bb4160e1c338239249549929b9c9c01000000b4050000d007000000000000023eaebadf75f330db73bf645f702bd8392f1cee20a5a897b72512903cccfe117700624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f2d085d24c2b33fd2a1761fd6994d546e72b131ff55c0c296d223956bc5a87db80000e1f50500000000003688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c01d993433bbc1c0038866cffeb6a7ffc94e22b26abd5370fe1717f62022a0175fd0080841e000000000001002a5495227823385a86971651a3b6b68ed71311d73f43e9fd3a92ab53f1c4d7ce",
+  "terms_hash": "63f63f37025b1277bf884b006bd70728d3a542b35120653608d8e2e76f1d4bc3"
+}

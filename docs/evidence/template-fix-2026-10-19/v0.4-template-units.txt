@@ -1,0 +1,91 @@
+Template release 0.4 (known limitation L20 fixed): script units and sizes, release 0.3 against release 0.4
+Recorded 2026-10-19 on an Apple M1 Max, Rust 1.94.0, rusty-kaspa a41a333 (kaspa-txscript, covenants enabled), silverscript v1.0.0.
+Base: main dcefe89, working tree with the release 0.4 contracts.
+Release 0.4 pins: TEMPLATE_HASH 54f67adec9fde967160bb7435a1cdcb2c021a7c29a667d6aeed6d57bddaa9478,
+  TEMPLATE_HASH_V2 75d754c16299e7707787f0e66d9880d7657d09b1bea4ef3bd508cefdb6dd7548,
+  TEMPLATE_HASH_HASHLOCK 1e708d70c86ace8015778ccb693573b109dcd7135cf921366525a6f4aeef43d6.
+Release 0.3 pins (contracts/v0.3/): TEMPLATE_HASH 1877344751ca7b4491ba6d19e20139995c83321b3106e539f1c1be4384a65fcd,
+  TEMPLATE_HASH_V2 1a1239083ca68bdf7ef38e74409edf10c0cdc54ae0d5a4d881593b871ff54703,
+  TEMPLATE_HASH_HASHLOCK aa9e7e2ddeccc1d94d559767d7eb89c26ff1d19c3a53be99948673c3ed1f59dc.
+Template v3 is measured in docs/measurements/v3-zk-units.txt.
+
+Method: each test runs the same spend against both releases in the engine with one fee input,
+then the release 0.4 spend with fee inputs added up to the input bound (12 inputs; N + 18 for a
+template v2 settle), and reports the units of each vault input. "Units per extra input" is the
+difference between the bound and one fee input, divided by the added inputs. "Builder rule" is
+the budget the builders commit for that spend at the bound. Commands:
+  cargo test --locked -p impulse-engine-tests --test foreign_covenant_release_0_3 units -- --nocapture --test-threads 1
+  cargo test --locked -p impulse-engine-tests --test v2_foreign_covenant units -- --nocapture --test-threads 1
+  cargo test --locked -p impulse-engine-tests --test htlc_foreign_covenant units -- --nocapture --test-threads 1
+
+Template sizes (bytes, from scripts/build-template*.sh, compiled artifact; suffix after the state):
+  v1        release 0.3 2938 (suffix 2429), release 0.4 3854 (suffix 3345)
+  v2        release 0.3 7582 (suffix 7065), release 0.4 8994 (suffix 8477)
+  v3        release 0.3 3922 (suffix 3347), release 0.4 4839 (suffix 4264)
+  hashlock  release 0.3 1635 (suffix 1284), release 0.4 2371 (suffix 2020)
+
+Raw output (cargo build lines removed; nothing else edited):
+=== cargo test --locked -p impulse-engine-tests --test foreign_covenant_release_0_3 units -- --nocapture --test-threads 1
+
+running 1 test
+test units_at_the_input_bound_stay_within_the_builder_budget ... | Spend | Vault input | Release 0.3, 1 fee input | Release 0.4, 1 fee input | Difference | Release 0.4, 12 inputs | Units per extra input | Builder rule |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| settle Mode { authority: true, cash: 0, funding: 0 } | 0 | 133657 | 136427 | 2770 | 138307 | 235 | 144837 |
+| settle Mode { authority: true, cash: 0, funding: 0 } | 1 | 121977 | 124752 | 2775 | 126640 | 236 | 144837 |
+| settle Mode { authority: true, cash: 1, funding: 0 } | 0 | 151032 | 154100 | 3068 | 155738 | 234 | 173057 |
+| settle Mode { authority: true, cash: 1, funding: 0 } | 1 | 152426 | 155466 | 3040 | 157111 | 235 | 173057 |
+| settle Mode { authority: true, cash: 2, funding: 0 } | 0 | 133429 | 135964 | 2535 | 138079 | 235 | 144837 |
+| settle Mode { authority: false, cash: 0, funding: 1 } | 0 | 33559 | 36329 | 2770 | 38209 | 235 | 144837 |
+| settle Mode { authority: false, cash: 0, funding: 1 } | 1 | 21879 | 24654 | 2775 | 26542 | 236 | 144837 |
+| settle Mode { authority: false, cash: 1, funding: 1 } | 0 | 50934 | 54002 | 3068 | 55640 | 234 | 173057 |
+| settle Mode { authority: false, cash: 1, funding: 1 } | 1 | 52328 | 55368 | 3040 | 57013 | 235 | 173057 |
+| refund Mode { authority: true, cash: 1, funding: 0 } leg 0 by Seller | 0 | 133865 | 136094 | 2229 | 137597 | 167 | 144837 |
+| refund Mode { authority: true, cash: 1, funding: 0 } leg 0 by Buyer | 0 | 133900 | 136129 | 2229 | 137632 | 167 | 144837 |
+| refund Mode { authority: true, cash: 1, funding: 0 } leg 0 by Authority | 0 | 133900 | 136129 | 2229 | 137632 | 167 | 144837 |
+| refund Mode { authority: true, cash: 1, funding: 0 } leg 1 by Buyer | 0 | 137239 | 139534 | 2295 | 141037 | 167 | 148220 |
+| refund Mode { authority: true, cash: 1, funding: 0 } leg 1 by Seller | 0 | 137273 | 139568 | 2295 | 141071 | 167 | 148220 |
+| refund Mode { authority: true, cash: 0, funding: 0 } leg 1 by Buyer | 0 | 106747 | 108843 | 2096 | 110523 | 168 | 120000 |
+| refund Mode { authority: true, cash: 0, funding: 0 } leg 1 by Authority | 0 | 106746 | 108842 | 2096 | 110522 | 168 | 120000 |
+| refund Mode { authority: false, cash: 0, funding: 1 } leg 1 by Seller | 0 | 106746 | 108842 | 2096 | 110522 | 168 | 120000 |
+redeem script of the asset vault of this world: release 0.3 2938 bytes (suffix 2429), release 0.4 3854 bytes (suffix 3345)
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 88.17s
+
+=== cargo test --locked -p impulse-engine-tests --test v2_foreign_covenant units -- --nocapture --test-threads 1
+
+running 1 test
+test units_per_input_after_the_vaults_are_measured ... | Spend | Vault input | Release 0.3, 1 fee input | Release 0.4, 1 fee input | Difference | Release 0.4, inputs at the bound | Units | Units per extra input |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| settle N = 2, KCC-20 and KCC-20 | 0 | 217909 | 230165 | 12256 | 20 | 231755 | 106 |
+| settle N = 2, KCC-20 and KCC-20 | 1 | 219324 | 231580 | 12256 | 20 | 233170 | 106 |
+| settle N = 2, KCC-20 and KAS | 0 | 99112 | 111263 | 12151 | 20 | 112959 | 106 |
+| settle N = 2, KCC-20 and KAS | 1 | 87508 | 99659 | 12151 | 20 | 101355 | 106 |
+| settle ring of 3 | 0 | 279498 | 299119 | 19621 | 21 | 300617 | 107 |
+| settle ring of 3 | 1 | 280903 | 300524 | 19621 | 21 | 302022 | 107 |
+| settle ring of 3 | 2 | 279510 | 299131 | 19621 | 21 | 300629 | 107 |
+| settle 3 with a KAS leg | 0 | 262793 | 282308 | 19515 | 21 | 283913 | 107 |
+| settle 3 with a KAS leg | 1 | 264198 | 283713 | 19515 | 21 | 285318 | 107 |
+| settle 3 with a KAS leg | 2 | 251189 | 270704 | 19515 | 21 | 272309 | 107 |
+| settle tranche of 3 of 10 lots | 0 | 233457 | 245713 | 12256 | 20 | 247303 | 106 |
+| settle tranche of 3 of 10 lots | 1 | 236868 | 249124 | 12256 | 20 | 250714 | 106 |
+| refund KCC-20 leg, depositor | 0 | 148656 | 152319 | 3663 | 12 | 153822 | 167 |
+| refund KCC-20 leg, authority | 0 | 147921 | 151584 | 3663 | 12 | 153087 | 167 |
+| refund KCC-20 leg, another depositor | 0 | 152509 | 156172 | 3663 | 12 | 157675 | 167 |
+| refund KAS leg, depositor | 0 | 120261 | 123317 | 3056 | 12 | 124997 | 168 |
+| refund KAS leg, authority | 0 | 119060 | 122116 | 3056 | 12 | 123796 | 168 |
+ok
+
+(recorded from the full v2_foreign_covenant run of 2026-10-19 with --nocapture --test-threads 1; the other tests' lines removed)
+
+=== cargo test --locked -p impulse-engine-tests --test htlc_foreign_covenant units -- --nocapture --test-threads 1
+
+running 1 test
+test units_per_input_are_measured ... | Spend | Release 0.3, 1 fee input | Release 0.4, 1 fee input | Difference | Release 0.4, 12 inputs | Units per extra input |
+| --- | --- | --- | --- | --- | --- |
+| claim | 30538 | 32406 | 1868 | 33909 | 167 |
+| seller refund | 130741 | 132609 | 1868 | 134112 | 167 |
+| buyer refund | 130741 | 132609 | 1868 | 134112 | 167 |
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 12 filtered out; finished in 7.11s

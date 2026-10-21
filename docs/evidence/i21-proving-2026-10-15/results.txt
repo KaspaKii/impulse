@@ -1,0 +1,29 @@
+I21 proving measurement of the terms guest (spec/V3-ZK.md sections 14.2 and 22.10)
+directory: ~/impulse/docs/evidence/i21-proving-2026-10-15
+method: circuits/scripts/measure-proving-terms.sh (copied here); raw data in raw/; machine in machine.txt
+input: the witness of the fixture plan settle-kcc20-asset (raw/settle-kcc20-asset.witness.bin: holds fixed public test keys only)
+runs: 5, completed: 5
+1-minute load average at run start: 19.45 / 22.55 / 22.79 (other work shared the machine; see raw/run*-load-before.txt)
+
+figures for this laptop and these versions only; min / median / max over completed runs
+guest total cycles:               4194304 / 4194304 / 4194304
+guest user cycles:                3622648 / 3622648 / 3622648
+segments:                         4 / 4 / 4
+(a) execution, s:                 0.080 / 0.083 / 0.086
+(b) succinct receipt, s:          458.7 / 474.3 / 503.3
+(c1) identity_p254, s:            38.9 / 39.1 / 41.9
+(c2) Groth16 step in Docker, s:   17.0 / 18.7 / 20.2
+total in the prover, s:           514.6 / 532.0 / 565.1
+host peak resident memory, MiB:   9725.2 / 10037.3 / 10099.7
+Groth16 container peak memory, MiB (sampled about once a second): 7144.4 / 7276.5 / 7344.1
+Docker VM memory limit, MiB:      7934.1
+succinct seal, bytes:             222668 / 222668 / 222668
+compressed Groth16 proof, bytes:  128 / 128 / 128
+
+run {"docker_exit": 0, "docker_oom_or_kill": false, "docker_peak_mem_bytes": 7700876361, "execute_ms": 84, "exit": 0, "groth16_container": "impulse-zk-measure-terms-1-68524", "groth16_ms": 19792, "host_peak_rss_bytes": 10452434944, "identity_p254_ms": 41921, "load_avg_1m_before": 19.45, "proof_bytes": 128, "run": 1, "segments": 4, "succinct_ms": 503322, "succinct_receipt_bytes": 222668, "total_cycles": 4194304, "total_ms": 565140, "user_cycles": 3622648}
+run {"docker_exit": 0, "docker_oom_or_kill": false, "docker_peak_mem_bytes": 7630009401, "execute_ms": 83, "exit": 0, "groth16_container": "impulse-zk-measure-terms-2-68524", "groth16_ms": 20158, "host_peak_rss_bytes": 10197581824, "identity_p254_ms": 40553, "load_avg_1m_before": 22.6, "proof_bytes": 128, "run": 2, "segments": 4, "succinct_ms": 483111, "succinct_receipt_bytes": 222668, "total_cycles": 4194304, "total_ms": 543930, "user_cycles": 3622648}
+run {"docker_exit": 0, "docker_oom_or_kill": false, "docker_peak_mem_bytes": 7491496706, "execute_ms": 86, "exit": 0, "groth16_container": "impulse-zk-measure-terms-3-68524", "groth16_ms": 18545, "host_peak_rss_bytes": 10532847616, "identity_p254_ms": 39068, "load_avg_1m_before": 22.34, "proof_bytes": 128, "run": 3, "segments": 4, "succinct_ms": 474278, "succinct_receipt_bytes": 222668, "total_cycles": 4194304, "total_ms": 531999, "user_cycles": 3622648}
+run {"docker_exit": 0, "docker_oom_or_kill": false, "docker_peak_mem_bytes": 7668664107, "execute_ms": 82, "exit": 0, "groth16_container": "impulse-zk-measure-terms-4-68524", "groth16_ms": 18725, "host_peak_rss_bytes": 10524868608, "identity_p254_ms": 39057, "load_avg_1m_before": 22.55, "proof_bytes": 128, "run": 4, "segments": 4, "succinct_ms": 459055, "succinct_receipt_bytes": 222668, "total_cycles": 4194304, "total_ms": 516941, "user_cycles": 3622648}
+run {"docker_exit": 0, "docker_oom_or_kill": false, "docker_peak_mem_bytes": 7552699990, "execute_ms": 80, "exit": 0, "groth16_container": "impulse-zk-measure-terms-5-68524", "groth16_ms": 16955, "host_peak_rss_bytes": 10590273536, "identity_p254_ms": 38863, "load_avg_1m_before": 22.79, "proof_bytes": 128, "run": 5, "segments": 4, "succinct_ms": 458682, "succinct_receipt_bytes": 222668, "total_cycles": 4194304, "total_ms": 514601, "user_cycles": 3622648}
+
+go or no-go (section 14.2): GO

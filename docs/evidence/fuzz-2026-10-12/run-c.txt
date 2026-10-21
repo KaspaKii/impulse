@@ -1,0 +1,76 @@
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+    Finished `release` profile [optimized + debuginfo] target(s) in 0.67s
+warning: the following packages contain code that will be rejected by a future version of Rust: block v0.1.6
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 1`
+==> cli_terms_file
+Done 511326 runs in 601 second(s)
+stat::number_of_executed_units: 511326
+stat::average_exec_per_sec:     850
+stat::new_units_added:          3916
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              301
+==> cli_args
+Done 944844 runs in 601 second(s)
+stat::number_of_executed_units: 944844
+stat::average_exec_per_sec:     1572
+stat::new_units_added:          1668
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              181
+==> cli_receipt
+Done 1445145 runs in 601 second(s)
+stat::number_of_executed_units: 1445145
+stat::average_exec_per_sec:     2404
+stat::new_units_added:          6738
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              305
+==> cli_rpc_walk
+Done 1010542 runs in 601 second(s)
+stat::number_of_executed_units: 1010542
+stat::average_exec_per_sec:     1681
+stat::new_units_added:          1306
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              523
+==> cli_rpc_wire
+fuzz.sh: cli_rpc_wire FAILED, log ~/impulse/docs/evidence/fuzz-2026-10-12/logs/cli_rpc_wire.log, artifacts artifacts/cli_rpc_wire/
+    #27 0x000102994f94 in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*)+0x48 (cli_rpc_wire:arm64+0x100044f94)
+    #28 0x000102996e98 in fuzzer::Fuzzer::MutateAndTestOne()+0x22c (cli_rpc_wire:arm64+0x100046e98)
+    #29 0x000102997bf4 in fuzzer::Fuzzer::Loop(std::__1::vector<fuzzer::SizedFile, std::__1::allocator<fuzzer::SizedFile>>&)+0x354 (cli_rpc_wire:arm64+0x100047bf4)
+    #30 0x0001029b6ebc in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long))+0x1a3c (cli_rpc_wire:arm64+0x100066ebc)
+    #31 0x0001029c4a60 in main+0x24 (cli_rpc_wire:arm64+0x100074a60)
+    #32 0x000181743e7c in start+0x1a1c (dyld:arm64e+0x31e7c)
+
+MS: 1 InsertRepeatedBytes-; base unit: eafbb79e4426e3b073d5dbbd11a6f7c3b698491d
+0x5,0x1,0x0,0x4,0x0,0x0,0x0,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0x0,0x0,0x0,0x0,
+\005\001\000\004\000\000\000\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\000\000\000\000
+artifact_prefix='artifacts/cli_rpc_wire/'; Test unit written to artifacts/cli_rpc_wire/oom-08aea74dd2d0ab0e62c8e985036561aab0a797b5
+Base64: BQEABAAAAP///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////wAAAAA=
+SUMMARY: libFuzzer: out-of-memory
+stat::number_of_executed_units: 24
+stat::average_exec_per_sec:     8
+stat::new_units_added:          7
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              62
+
+────────────────────────────────────────────────────────────────────────────────
+
+Failing input:
+
+	artifacts/cli_rpc_wire/oom-08aea74dd2d0ab0e62c8e985036561aab0a797b5
+
+Output of `std::fmt::Debug`:
+
+	[5, 1, 0, 4, 0, 0, 0, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 0, 0, 0, 0]
+
+Reproduce with:
+
+	cargo fuzz run -O cli_rpc_wire artifacts/cli_rpc_wire/oom-08aea74dd2d0ab0e62c8e985036561aab0a797b5
+
+Minimize test case with:
+
+	cargo fuzz tmin -O cli_rpc_wire artifacts/cli_rpc_wire/oom-08aea74dd2d0ab0e62c8e985036561aab0a797b5
+
+────────────────────────────────────────────────────────────────────────────────
+
+Error: Fuzz target exited with exit status: 71

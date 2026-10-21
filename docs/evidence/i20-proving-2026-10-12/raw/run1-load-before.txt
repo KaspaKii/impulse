@@ -1,0 +1,10 @@
+ 9:05  up 1 day, 22:39, 1 user, load averages: 74.00 70.24 62.59
+ %CPU COMM
+404.0 gitleaks
+ 71.6 /System/Library/PrivateFrameworks/XprotectFramework.framework/Versions/A/XPCServices/XprotectService.xpc/Contents/MacOS/XprotectService
+ 58.6 ~/rusty-kaspa-v2.0.1/target/release/kaspad
+ 47.8 ~/.rustup/toolchains/1.94.0-aarch64-apple-darwin/bin/rustc
+ 44.4 ~/.rustup/toolchains/1.94.0-aarch64-apple-darwin/bin/rustc
+ 42.4 ~/.rustup/toolchains/1.94.0-aarch64-apple-darwin/bin/rustc
+ 39.0 ~/.rustup/toolchains/1.94.0-aarch64-apple-darwin/bin/rustc
+running containers: 21

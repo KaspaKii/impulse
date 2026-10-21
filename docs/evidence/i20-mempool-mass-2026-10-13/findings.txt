@@ -1,0 +1,30 @@
+Mempool mass policy at the pinned rusty-kaspa rev a41a333 (read 2026-10-13, I20 review round 1, finding 4).
+Method: read the source of the pinned checkout ~/.cargo/git/checkouts/rusty-kaspa-410e06d1fde91a92/a41a333, paths below relative to it.
+Nothing here was run against a node; the live acceptance of a v3 settle is not checked here.
+
+1. Standard mass cap, mining/src/mempool/check_transaction_standard.rs
+   - line 26: MAXIMUM_STANDARD_TRANSACTION_MASS_PRE_TOCCATA = 100_000, a per-dimension cap (compute, transient, storage).
+   - lines 29-33: STANDARD_MASS_RELAXATION_WINDOW_SECONDS = 30 minutes before the Toccata activation.
+   - lines 43-47: standard_transaction_mass_cap returns the cap only while the relaxation window has not started
+     (toccata_activation.early_by(window) not active at the virtual DAA score); afterwards it returns None.
+   - lines 58 and 98: the cap is applied to compute and transient mass in isolation and to storage mass in context, only when it is Some.
+   So a node whose virtual DAA score is within 30 minutes of, or past, the Toccata activation applies no 100,000 cap.
+   The v3 settle (compute about 167,500 to 175,000 grams in docs/measurements/v3-zk-units.txt) is refused by a node where the cap is in force.
+
+2. The block-fit ceiling that remains, mining/src/mempool/check_transaction_limits.rs lines 23-29 and 45-49:
+   compute and transient mass against mempool_block_mass_limits.get(virtual_daa_score), storage mass in context.
+   consensus/core/src/config/params.rs: mainnet prior_block_mass_limits = with_shared_limit(500_000) (line 698),
+   new_transient_mass_limit = 1_000_000 (line 699). So the ceiling after Toccata is 500,000 compute and 1,000,000 transient (read from
+   source; the storage limit is the shared 500,000), above the D63 caps of the v3 builder (450,000 and 900,000).
+
+3. Other standardness checks a v3 settle meets, check_transaction_standard.rs:
+   - MAX_STANDARD_P2SH_SIG_OPS = 15 per input (line 19, check at line 120); a v3 vault input has 2 sig ops (docs/measurements/v3-zk-units.txt).
+   - Signature script length: consensus params NEW_MAX_SIGNATURE_SCRIPT_LEN = 250_000 after Toccata, 10_000 before (params.rs lines 21 and 27);
+     the asset vault settle's signature script is 4,199 bytes (under both).
+
+4. Activation: mainnet toccata_activation = ForkActivation::new(474_165_565) (params.rs line 724), with the source comment "Roughly 2026-06-30 1615 UTC".
+   That date is the source's own estimate and was not checked against a node. Whether the public nodes the owner uses are past it is unverified.
+
+5. Open: that the public nodes chosen are updated to a rev that carries this policy (many public nodes run other versions).
+   Submitting the same signed settle through two nodes and recording each response is the test; a
+   RejectComputeMass or RejectTransientMass response naming a 100,000 limit means that node still applies the pre-Toccata cap.

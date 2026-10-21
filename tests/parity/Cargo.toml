@@ -1,0 +1,29 @@
+[package]
+name = "impulse-parity"
+description = "Parity suite against the Solana Foundation DvP program (I10): one test per Solana instruction, error code and README edge case. Test targets only."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+publish = false
+autotests = false
+
+# One test target. It reuses the engine harness read-only (tests/engine/harness.rs, through
+# `#[path]`), so every dependency is a dev-dependency, as in tests/engine. All are already in
+# the lock file; this crate adds no package.
+[[test]]
+name = "parity"
+path = "parity.rs"
+
+[dev-dependencies]
+impulse-core = { path = "../../crates/impulse-core" }
+impulse-terms-core = { path = "../../circuits/terms-core" }
+kaspa-addresses.workspace = true
+kaspa-consensus-core.workspace = true
+kaspa-txscript.workspace = true
+kaspa-txscript-errors.workspace = true
+silverscript-abi.workspace = true
+silverscript-lang.workspace = true
+rand.workspace = true
+secp256k1.workspace = true
+serde_json.workspace = true

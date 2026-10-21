@@ -1,0 +1,232 @@
+[package]
+name = "impulse-engine-tests"
+description = "ImpulseVault tests in the real Kaspa script engine (kaspa-txscript, covenants enabled). Test targets only."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+publish = false
+autotests = false
+
+# Test targets only; every dependency is a dev-dependency, so silverscript-lang never reaches
+# a shipped crate. harness.rs is shared through `mod harness;`.
+[[test]]
+name = "verify"
+path = "verify.rs"
+
+[[test]]
+name = "escrow_release"
+path = "escrow_release.rs"
+
+[[test]]
+name = "settle"
+path = "settle.rs"
+
+[[test]]
+name = "refund"
+path = "refund.rs"
+
+[[test]]
+name = "locktime"
+path = "locktime.rs"
+
+[[test]]
+name = "template"
+path = "template.rs"
+
+[[test]]
+name = "measure"
+path = "measure.rs"
+
+[[test]]
+name = "instantiate"
+path = "instantiate.rs"
+
+# No token of another covenant rides along in a vault spend (L20, the part this closes).
+[[test]]
+name = "foreign_covenant"
+path = "foreign_covenant.rs"
+
+# The other leg's vault in a settle ([S10]): closes the last case of L20, and L8.
+[[test]]
+name = "foreign_covenant_residual"
+path = "foreign_covenant_residual.rs"
+
+[[test]]
+name = "builders"
+path = "builders.rs"
+
+[[test]]
+name = "threshold"
+path = "threshold.rs"
+
+[[test]]
+name = "v3_vaults"
+path = "v3_vaults.rs"
+
+[[test]]
+name = "v3_refund_guards"
+path = "v3_refund_guards.rs"
+
+[[test]]
+name = "v3_journal"
+path = "v3_journal.rs"
+
+[[test]]
+name = "v3_refund"
+path = "v3_refund.rs"
+
+[[test]]
+name = "v3p_settle"
+path = "v3p_settle.rs"
+
+[[test]]
+name = "v3p_locktime"
+path = "v3p_locktime.rs"
+
+[[test]]
+name = "v3p_escrow_release"
+path = "v3p_escrow_release.rs"
+
+[[test]]
+name = "v3_template"
+path = "v3_template.rs"
+
+[[test]]
+name = "v3p_mode"
+path = "v3p_mode.rs"
+
+[[test]]
+name = "v3_proofs"
+path = "v3_proofs.rs"
+
+[[test]]
+name = "v3_settle"
+path = "v3_settle.rs"
+
+# Template v3, shipped template with the committed proofs: no token of another covenant rides along.
+[[test]]
+name = "v3_foreign_covenant"
+path = "v3_foreign_covenant.rs"
+
+[[test]]
+name = "v3_measure"
+path = "v3_measure.rs"
+
+[[test]]
+name = "v3p_gate"
+path = "v3p_gate.rs"
+
+# The suite foreign_covenant.rs against the template v3 probe.
+[[test]]
+name = "v3p_foreign_covenant"
+path = "v3p_foreign_covenant.rs"
+
+# The suite foreign_covenant_residual.rs ([S10]) against the template v3 probe.
+[[test]]
+name = "v3p_sibling"
+path = "v3p_sibling.rs"
+
+[dev-dependencies]
+# sha2: the hashlock tests (I18) hash the secret.
+sha2.workspace = true
+impulse-terms-core = { path = "../../circuits/terms-core" }
+impulse-core = { path = "../../crates/impulse-core", features = ["threshold", "zk-hashed", "htlc-secret"] }
+kaspa-consensus-core.workspace = true
+kaspa-txscript.workspace = true
+kaspa-txscript-errors.workspace = true
+silverscript-abi.workspace = true
+silverscript-lang.workspace = true
+rand.workspace = true
+secp256k1.workspace = true
+serde_json.workspace = true
+
+[[test]]
+name = "v3_live"
+path = "v3_live.rs"
+
+[[test]]
+name = "v4_script"
+path = "v4_script.rs"
+
+[[test]]
+name = "v4_template"
+path = "v4_template.rs"
+
+[[test]]
+name = "v4_verify"
+path = "v4_verify.rs"
+
+[[test]]
+name = "v4_live"
+path = "v4_live.rs"
+
+# The v1 suite settle.rs again, every vault run also put through terms-core (spec/V3-ZK.md 22.9).
+[[test]]
+name = "v4d_settle"
+path = "settle.rs"
+
+# The v1 suite refund.rs again, every vault run also put through terms-core (spec/V3-ZK.md 22.9).
+[[test]]
+name = "v4d_refund"
+path = "refund.rs"
+
+# The v1 suite locktime.rs again, every vault run also put through terms-core (spec/V3-ZK.md 22.9).
+[[test]]
+name = "v4d_locktime"
+path = "locktime.rs"
+
+# The v1 suite escrow_release.rs again, every vault run also put through terms-core (spec/V3-ZK.md 22.9).
+[[test]]
+name = "v4d_escrow_release"
+path = "escrow_release.rs"
+
+[[test]]
+name = "htlc_builders"
+path = "htlc_builders.rs"
+
+[[test]]
+name = "htlc_settle"
+path = "htlc_settle.rs"
+
+[[test]]
+name = "htlc_refund"
+path = "htlc_refund.rs"
+
+[[test]]
+name = "htlc_measure"
+path = "htlc_measure.rs"
+
+# Hashlock template: no token of another covenant rides along.
+[[test]]
+name = "htlc_foreign_covenant"
+path = "htlc_foreign_covenant.rs"
+
+[[test]]
+name = "v2_template"
+path = "v2_template.rs"
+
+[[test]]
+name = "v2_settle"
+path = "v2_settle.rs"
+
+[[test]]
+name = "v2_refund"
+path = "v2_refund.rs"
+
+[[test]]
+name = "v2_measure"
+path = "v2_measure.rs"
+
+[[test]]
+name = "v2_partial"
+path = "v2_partial.rs"
+
+[[test]]
+name = "v2_builders"
+path = "v2_builders.rs"
+
+# Template v2: no token of another covenant rides along.
+[[test]]
+name = "v2_foreign_covenant"
+path = "v2_foreign_covenant.rs"

@@ -1,0 +1,635 @@
+Mutation run, crates/impulse-cli/src (scripts/cli-mutation.py)
+source sha256 a1d5ea5e04d0b2d36237ace8698768c4cecd00bc7bf7c3bcb2fd487601ad48a6
+script sha256 63ece28d67108dbb63e0ab4fb5efea119c5c2efd7741d43edf2314b39e791c6d
+mutants 313, test target impulse-cli --lib
+
+baseline: all tests pass
+
+[FU02] funds.rs: a UTXO a trade input spends is also a fee candidate
+  caught by (1): phase2_tests::builders_use_only_the_utxos_the_spec_names
+[FU03] funds.rs: a UTXO under another scriptPublicKey is used
+  caught by (1): phase2_tests::builders_use_only_the_utxos_the_spec_names
+[FU04] funds.rs: a UTXO with another covenant ID is used
+  caught by (3): phase2_tests::builders_use_only_the_utxos_the_spec_names, phase2_tests::token_tests::minted_tokens_validate_in_the_engine_and_settle_a_trade, phase2_tests::token_tests::token_list_finds_only_the_token_it_names
+[FU05] funds.rs: the highest outpoint first, not the lowest
+  caught by (3): phase2_tests::builders_use_only_the_utxos_the_spec_names, phase2_tests::direct_cancel_build_cancels_the_direct_transaction_it_names, phase2_tests::token_tests::token_list_finds_only_the_token_it_names
+[FU06] funds.rs: change below the minimum does not take one more fee input
+  caught by (1): phase2_tests::builders_use_only_the_utxos_the_spec_names
+[FU08] funds.rs: an ECDSA --pay-from accepted
+  caught by (1): phase2_tests::builders_use_only_the_utxos_the_spec_names
+[FU10] funds.rs: an outpoint index beyond u32 truncated
+  caught by (1): phase2_tests::builders_use_only_the_utxos_the_spec_names
+[BC06] build_cmd.rs: the asset authorizer with the least KAS, not the most
+  caught by (1): phase2_tests::recovery_and_funding_options_are_used_as_given
+[BC08] build_cmd.rs: --token-minter not refused on a KAS leg
+  caught by (1): phase2_tests::recovery_and_funding_options_are_used_as_given
+[BC09] build_cmd.rs: refund --token-amount ignored
+  caught by (1): phase2_tests::recovery_and_funding_options_are_used_as_given
+[BC10a] build_cmd.rs: --token-minter dropped from the escrow lookup
+  caught by (1): phase2_tests::recovery_and_funding_options_are_used_as_given
+[BC10b] build_cmd.rs: --token-minter dropped from the refunded escrow
+  caught by (1): phase2_tests::recovery_and_funding_options_are_used_as_given
+[BC11] build_cmd.rs: fund --carrier ignored
+  caught by (2): phase2_tests::ipst_sign_bounds_what_the_signer_commits, phase2_tests::recovery_and_funding_options_are_used_as_given
+[BC12] build_cmd.rs: fund --authorizer ignored
+  caught by (2): phase2_tests::ipst_sign_bounds_what_the_signer_commits, phase2_tests::recovery_and_funding_options_are_used_as_given
+[BC13] build_cmd.rs: only the first --token used
+  caught by (1): phase2_tests::recovery_and_funding_options_are_used_as_given
+[BC15] build_cmd.rs: --authorizer not refused on a KAS leg
+  caught by (1): phase2_tests::recovery_and_funding_options_are_used_as_given
+[BC18] build_cmd.rs: a Direct trade's cash UTXO is also a fee candidate
+  caught by (1): phase2_tests::builders_use_only_the_utxos_the_spec_names
+[BC19] build_cmd.rs: settle and refund build take terms of another network
+  caught by (2): phase2_tests::builders_use_only_the_utxos_the_spec_names, phase2_tests::direct_cancel_build_refuses_what_it_cannot_cancel
+[TV02] txview.rs: a KCC-20 funding's trade inputs miscounted
+  caught by (24): phase2_tests::a_kas_cash_leg_below_the_minimum_is_refused_before_funding, phase2_tests::a_settle_past_expiry_is_not_signed_or_submitted, phase2_tests::a_token_of_the_other_legs_covenant_at_a_vault_is_not_warned_about, phase2_tests::builders_use_only_the_utxos_the_spec_names, phase2_tests::carrier_is_refused_outside_a_kcc20_funding_or_a_direct_transaction, phase2_tests::decode_and_the_transaction_lines_state_their_facts, phase2_tests::decode_reports_a_refund_with_its_signer_and_refuses_an_unknown_txid, phase2_tests::every_mode_funds_settles_and_decodes, phase2_tests::every_refund_role_and_leg_kind_goes_home, phase2_tests::fund_build_funds_only_your_own_leg, phase2_tests::ipst_sign_bounds_what_the_signer_commits, phase2_tests::ipst_sign_checks_the_payers_change_and_fee, phase2_tests::ipst_sign_checks_the_signers_role_and_own_destinations, phase2_tests::ipst_sign_signs_only_for_the_trade_the_signer_agreed_to, phase2_tests::phase_2_writers_refuse_an_existing_output_and_a_malformed_key, phase2_tests::recovery_and_funding_options_are_used_as_given, phase2_tests::refund_build_without_the_token_is_the_depositors_and_says_so, phase2_tests::settle_build_needs_funded_vaults_and_the_templates, phase2_tests::submit_writes_the_signed_transaction_the_watcher_keeps, phase2_tests::the_payers_checks_hold_for_every_layout, phase2_tests::the_top_up_of_a_settle_is_shown_and_bounded, phase2_tests::the_value_cap_applies_to_every_builder_and_to_ipst_sign, phase2_tests::token_tests::a_trade_carrying_the_genesis_tag_is_an_ordinary_trade, phase2_tests::token_tests::minted_tokens_validate_in_the_engine_and_settle_a_trade
+[TV03a] txview.rs: a settle with KCC-20 cash: trade inputs miscounted
+  caught by (1): phase2_tests::the_payers_checks_hold_for_every_layout
+[TV03b] txview.rs: a settle with external cash: trade inputs miscounted
+  caught by (1): phase2_tests::the_payers_checks_hold_for_every_layout
+[TV03c] txview.rs: a refund: trade inputs miscounted
+  caught by (2): phase2_tests::the_payers_checks_hold_for_every_layout, phase2_tests::the_top_up_of_a_settle_is_shown_and_bounded
+[TV03d] txview.rs: a Direct transaction: trade inputs miscounted
+  caught by (1): phase2_tests::the_payers_checks_hold_for_every_layout
+[TV04] txview.rs: the lock time hint one DAA score early
+  caught by (2): phase2_tests::decode_and_the_transaction_lines_state_their_facts, phase2_tests::the_direct_refund_sends_the_buyers_cash_home_after_the_expiry
+[TV05] txview.rs: the change line names the output after the change
+  caught by (13): phase2_tests::a_token_of_the_other_legs_covenant_at_a_vault_is_not_warned_about, phase2_tests::builders_use_only_the_utxos_the_spec_names, phase2_tests::carrier_is_refused_outside_a_kcc20_funding_or_a_direct_transaction, phase2_tests::decode_and_the_transaction_lines_state_their_facts, phase2_tests::every_mode_funds_settles_and_decodes, phase2_tests::fund_build_checks_its_arguments, phase2_tests::recovery_and_funding_options_are_used_as_given, phase2_tests::settle_build_needs_funded_vaults_and_the_templates, phase2_tests::the_direct_refund_sends_the_buyers_cash_home_after_the_expiry, phase2_tests::the_payers_checks_hold_for_every_layout, phase2_tests::token_tests::minted_tokens_validate_in_the_engine_and_settle_a_trade, phase2_tests::token_tests::the_change_goes_to_the_payer_by_default, phase2_tests::token_tests::token_mint_build_checks_its_arguments
+[TV06] txview.rs: pending names a signer once per slot
+  caught by (2): phase2_tests::decode_and_the_transaction_lines_state_their_facts, phase2_tests::the_direct_refund_sends_the_buyers_cash_home_after_the_expiry
+[PC1] txview.rs: the payer cost beyond the fee shown as 0
+  caught by (1): phase2_tests::the_top_up_of_a_settle_is_shown_and_bounded
+[IC05] ipst_cmd.rs: the default fee limit ten times the minimum relay fee, not twice
+  caught by (2): phase2_tests::the_payers_checks_hold_for_every_layout, phase2_tests::token_tests::ipst_sign_of_a_genesis_checks_the_payer
+[IC06] ipst_cmd.rs: the payer's change not checked
+  caught by (4): phase2_tests::a_cancellation_is_held_to_what_direct_cancel_build_makes, phase2_tests::ipst_sign_checks_the_payers_change_and_fee, phase2_tests::the_payers_checks_hold_for_every_layout, phase2_tests::token_tests::ipst_sign_of_a_genesis_checks_the_payer
+[AG1] ipst_cmd.rs: an IPST for other terms than the agreed ones signed
+  caught by (3): frost_tests::sign_refuses_before_printing_or_writing_anything, phase2_tests::ipst_sign_signs_only_for_the_trade_the_signer_agreed_to, phase2_tests::token_tests::ipst_sign_of_a_genesis_checks_the_payer
+[RL1] ipst_cmd.rs: a party's own destinations not checked
+  caught by (2): phase2_tests::ipst_sign_checks_the_signers_role_and_own_destinations, phase2_tests::token_tests::ipst_sign_of_a_genesis_checks_the_payer
+[RL2] ipst_cmd.rs: any key signs as the authority
+  caught by (2): phase2_tests::ipst_sign_checks_the_signers_role_and_own_destinations, phase2_tests::token_tests::ipst_sign_of_a_genesis_checks_the_payer
+[RL3] ipst_cmd.rs: a party's key signs as a payer
+  caught by (1): phase2_tests::ipst_sign_checks_the_signers_role_and_own_destinations
+[RL4] ipst_cmd.rs: pins accepted for the authority and a payer
+  caught by (1): phase2_tests::ipst_sign_checks_the_signers_role_and_own_destinations
+[FN1] ipst_cmd.rs: a funding signed by a key that is not its depositor
+  caught by (2): phase2_tests::ipst_sign_checks_the_signers_role_and_own_destinations, phase2_tests::ipst_sign_signs_only_the_slots_of_my_key
+[FN2] ipst_cmd.rs: a funding signed without the creation checks
+  caught by (1): phase2_tests::ipst_sign_checks_the_signers_role_and_own_destinations
+[DP1] ipst_cmd.rs: a KCC-20 deposit's carrier not confirmed
+  caught by (1): phase2_tests::ipst_sign_bounds_what_the_signer_commits
+[DP2] ipst_cmd.rs: a KCC-20 deposit's authorizer not confirmed
+  caught by (1): phase2_tests::ipst_sign_bounds_what_the_signer_commits
+[WM1] ipst_cmd.rs: --authorizer taken outside a KCC-20 funding
+  caught by (2): phase2_tests::ipst_sign_bounds_what_the_signer_commits, phase2_tests::token_tests::ipst_sign_of_a_genesis_checks_the_payer
+[TP1] ipst_cmd.rs: the top-up not bounded
+  caught by (1): phase2_tests::the_top_up_of_a_settle_is_shown_and_bounded
+[TP2] ipst_cmd.rs: the default top-up limit unbounded
+  caught by (2): phase2_tests::the_top_up_of_a_settle_is_shown_and_bounded, phase2_tests::token_tests::ipst_sign_of_a_genesis_checks_the_payer
+[OF1] ipst_cmd.rs: the signer's outflow not bounded
+  caught by (1): phase2_tests::ipst_sign_bounds_what_the_signer_commits
+[OF2] ipst_cmd.rs: change to any address counts as coming back to the signer
+  caught by (1): phase2_tests::ipst_sign_bounds_what_the_signer_commits
+[OF3] ipst_cmd.rs: vault inputs counted as the signer's own funds
+  caught by (15): phase2_tests::a_settle_past_expiry_is_not_signed_or_submitted, phase2_tests::carrier_is_refused_outside_a_kcc20_funding_or_a_direct_transaction, phase2_tests::decode_and_the_transaction_lines_state_their_facts, phase2_tests::decode_reports_a_refund_with_its_signer_and_refuses_an_unknown_txid, phase2_tests::every_mode_funds_settles_and_decodes, phase2_tests::every_refund_role_and_leg_kind_goes_home, phase2_tests::ipst_sign_checks_the_payers_change_and_fee, phase2_tests::ipst_sign_signs_only_for_the_trade_the_signer_agreed_to, phase2_tests::phase_2_writers_refuse_an_existing_output_and_a_malformed_key, phase2_tests::submit_refuses_a_transaction_the_node_would_not_yet_accept, phase2_tests::submit_writes_the_signed_transaction_the_watcher_keeps, phase2_tests::the_payers_checks_hold_for_every_layout, phase2_tests::the_top_up_of_a_settle_is_shown_and_bounded, phase2_tests::the_value_cap_applies_to_every_builder_and_to_ipst_sign, phase2_tests::token_tests::a_trade_carrying_the_genesis_tag_is_an_ordinary_trade
+[OF4] ipst_cmd.rs: a Direct token's carrier allowance a hundred times --carrier
+  caught by (1): phase2_tests::ipst_sign_bounds_what_the_signer_commits
+[OF5] ipst_cmd.rs: a funding's token change not counted as coming back
+  caught by (24): phase2_tests::a_kas_cash_leg_below_the_minimum_is_refused_before_funding, phase2_tests::a_settle_past_expiry_is_not_signed_or_submitted, phase2_tests::a_token_of_the_other_legs_covenant_at_a_vault_is_not_warned_about, phase2_tests::builders_use_only_the_utxos_the_spec_names, phase2_tests::carrier_is_refused_outside_a_kcc20_funding_or_a_direct_transaction, phase2_tests::decode_and_the_transaction_lines_state_their_facts, phase2_tests::decode_reports_a_refund_with_its_signer_and_refuses_an_unknown_txid, phase2_tests::every_mode_funds_settles_and_decodes, phase2_tests::every_refund_role_and_leg_kind_goes_home, phase2_tests::fund_build_funds_only_your_own_leg, phase2_tests::ipst_sign_bounds_what_the_signer_commits, phase2_tests::ipst_sign_checks_the_payers_change_and_fee, phase2_tests::ipst_sign_checks_the_signers_role_and_own_destinations, phase2_tests::ipst_sign_signs_only_for_the_trade_the_signer_agreed_to, phase2_tests::phase_2_writers_refuse_an_existing_output_and_a_malformed_key, phase2_tests::recovery_and_funding_options_are_used_as_given, phase2_tests::refund_build_without_the_token_is_the_depositors_and_says_so, phase2_tests::settle_build_needs_funded_vaults_and_the_templates, phase2_tests::submit_writes_the_signed_transaction_the_watcher_keeps, phase2_tests::the_payers_checks_hold_for_every_layout, phase2_tests::the_top_up_of_a_settle_is_shown_and_bounded, phase2_tests::the_value_cap_applies_to_every_builder_and_to_ipst_sign, phase2_tests::token_tests::a_trade_carrying_the_genesis_tag_is_an_ordinary_trade, phase2_tests::token_tests::minted_tokens_validate_in_the_engine_and_settle_a_trade
+[OF6] ipst_cmd.rs: a signer of no fee input allowed the fee limit too
+  caught by (1): phase2_tests::ipst_sign_bounds_what_the_signer_commits
+[CP1] ipst_cmd.rs: the outflow not held to the value cap
+  caught by (2): phase2_tests::ipst_sign_bounds_what_the_signer_commits, phase2_tests::token_tests::ipst_sign_of_a_genesis_checks_the_payer
+[Z1] ipst_cmd.rs: --carrier taken outside a KCC-20 funding or a Direct transaction
+  caught by (2): phase2_tests::carrier_is_refused_outside_a_kcc20_funding_or_a_direct_transaction, phase2_tests::the_cancellation_check_refuses_each_clause_of_its_input_0_gate
+[FE1] ipst_cmd.rs: the default fee limit covers any number of the signer's fee inputs
+  caught by (1): phase2_tests::the_default_fee_limit_covers_at_most_three_of_the_signers_fee_inputs
+[FE2] ipst_cmd.rs: the default fee limit covers four fee inputs
+  caught by (1): phase2_tests::the_default_fee_limit_covers_at_most_three_of_the_signers_fee_inputs
+[FE3] ipst_cmd.rs: the default fee limit covers two fee inputs
+  caught by (1): phase2_tests::the_default_fee_limit_covers_at_most_three_of_the_signers_fee_inputs
+[FE4] ipst_cmd.rs: --max-fee does not lift the fee input bound
+  caught by (1): phase2_tests::the_default_fee_limit_covers_at_most_three_of_the_signers_fee_inputs
+[FE5] ipst_cmd.rs: every fee input counted, not only the signer's
+  caught by (1): phase2_tests::the_default_fee_limit_covers_at_most_three_of_the_signers_fee_inputs
+[PF1] build_cmd.rs: fund build pays from an address that is not --my-key's
+  caught by (1): phase2_tests::fund_build_funds_only_your_own_leg
+[AD1] cli.rs: address gives funding instructions for an unpinned template
+  caught by (1): phase2_tests::an_unpinned_template_is_flagged_and_its_terms_are_not_funded
+[TW1] cli.rs: terms new prints no warning for an unpinned template
+  caught by (1): phase2_tests::an_unpinned_template_is_flagged_and_its_terms_are_not_funded
+[AD2] cli.rs: verify gives its ok for an unpinned template
+  caught by (1): phase2_tests::an_unpinned_template_is_flagged_and_its_terms_are_not_funded
+[ND01] node.rs: an acceptance in a block the v2 answer does not add
+  caught by (1): node::tests::the_accepted_transaction_walk_finds_the_transaction_by_its_id
+[ND02] node.rs: a mainnet transport refusal echoes the node URL's credential (I14)
+  caught by (1): node::tests::refusals_never_echo_a_credential_in_the_node_url
+[ND03] node.rs: a refused submission names the wrong block to walk from (I14)
+  caught by (1): node::tests::a_failed_submission_names_the_transaction_to_look_for
+[ND04] node.rs: a node call waits a thousand times the timeout (I14)
+  caught by (1): node::tests::a_call_that_never_answers_is_refused_at_the_timeout
+[ND05] node.rs: the redacted URL keeps the path and query (I14)
+  caught by (2): node::tests::a_node_that_never_answers_the_handshake_is_unreachable, node::tests::refusals_never_echo_a_credential_in_the_node_url
+[DC01] decode_cmd.rs: the accepting block's DAA score printed as 0
+  caught by (1): phase2_tests::decode_and_the_transaction_lines_state_their_facts
+[DC02] decode_cmd.rs: refused vault inputs never printed
+  caught by (1): phase2_tests::decode_and_the_transaction_lines_state_their_facts
+[DC03] decode_cmd.rs: the seller named as the buyer
+  caught by (1): phase2_tests::decode_and_the_transaction_lines_state_their_facts
+[DC04] decode_cmd.rs: the buyer named as the seller
+  caught by (1): phase2_tests::decode_reports_a_refund_with_its_signer_and_refuses_an_unknown_txid
+[DC05] decode_cmd.rs: the authority named as the seller
+  caught by (1): phase2_tests::decode_and_the_transaction_lines_state_their_facts
+[DC07] decode_cmd.rs: a delivery printed to the buyer's delivery whatever the leg
+  caught by (1): phase2_tests::decode_and_the_transaction_lines_state_their_facts
+[DC08] decode_cmd.rs: a refund printed to the seller's refund whatever the leg
+  caught by (1): phase2_tests::decode_and_the_transaction_lines_state_their_facts
+[SM01] sim.rs: outputs above the inputs accepted
+  caught by (1): phase2_tests::the_fake_node_runs_every_input_in_the_engine
+[SM02] sim.rs: an outpoint spent twice in one transaction not refused
+  caught by (1): phase2_tests::the_fake_node_runs_every_input_in_the_engine
+[TR02] trade.rs: an unpinned KCC-20 cash leg not flagged
+  caught by (1): phase2_tests::builders_use_only_the_utxos_the_spec_names
+[SX01] ipst_cmd.rs: a taken --signed-tx-out path overwritten, not refused before submitting
+  caught by (1): phase2_tests::submit_writes_the_signed_transaction_the_watcher_keeps
+[SX02] ipst_cmd.rs: the signed-transaction file never written
+  caught by (1): phase2_tests::submit_writes_the_signed_transaction_the_watcher_keeps
+[SX03] ipst_cmd.rs: the signed-transaction file without its line feed
+  caught by (1): phase2_tests::submit_writes_the_signed_transaction_the_watcher_keeps
+[CN01] cancel.rs: vault terms not refused
+  caught by (1): phase2_tests::direct_cancel_build_refuses_what_it_cannot_cancel
+[CN02] cancel.rs: --my-key not checked against the role's key
+  caught by (1): phase2_tests::direct_cancel_build_refuses_what_it_cannot_cancel
+[CN03] cancel.rs: a token Direct input not refused
+  caught by (1): phase2_tests::direct_cancel_build_refuses_what_it_cannot_cancel
+[CN04] cancel.rs: the value cap not applied
+  caught by (1): phase2_tests::direct_cancel_build_refuses_what_it_cannot_cancel
+[CN05] cancel.rs: --direct-input of another amount accepted
+  caught by (1): phase2_tests::direct_cancel_build_refuses_what_it_cannot_cancel
+[CN06] cancel.rs: the default Direct input not of the cash amount
+  caught by (5): phase2_tests::a_cancellation_is_held_to_what_direct_cancel_build_makes, phase2_tests::direct_cancel_build_cancels_the_direct_transaction_it_names, phase2_tests::direct_cancel_build_refuses_what_it_cannot_cancel, phase2_tests::the_cancellation_check_refuses_each_clause_of_its_input_0_gate, phase2_tests::the_direct_refund_sends_the_buyers_cash_home_after_the_expiry
+[CN07] cancel.rs: the Direct input also taken as a fee input
+  caught by (1): phase2_tests::direct_cancel_build_refuses_what_it_cannot_cancel
+[CN08] cancel.rs: no fee input not refused by the builder
+  caught by (1): phase2_tests::a_cancellation_is_held_to_what_direct_cancel_build_makes
+[CN09] cancel.rs: a fee input of another key accepted
+  caught by (1): phase2_tests::a_cancellation_is_held_to_what_direct_cancel_build_makes
+[CN10] cancel.rs: an outpoint spent twice accepted
+  caught by (1): phase2_tests::a_cancellation_is_held_to_what_direct_cancel_build_makes
+[CN11] cancel.rs: a non-standard change script accepted
+  caught by (2): phase2_tests::a_cancellation_is_held_to_what_direct_cancel_build_makes, phase2_tests::direct_cancel_build_applies_each_rule_of_the_builders
+[CN12] cancel.rs: too little to pay the fee not refused
+  caught by (1): phase2_tests::direct_cancel_build_refuses_what_it_cannot_cancel
+[CN13] cancel.rs: change below its minimum accepted
+  caught by (1): phase2_tests::direct_cancel_build_refuses_what_it_cannot_cancel
+[CN14] cancel.rs: a fee below the minimum relay fee accepted
+  caught by (3): phase2_tests::a_cancellation_is_held_to_what_direct_cancel_build_makes, phase2_tests::direct_cancel_build_refuses_what_it_cannot_cancel, phase2_tests::the_direct_refund_sends_the_buyers_cash_home_after_the_expiry
+[CN15] cancel.rs: no lock time at the expiry
+  caught by (2): phase2_tests::a_cancellation_is_held_to_what_direct_cancel_build_makes, phase2_tests::the_direct_refund_sends_the_buyers_cash_home_after_the_expiry
+[CN16] cancel.rs: a final sequence, so the lock time does not hold
+  caught by (2): phase2_tests::a_cancellation_is_held_to_what_direct_cancel_build_makes, phase2_tests::the_direct_refund_sends_the_buyers_cash_home_after_the_expiry
+[CN17] cancel.rs: the Direct input not sent home whole
+  caught by (3): phase2_tests::a_cancellation_is_held_to_what_direct_cancel_build_makes, phase2_tests::the_cancellation_check_refuses_each_clause_of_its_input_0_gate, phase2_tests::the_direct_refund_sends_the_buyers_cash_home_after_the_expiry
+[CN18a] cancel.rs: the check takes a KAS input 0 under KCC-20 cash terms
+  caught by (1): phase2_tests::the_cancellation_check_refuses_each_clause_of_its_input_0_gate
+[CN18b] cancel.rs: the check takes an input 0 under any key
+  caught by (1): phase2_tests::the_cancellation_check_refuses_each_clause_of_its_input_0_gate
+[CN18c] cancel.rs: the check takes an input 0 of any amount
+  caught by (1): phase2_tests::a_cancellation_is_held_to_what_direct_cancel_build_makes
+[CN19] cancel.rs: the check does not compare the rebuilt document
+  caught by (1): phase2_tests::a_cancellation_is_held_to_what_direct_cancel_build_makes
+[CN20] cancel.rs: no document is taken as a cancellation
+  caught by (4): phase2_tests::a_cancellation_is_held_to_what_direct_cancel_build_makes, phase2_tests::direct_cancel_build_cancels_the_direct_transaction_it_names, phase2_tests::the_cancellation_check_refuses_each_clause_of_its_input_0_gate, phase2_tests::the_direct_refund_sends_the_buyers_cash_home_after_the_expiry
+[CN25] cancel.rs: an input 0 with a covenant ID taken as a cancellation
+  caught by (1): phase2_tests::the_cancellation_check_refuses_each_clause_of_its_input_0_gate
+[CN26] cancel.rs: a Direct input with a covenant ID built
+  caught by (1): phase2_tests::direct_cancel_build_applies_each_rule_of_the_builders
+[CN27] cancel.rs: a fee input with a covenant ID built
+  caught by (1): phase2_tests::direct_cancel_build_applies_each_rule_of_the_builders
+[CN28] cancel.rs: a UTXO of zero sompi built
+  caught by (1): phase2_tests::direct_cancel_build_applies_each_rule_of_the_builders
+[CN29] cancel.rs: a UTXO above the supply not refused at its own index
+  caught by (1): phase2_tests::direct_cancel_build_applies_each_rule_of_the_builders
+[CN30] cancel.rs: UTXOs above the supply together built
+  caught by (1): phase2_tests::direct_cancel_build_applies_each_rule_of_the_builders
+[CN31] cancel.rs: a mass above the standard cap built
+  caught by (1): phase2_tests::direct_cancel_build_applies_each_rule_of_the_builders
+[CN32] cancel.rs: a P2PK script of any version taken
+  caught by (1): phase2_tests::direct_cancel_build_applies_each_rule_of_the_builders
+[CN33] cancel.rs: a P2SH change refused
+  caught by (1): phase2_tests::direct_cancel_build_applies_each_rule_of_the_builders
+[CN34] cancel.rs: a P2PK-ECDSA change refused
+  caught by (1): phase2_tests::direct_cancel_build_applies_each_rule_of_the_builders
+[CN35] cancel.rs: a change script of any version taken
+  caught by (1): phase2_tests::direct_cancel_build_applies_each_rule_of_the_builders
+[CN36] cancel.rs: fee inputs smallest first
+  caught by (1): phase2_tests::the_cancellation_check_refuses_each_clause_of_its_input_0_gate
+[CN37] ipst_cmd.rs: --carrier taken on a cancellation
+  caught by (1): phase2_tests::the_cancellation_check_refuses_each_clause_of_its_input_0_gate
+[CN38] cancel.rs: the first of several exact UTXOs taken, as before the review
+  caught by (1): phase2_tests::direct_cancel_build_cancels_the_direct_transaction_it_names
+[CN39] cancel.rs: --for-ipst's input 0 taken, not its input 1
+  caught by (3): phase2_tests::direct_cancel_build_cancels_the_direct_transaction_it_names, phase2_tests::the_direct_refund_sends_the_buyers_cash_home_after_the_expiry, phase2_tests::token_tests::a_trade_carrying_the_genesis_tag_is_an_ordinary_trade
+[CN40] cancel.rs: --for-ipst of other terms taken
+  caught by (1): phase2_tests::direct_cancel_build_cancels_the_direct_transaction_it_names
+[CN41] cancel.rs: --for-ipst that is a cancellation taken
+  caught by (1): phase2_tests::direct_cancel_build_cancels_the_direct_transaction_it_names
+[CN42] cancel.rs: --for-ipst whose input 1 is not the buyer's exact cash taken
+  caught by (1): phase2_tests::direct_cancel_build_cancels_the_direct_transaction_it_names
+[CN43] cancel.rs: --direct-input beside --for-ipst naming another UTXO taken
+  caught by (1): phase2_tests::direct_cancel_build_cancels_the_direct_transaction_it_names
+[CN44] cancel.rs: the cancels: line does not name the Direct transaction's input
+  caught by (2): phase2_tests::direct_cancel_build_cancels_the_direct_transaction_it_names, phase2_tests::the_direct_refund_sends_the_buyers_cash_home_after_the_expiry
+[SX04] ipst_cmd.rs: a refused submission keeps its signed-transaction file
+  caught by (1): phase2_tests::submit_writes_the_signed_transaction_the_watcher_keeps
+[SX05] ipst_cmd.rs: a submission the node took removes its signed-transaction file
+  caught by (1): phase2_tests::submit_writes_the_signed_transaction_the_watcher_keeps
+[SX06] ipst_cmd.rs: a refused submission does not say how to write the file
+  caught by (1): phase2_tests::submit_writes_the_signed_transaction_the_watcher_keeps
+[SX07] ipst_cmd.rs: a failed write of the signed-transaction file ignored
+  caught by (1): phase2_tests::submit_writes_the_signed_transaction_the_watcher_keeps
+[RW1] ipst_cmd.rs: ipst raw writes an IPST that is not fully signed
+  caught by (1): phase2_tests::submit_writes_the_signed_transaction_the_watcher_keeps
+[CN21] ipst_cmd.rs: the core terms check, not the cancellation check, for a cancellation
+  caught by (3): phase2_tests::a_cancellation_is_held_to_what_direct_cancel_build_makes, phase2_tests::the_cancellation_check_refuses_each_clause_of_its_input_0_gate, phase2_tests::the_direct_refund_sends_the_buyers_cash_home_after_the_expiry
+[CN22] ipst_cmd.rs: a cancellation's output 0 not counted as coming back to its signer
+  caught by (3): phase2_tests::a_cancellation_is_held_to_what_direct_cancel_build_makes, phase2_tests::the_cancellation_check_refuses_each_clause_of_its_input_0_gate, phase2_tests::the_direct_refund_sends_the_buyers_cash_home_after_the_expiry
+[CN23] txview.rs: a cancellation's fee inputs counted from input 2
+  caught by (3): phase2_tests::a_cancellation_is_held_to_what_direct_cancel_build_makes, phase2_tests::the_cancellation_check_refuses_each_clause_of_its_input_0_gate, phase2_tests::the_direct_refund_sends_the_buyers_cash_home_after_the_expiry
+[CN24] txview.rs: a cancellation named as a Direct transaction
+  caught by (1): phase2_tests::the_direct_refund_sends_the_buyers_cash_home_after_the_expiry
+[TG01] token.rs: token mint build and token list act on mainnet
+  caught by (3): phase2_tests::token_tests::a_token_genesis_is_testnet_only_everywhere, phase2_tests::token_tests::token_list_finds_only_the_token_it_names, phase2_tests::token_tests::token_mint_build_checks_its_arguments
+[TG02] token.rs: a mainnet genesis IPST is read
+  caught by (1): phase2_tests::token_tests::a_token_genesis_is_testnet_only_everywhere
+[TG03] token.rs: the genesis check takes mainnet terms
+  caught by (1): phase2_tests::token_tests::a_token_genesis_is_testnet_only_everywhere
+[TG04] token.rs: token mint build and token list take an unpinned template
+  caught by (2): phase2_tests::token_tests::token_list_finds_only_the_token_it_names, phase2_tests::token_tests::token_mint_build_checks_its_arguments
+[TG05] token.rs: the genesis check takes an unpinned template
+  caught by (1): phase2_tests::token_tests::the_genesis_check_refuses_an_unpinned_template
+[TG06] token.rs: an owner that is not an x-only key taken
+  caught by (2): phase2_tests::token_tests::token_list_finds_only_the_token_it_names, phase2_tests::token_tests::token_mint_build_checks_its_arguments
+[TG07] token.rs: an amount of 0 taken
+  caught by (2): phase2_tests::token_tests::token_list_finds_only_the_token_it_names, phase2_tests::token_tests::token_mint_build_checks_its_arguments
+[TG08] token.rs: an amount above i64::MAX taken
+  caught by (1): phase2_tests::token_tests::token_mint_build_checks_its_arguments
+[TG09] token.rs: a genesis input of another key built
+  caught by (2): phase2_tests::token_tests::a_genesis_is_held_to_what_token_mint_build_makes, phase2_tests::token_tests::the_genesis_builder_keeps_the_builders_rules
+[TG10] token.rs: a genesis input after input 0 with a covenant ID built
+  caught by (1): phase2_tests::token_tests::the_genesis_builder_keeps_the_builders_rules
+[TG11] token.rs: a genesis input 0 with a covenant ID built
+  caught by (2): phase2_tests::token_tests::a_genesis_is_held_to_what_token_mint_build_makes, phase2_tests::token_tests::the_genesis_builder_keeps_the_builders_rules
+[TG12] token.rs: a genesis input spent twice built
+  caught by (2): phase2_tests::token_tests::a_genesis_is_held_to_what_token_mint_build_makes, phase2_tests::token_tests::the_genesis_builder_keeps_the_builders_rules
+[TG13] token.rs: a genesis input of 0 sompi not refused at its index
+  caught by (1): phase2_tests::token_tests::the_genesis_builder_keeps_the_builders_rules
+[TG14] token.rs: a genesis input above the supply not refused at its index
+  caught by (1): phase2_tests::token_tests::the_genesis_builder_keeps_the_builders_rules
+[TG15] token.rs: genesis inputs above the supply together built
+  caught by (1): phase2_tests::token_tests::the_genesis_builder_keeps_the_builders_rules
+[TG16] token.rs: a non-standard genesis change built
+  caught by (2): phase2_tests::token_tests::a_genesis_is_held_to_what_token_mint_build_makes, phase2_tests::token_tests::the_genesis_builder_keeps_the_builders_rules
+[TG17] token.rs: a carrier below the minimum built
+  caught by (2): phase2_tests::token_tests::the_genesis_builder_keeps_the_builders_rules, phase2_tests::token_tests::token_mint_build_checks_its_arguments
+[TG18] token.rs: too little for the carrier and the fee not refused
+  caught by (2): phase2_tests::token_tests::a_genesis_of_two_inputs_binds_input_0, phase2_tests::token_tests::the_genesis_builder_keeps_the_builders_rules
+[TG19] token.rs: genesis change below its minimum built
+  caught by (1): phase2_tests::token_tests::the_genesis_builder_keeps_the_builders_rules
+[TG20] token.rs: a genesis above the standard mass cap built
+  caught by (1): phase2_tests::token_tests::the_genesis_builder_keeps_the_builders_rules
+[TG21] token.rs: a genesis fee below the minimum relay fee built
+  caught by (9): phase2_tests::token_tests::a_genesis_is_held_to_what_token_mint_build_makes, phase2_tests::token_tests::a_genesis_of_two_inputs_binds_input_0, phase2_tests::token_tests::a_token_genesis_is_testnet_only_everywhere, phase2_tests::token_tests::minted_tokens_validate_in_the_engine_and_settle_a_trade, phase2_tests::token_tests::the_change_goes_to_the_payer_by_default, phase2_tests::token_tests::the_engine_refuses_a_genesis_with_another_covenant_id, phase2_tests::token_tests::the_genesis_builder_keeps_the_builders_rules, phase2_tests::token_tests::token_list_finds_only_the_token_it_names, phase2_tests::token_tests::token_mint_build_checks_its_arguments
+[TG22] token.rs: the genesis check does not compare the rebuilt document
+  caught by (1): phase2_tests::token_tests::a_genesis_is_held_to_what_token_mint_build_makes
+[TG23] token.rs: no document is taken as a token genesis
+  caught by (11): phase2_tests::token_tests::a_genesis_is_held_to_what_token_mint_build_makes, phase2_tests::token_tests::a_genesis_of_two_inputs_binds_input_0, phase2_tests::token_tests::a_token_genesis_is_testnet_only_everywhere, phase2_tests::token_tests::a_trade_carrying_the_genesis_tag_is_an_ordinary_trade, phase2_tests::token_tests::genesis_terms_need_all_four_marks, phase2_tests::token_tests::ipst_sign_of_a_genesis_checks_the_payer, phase2_tests::token_tests::minted_tokens_validate_in_the_engine_and_settle_a_trade, phase2_tests::token_tests::the_change_goes_to_the_payer_by_default, phase2_tests::token_tests::the_engine_refuses_a_genesis_with_another_covenant_id, phase2_tests::token_tests::the_genesis_check_refuses_an_unpinned_template, phase2_tests::token_tests::token_list_finds_only_the_token_it_names
+[TG24] token.rs: the genesis carrier not confirmed against --carrier
+  caught by (1): phase2_tests::token_tests::ipst_sign_of_a_genesis_checks_the_payer
+[TG25] token.rs: the token output without its genesis covenant binding
+  caught by (12): phase2_tests::token_tests::a_genesis_is_held_to_what_token_mint_build_makes, phase2_tests::token_tests::a_genesis_of_two_inputs_binds_input_0, phase2_tests::token_tests::a_token_genesis_is_testnet_only_everywhere, phase2_tests::token_tests::a_trade_carrying_the_genesis_tag_is_an_ordinary_trade, phase2_tests::token_tests::ipst_sign_of_a_genesis_checks_the_payer, phase2_tests::token_tests::minted_tokens_validate_in_the_engine_and_settle_a_trade, phase2_tests::token_tests::the_change_goes_to_the_payer_by_default, phase2_tests::token_tests::the_engine_refuses_a_genesis_with_another_covenant_id, phase2_tests::token_tests::the_genesis_builder_keeps_the_builders_rules, phase2_tests::token_tests::the_genesis_check_refuses_an_unpinned_template, phase2_tests::token_tests::token_list_finds_only_the_token_it_names, phase2_tests::token_tests::token_mint_build_checks_its_arguments
+[TG26] token.rs: the token held by another key than --owner
+  caught by (6): phase2_tests::token_tests::a_genesis_is_held_to_what_token_mint_build_makes, phase2_tests::token_tests::a_genesis_of_two_inputs_binds_input_0, phase2_tests::token_tests::minted_tokens_validate_in_the_engine_and_settle_a_trade, phase2_tests::token_tests::the_change_goes_to_the_payer_by_default, phase2_tests::token_tests::the_genesis_builder_keeps_the_builders_rules, phase2_tests::token_tests::token_list_finds_only_the_token_it_names
+[TG27] token.rs: genesis terms that have not expired
+  caught by (13): phase2_tests::token_tests::a_genesis_is_held_to_what_token_mint_build_makes, phase2_tests::token_tests::a_genesis_of_two_inputs_binds_input_0, phase2_tests::token_tests::a_token_genesis_is_testnet_only_everywhere, phase2_tests::token_tests::a_trade_carrying_the_genesis_tag_is_an_ordinary_trade, phase2_tests::token_tests::genesis_terms_need_all_four_marks, phase2_tests::token_tests::ipst_sign_of_a_genesis_checks_the_payer, phase2_tests::token_tests::minted_tokens_validate_in_the_engine_and_settle_a_trade, phase2_tests::token_tests::the_change_goes_to_the_payer_by_default, phase2_tests::token_tests::the_engine_refuses_a_genesis_with_another_covenant_id, phase2_tests::token_tests::the_genesis_check_refuses_an_unpinned_template, phase2_tests::token_tests::the_genesis_terms_of_a_fixed_token_are_a_known_answer, phase2_tests::token_tests::the_token_genesis_terms_are_fixed_and_never_a_live_trade, phase2_tests::token_tests::token_list_finds_only_the_token_it_names
+[TG31] txview.rs: a genesis input taken as a trade input, not the payer's
+  caught by (9): phase2_tests::token_tests::a_genesis_is_held_to_what_token_mint_build_makes, phase2_tests::token_tests::a_token_genesis_is_testnet_only_everywhere, phase2_tests::token_tests::a_trade_carrying_the_genesis_tag_is_an_ordinary_trade, phase2_tests::token_tests::ipst_sign_of_a_genesis_checks_the_payer, phase2_tests::token_tests::minted_tokens_validate_in_the_engine_and_settle_a_trade, phase2_tests::token_tests::the_change_goes_to_the_payer_by_default, phase2_tests::token_tests::the_engine_refuses_a_genesis_with_another_covenant_id, phase2_tests::token_tests::the_genesis_check_refuses_an_unpinned_template, phase2_tests::token_tests::token_list_finds_only_the_token_it_names
+[TG32] txview.rs: the genesis change taken for a trade output
+  caught by (11): phase2_tests::token_tests::a_genesis_is_held_to_what_token_mint_build_makes, phase2_tests::token_tests::a_genesis_of_two_inputs_binds_input_0, phase2_tests::token_tests::a_token_genesis_is_testnet_only_everywhere, phase2_tests::token_tests::a_trade_carrying_the_genesis_tag_is_an_ordinary_trade, phase2_tests::token_tests::ipst_sign_of_a_genesis_checks_the_payer, phase2_tests::token_tests::minted_tokens_validate_in_the_engine_and_settle_a_trade, phase2_tests::token_tests::the_change_goes_to_the_payer_by_default, phase2_tests::token_tests::the_engine_refuses_a_genesis_with_another_covenant_id, phase2_tests::token_tests::the_genesis_check_refuses_an_unpinned_template, phase2_tests::token_tests::token_list_finds_only_the_token_it_names, phase2_tests::token_tests::token_mint_build_checks_its_arguments
+[TG33] txview.rs: a genesis named as a Direct transaction
+  caught by (3): phase2_tests::token_tests::a_genesis_is_held_to_what_token_mint_build_makes, phase2_tests::token_tests::a_trade_carrying_the_genesis_tag_is_an_ordinary_trade, phase2_tests::token_tests::minted_tokens_validate_in_the_engine_and_settle_a_trade
+[TG34] txview.rs: the token line names another output
+  caught by (3): phase2_tests::token_tests::minted_tokens_validate_in_the_engine_and_settle_a_trade, phase2_tests::token_tests::the_change_goes_to_the_payer_by_default, phase2_tests::token_tests::token_list_finds_only_the_token_it_names
+[TG35] ipst_cmd.rs: a mainnet genesis IPST read by every command
+  caught by (1): phase2_tests::token_tests::a_token_genesis_is_testnet_only_everywhere
+[TG36] ipst_cmd.rs: the terms check, not the genesis check, for a genesis
+  caught by (10): phase2_tests::token_tests::a_genesis_is_held_to_what_token_mint_build_makes, phase2_tests::token_tests::a_genesis_of_two_inputs_binds_input_0, phase2_tests::token_tests::a_token_genesis_is_testnet_only_everywhere, phase2_tests::token_tests::a_trade_carrying_the_genesis_tag_is_an_ordinary_trade, phase2_tests::token_tests::ipst_sign_of_a_genesis_checks_the_payer, phase2_tests::token_tests::minted_tokens_validate_in_the_engine_and_settle_a_trade, phase2_tests::token_tests::the_change_goes_to_the_payer_by_default, phase2_tests::token_tests::the_engine_refuses_a_genesis_with_another_covenant_id, phase2_tests::token_tests::the_genesis_check_refuses_an_unpinned_template, phase2_tests::token_tests::token_list_finds_only_the_token_it_names
+[TG37] ipst_cmd.rs: --carrier refused on a genesis
+  caught by (1): phase2_tests::token_tests::ipst_sign_of_a_genesis_checks_the_payer
+[TG38] ipst_cmd.rs: a genesis signed without its carrier confirmed
+  caught by (1): phase2_tests::token_tests::ipst_sign_of_a_genesis_checks_the_payer
+[TG39] ipst_cmd.rs: a genesis carrier held to the top-up limit
+  caught by (10): phase2_tests::token_tests::a_genesis_is_held_to_what_token_mint_build_makes, phase2_tests::token_tests::a_genesis_of_two_inputs_binds_input_0, phase2_tests::token_tests::a_token_genesis_is_testnet_only_everywhere, phase2_tests::token_tests::a_trade_carrying_the_genesis_tag_is_an_ordinary_trade, phase2_tests::token_tests::ipst_sign_of_a_genesis_checks_the_payer, phase2_tests::token_tests::minted_tokens_validate_in_the_engine_and_settle_a_trade, phase2_tests::token_tests::the_change_goes_to_the_payer_by_default, phase2_tests::token_tests::the_engine_refuses_a_genesis_with_another_covenant_id, phase2_tests::token_tests::the_genesis_check_refuses_an_unpinned_template, phase2_tests::token_tests::token_list_finds_only_the_token_it_names
+[TG40] ipst_cmd.rs: a genesis payer allowed a hundred carriers
+  caught by (1): phase2_tests::token_tests::ipst_sign_of_a_genesis_checks_the_payer
+[TG41] ipst_cmd.rs: a genesis held to a trade value
+  caught by (1): phase2_tests::token_tests::ipst_sign_of_a_genesis_checks_the_payer
+[TG42] ipst_cmd.rs: a genesis signed under a trade's terms summary
+  caught by (1): phase2_tests::token_tests::ipst_sign_of_a_genesis_checks_the_payer
+[TG43] cancel.rs: an output's covenant ID rendered as another
+  caught by (12): phase2_tests::token_tests::a_genesis_is_held_to_what_token_mint_build_makes, phase2_tests::token_tests::a_genesis_of_two_inputs_binds_input_0, phase2_tests::token_tests::a_token_genesis_is_testnet_only_everywhere, phase2_tests::token_tests::a_trade_carrying_the_genesis_tag_is_an_ordinary_trade, phase2_tests::token_tests::ipst_sign_of_a_genesis_checks_the_payer, phase2_tests::token_tests::minted_tokens_validate_in_the_engine_and_settle_a_trade, phase2_tests::token_tests::the_change_goes_to_the_payer_by_default, phase2_tests::token_tests::the_engine_refuses_a_genesis_with_another_covenant_id, phase2_tests::token_tests::the_genesis_builder_keeps_the_builders_rules, phase2_tests::token_tests::the_genesis_check_refuses_an_unpinned_template, phase2_tests::token_tests::token_list_finds_only_the_token_it_names, phase2_tests::token_tests::token_mint_build_checks_its_arguments
+[TG44] token.rs: genesis terms without the tag
+  caught by (1): phase2_tests::token_tests::genesis_terms_need_all_four_marks
+[TG45] token.rs: genesis terms with any seller_key
+  caught by (1): phase2_tests::token_tests::genesis_terms_need_all_four_marks
+[TG46] token.rs: genesis terms with any buyer_key
+  caught by (1): phase2_tests::token_tests::genesis_terms_need_all_four_marks
+[TG47] token.rs: genesis terms in vault mode
+  caught by (1): phase2_tests::token_tests::genesis_terms_need_all_four_marks
+[TG48] token.rs: genesis terms with any expiry
+  caught by (1): phase2_tests::token_tests::genesis_terms_need_all_four_marks
+[TG49] token.rs: the tag alone makes a token genesis (the reviewed defect)
+  caught by (1): phase2_tests::token_tests::a_trade_carrying_the_genesis_tag_is_an_ordinary_trade
+[TG50] frost.rs: frost sign and frost aggregate read a mainnet genesis
+  caught by (1): phase2_tests::token_tests::a_token_genesis_is_testnet_only_everywhere
+[TG51] token.rs: token list without its template line
+  caught by (1): phase2_tests::token_tests::minted_tokens_validate_in_the_engine_and_settle_a_trade
+[TG52] token.rs: token list names mainnet
+  caught by (1): phase2_tests::token_tests::minted_tokens_validate_in_the_engine_and_settle_a_trade
+[TG53] token.rs: token list prints the covenant as the owner
+  caught by (1): phase2_tests::token_tests::minted_tokens_validate_in_the_engine_and_settle_a_trade
+[TG54] token.rs: the pinned line swaps maxCovIns and maxCovOuts
+  caught by (1): phase2_tests::token_tests::minted_tokens_validate_in_the_engine_and_settle_a_trade
+[TG55] token.rs: the default change of token mint build goes to the owner
+  caught by (2): phase2_tests::token_tests::a_genesis_of_two_inputs_binds_input_0, phase2_tests::token_tests::the_change_goes_to_the_payer_by_default
+[TG56] token.rs: genesis seller_proceeds pay the buyer key
+  caught by (1): phase2_tests::token_tests::the_genesis_terms_of_a_fixed_token_are_a_known_answer
+[TG57] token.rs: genesis buyer_refund pays the seller key
+  caught by (1): phase2_tests::token_tests::the_genesis_terms_of_a_fixed_token_are_a_known_answer
+[TG58] token.rs: genesis seller_refund owned by the buyer key
+  caught by (1): phase2_tests::token_tests::the_genesis_terms_of_a_fixed_token_are_a_known_answer
+[TG59] token.rs: the carrier and the fee summed with wrap-around
+  caught by (2): phase2_tests::token_tests::the_genesis_builder_keeps_the_builders_rules, phase2_tests::token_tests::token_mint_build_checks_its_arguments
+[TG60] token.rs: genesis inputs at sequence 1
+  caught by (1): phase2_tests::token_tests::the_genesis_builder_keeps_the_builders_rules
+[TG61] token.rs: the genesis binding authorizes the last input
+  caught by (2): phase2_tests::token_tests::a_genesis_of_two_inputs_binds_input_0, phase2_tests::token_tests::the_genesis_builder_keeps_the_builders_rules
+[TG62] token.rs: a token of one unit refused
+  caught by (2): phase2_tests::token_tests::a_genesis_of_two_inputs_binds_input_0, phase2_tests::token_tests::token_mint_build_checks_its_arguments
+[TG63] token.rs: a genesis with a lock time
+  caught by (2): phase2_tests::token_tests::a_genesis_is_held_to_what_token_mint_build_makes, phase2_tests::token_tests::the_genesis_builder_keeps_the_builders_rules
+[TG64] summary.rs: the terms summary without trade_ref
+  caught by (2): phase2_tests::token_tests::a_trade_carrying_the_genesis_tag_is_an_ordinary_trade, summary::tests::the_trade_reference_is_shown
+[VC01] v2_terms.rs: a key that deposits no leg passes the party check
+  caught by (1): v2_tests::the_party_check_refuses_terms_that_do_not_pay_you
+[VC02] v2_terms.rs: a refund to another depositor accepted when pinned
+  caught by (1): v2_tests::the_party_check_refuses_terms_that_do_not_pay_you
+[VC03] v2_terms.rs: a refund to the authority accepted when pinned
+  caught by (1): v2_tests::the_party_check_refuses_terms_that_do_not_pay_you
+[VC04] v2_terms.rs: terms that deliver nothing to the party accepted
+  caught by (1): v2_tests::the_party_check_refuses_terms_that_do_not_pay_you
+[VC05] v2_terms.rs: the v2 trade value is the largest KAS leg, not the KAS legs together
+  caught by (1): v2_tests::the_v2_trade_value_is_the_sum_of_the_kas_legs_at_least
+[VC06] v2_terms.rs: a KAS leg at exactly MIN_V2 refused before funding
+  caught by (1): v2_tests::terms_are_refused_before_funding_when_a_kas_leg_is_below_min_v2
+[VC07] v2_terms.rs: a draft of two legs takes the revocable default
+  caught by (1): v2_tests::terms_new_writes_a_terms_file_with_the_d46_defaults
+[VC08] v2_terms.rs: the default expiry is 12 hours, not D46's 24
+  caught by (1): v2_tests::terms_new_writes_a_terms_file_with_the_d46_defaults
+[VC09] v2_terms.rs: terms v2 of another network acted on
+  caught by (2): linked_tests::a_sheet_is_refused_for_each_check_and_written_only_when_all_pass, v2_tests::mainnet_needs_the_explicit_flag_and_a_node
+[VC10] v2_cmd.rs: v2 fund build funds another party's leg
+  caught by (1): v2_tests::fund_build_funds_only_your_own_leg_with_its_own_arguments
+[VC11] v2_cmd.rs: a v2 funding paid from another address
+  caught by (1): v2_tests::fund_build_funds_only_your_own_leg_with_its_own_arguments
+[VC12] v2_cmd.rs: a KAS leg funding takes --carrier
+  caught by (1): v2_tests::fund_build_funds_only_your_own_leg_with_its_own_arguments
+[VC13] v2_cmd.rs: another depositor signs a leg's funding
+  caught by (1): v2_tests::ipst_sign_holds_each_signer_to_its_own_part
+[VC14] v2_cmd.rs: the escrowed token's carrier not confirmed
+  caught by (1): v2_tests::ipst_sign_holds_each_signer_to_its_own_part
+[VC15] v2_cmd.rs: a depositor's key signs as a payer
+  caught by (1): v2_tests::ipst_sign_holds_each_signer_to_its_own_part
+[VC16] v2_cmd.rs: a v2 fee input signed with the change going elsewhere
+  caught by (1): v2_tests::ipst_sign_holds_each_signer_to_its_own_part
+[VC17] v2_cmd.rs: a v2 fee above --max-fee signed
+  caught by (1): v2_tests::ipst_sign_holds_each_signer_to_its_own_part
+[VC18] v2_cmd.rs: v2 ipst sign with nothing to sign writes a copy
+  caught by (1): v2_tests::ipst_sign_holds_each_signer_to_its_own_part
+[VC19] v2_cmd.rs: a KAS leg refund takes --without-token
+  caught by (1): v2_tests::refund_build_checks_the_leg_the_signer_and_the_token_flags
+[VC20] v2_cmd.rs: a leg index equal to the leg count passes the CLI's check
+  caught by (1): v2_tests::fund_build_funds_only_your_own_leg_with_its_own_arguments
+[XC01] xchain.rs: the race R2 notice not printed on mainnet
+  caught by (1): xchain::tests::mainnet_runs_under_the_value_cap
+[XC02] xchain.rs: a network ID without pinned parameters read as 10 blocks per second
+  caught by (1): xchain::tests::a_node_at_another_blocks_per_second_is_refused
+[XC03] xchain.rs: the node's blocks-per-second not checked
+  caught by (1): xchain::tests::a_node_at_another_blocks_per_second_is_refused
+[XC04] xchain_doc.rs: a known hash lock under other terms accepted
+  caught by (1): xchain::tests::a_hash_lock_serves_one_trade_r8
+[XC05] xchain.rs: xchain verify does not record the trade
+  caught by (1): xchain::tests::a_hash_lock_serves_one_trade_r8
+[XC06] xchain.rs: xchain new for a key that is not the seller's
+  caught by (1): xchain::tests::new_checks_the_draft_the_role_and_the_margins_before_writing_anything
+[XC07] xchain.rs: the counterpart account not compared with --my-counterpart-account
+  caught by (2): xchain::tests::new_checks_the_draft_the_role_and_the_margins_before_writing_anything, xchain::tests::verify_checks_the_buyers_side
+[XC08] xchain.rs: a pin accepts the counterparty's key as the user's own destination
+  caught by (1): xchain::tests::new_checks_the_draft_the_role_and_the_margins_before_writing_anything
+[XC09] xchain.rs: a counterpart timeout inside the claim lead accepted at creation
+  caught by (1): xchain::tests::new_checks_the_draft_the_role_and_the_margins_before_writing_anything
+[XC10] xchain.rs: an unpinned KCC-20 template accepted
+  caught by (1): xchain::tests::new_checks_the_draft_the_role_and_the_margins_before_writing_anything
+[XC11] xchain.rs: a trade above the value cap accepted
+  caught by (4): xchain::tests::a_mainnet_claim_never_blocks_on_the_daa_sample, xchain::tests::mainnet_runs_under_the_value_cap, xchain::tests::new_checks_the_draft_the_role_and_the_margins_before_writing_anything, xchain::tests::recovery_is_not_value_capped_but_funding_is
+[XC12] xchain_doc.rs: a secret file others can read accepted
+  caught by (1): xchain::tests::the_secret_file_is_read_only_from_a_private_file_of_the_right_form
+[XC13] xchain_doc.rs: a short secret file accepted
+  caught by (1): xchain::tests::the_secret_file_is_read_only_from_a_private_file_of_the_right_form
+[XC14] xchain_doc.rs: the secret file written readable by others
+  caught by (14): xchain::tests::a_hashlock_trade_runs_end_to_end_and_completes_only_when_both_claims_are_final, xchain::tests::a_mainnet_claim_never_blocks_on_the_daa_sample, xchain::tests::a_node_at_another_blocks_per_second_is_refused, xchain::tests::recovery_is_not_value_capped_but_funding_is, xchain::tests::sign_checks_the_agreed_trade_the_role_and_what_the_signer_commits, xchain::tests::solana_source::a_frozen_escrow_is_refused_by_verify_counterpart_and_counterpart_claim, xchain::tests::solana_source::the_buyer_reads_the_reveal_from_a_claimed_and_closed_lock, xchain::tests::solana_source::the_first_reveal_through_this_source_is_the_solana_tools_not_the_cli, xchain::tests::the_first_reveal_is_refused_inside_the_claim_lead_r2, xchain::tests::the_kaspa_claim_needs_the_retry_window_unless_past_margin_is_given, xchain::tests::the_kaspa_claim_reads_the_preimage_from_the_counterpart_chain_in_any_finality_state, xchain::tests::the_seller_reveals_only_after_checking_the_buyers_lock, xchain::tests::verify_funding_refuses_a_spent_escrow, xchain::tests::watch_reports_the_reveal_only_at_counterpart_final
+[XC15] xchain.rs: the seller reveals against a lock that is not counterpart-final (R13)
+  caught by (1): xchain::tests::the_seller_reveals_only_after_checking_the_buyers_lock
+[XC16] xchain_counterpart.rs: an unfunded counterpart lock accepted
+  caught by (3): xchain::solana::tests::an_escrow_short_of_the_amount_is_not_funded, xchain::tests::solana_source::an_unfunded_or_unfinal_lock_is_refused, xchain::tests::the_seller_reveals_only_after_checking_the_buyers_lock
+[XC17] xchain.rs: the first reveal accepted inside the claim lead (R2)
+  caught by (1): xchain::tests::the_first_reveal_is_refused_inside_the_claim_lead_r2
+[XC18] xchain.rs: the counterpart claim reported done before counterpart-final
+  caught by (2): xchain::tests::a_hashlock_trade_runs_end_to_end_and_completes_only_when_both_claims_are_final, xchain::tests::the_first_reveal_is_refused_inside_the_claim_lead_r2
+[XC19] xchain.rs: the watch writes the preimage before counterpart-final
+  caught by (2): xchain::tests::solana_source::the_buyer_reads_the_reveal_from_a_claimed_and_closed_lock, xchain::tests::watch_reports_the_reveal_only_at_counterpart_final
+[XC20] xchain.rs: a claim with a wrong preimage taken as the reveal
+  caught by (1): xchain::tests::the_kaspa_claim_reads_the_preimage_from_the_counterpart_chain_in_any_finality_state
+[XC21] xchain.rs: the Kaspa claim built with less than the retry window left
+  caught by (2): xchain::tests::a_mainnet_claim_never_blocks_on_the_daa_sample, xchain::tests::the_kaspa_claim_needs_the_retry_window_unless_past_margin_is_given
+[XC22] xchain.rs: xchain sign signs for other terms than agreed
+  caught by (1): xchain::tests::sign_checks_the_agreed_trade_the_role_and_what_the_signer_commits
+[XC23] xchain.rs: xchain sign accepts change that is not the signer's
+  caught by (1): xchain::tests::sign_checks_the_agreed_trade_the_role_and_what_the_signer_commits
+[XC24] xchain.rs: xchain sign accepts a fee above --max-fee
+  caught by (1): xchain::tests::sign_checks_the_agreed_trade_the_role_and_what_the_signer_commits
+[XC25] xchain.rs: the trade reported complete with the counterpart claim not final
+  caught by (1): xchain::tests::a_hashlock_trade_runs_end_to_end_and_completes_only_when_both_claims_are_final
+[XC26] xchain.rs: the Kaspa transaction reported final at any depth
+  caught by (1): xchain::tests::a_hashlock_trade_runs_end_to_end_and_completes_only_when_both_claims_are_final
+[XC27] xchain_doc.rs: a sample point with a falling DAA score appended
+  caught by (1): xchain::tests::the_daa_sample_file_grows_one_point_at_a_time
+[XC28] xchain_doc.rs: a DAA sample of another network read
+  caught by (1): xchain::tests::the_daa_sample_file_grows_one_point_at_a_time
+[XC29] xchain_doc.rs: a terms file's hash not checked
+  caught by (1): xchain::tests::the_terms_form_is_the_vectors_form
+[XC30] xchain_doc.rs: an older document version read as version 3
+  caught by (1): xchain::tests::sign_checks_the_agreed_trade_the_role_and_what_the_signer_commits
+[XC31] xchain.rs: xchain submit ignores the lock time
+  caught by (1): xchain::tests::refunds_seller_after_expiry_buyer_at_any_time
+[XC32] xchain.rs: the claim lead without its two-hour floor
+  caught by (2): xchain::tests::new_checks_the_draft_the_role_and_the_margins_before_writing_anything, xchain::tests::the_first_reveal_is_refused_inside_the_claim_lead_r2
+[XC33] xchain.rs: a refund built without the token by default
+  caught by (3): xchain::tests::recovery_is_not_value_capped_but_funding_is, xchain::tests::refunds_seller_after_expiry_buyer_at_any_time, xchain::tests::verify_funding_refuses_a_spent_escrow
+[XC34] xchain.rs: the funding paid from another address than the seller's
+  caught by (1): xchain::tests::the_funding_is_the_sellers_and_is_signed_only_while_the_margin_holds
+[XC35] xchain.rs: a funding signed without the margin rule run again
+  caught by (1): xchain::tests::the_funding_is_the_sellers_and_is_signed_only_while_the_margin_holds
+[XC36] xchain.rs: a funding signed by the buyer
+  caught by (1): xchain::tests::the_funding_is_the_sellers_and_is_signed_only_while_the_margin_holds
+[XC37] xchain.rs: a funding's deposit not compared with --carrier and --authorizer
+  caught by (1): xchain::tests::the_funding_is_the_sellers_and_is_signed_only_while_the_margin_holds
+[XC38] xchain.rs: xchain verify for a key that is not the buyer's
+  caught by (1): xchain::tests::verify_checks_the_buyers_side
+[XC39] xchain.rs: a source of another chain accepted
+  caught by (2): xchain::tests::solana_source::the_chain_must_be_the_one_in_the_record, xchain::tests::the_seller_reveals_only_after_checking_the_buyers_lock
+[XC40] xchain.rs: a destination that differs from its pin accepted
+  caught by (1): xchain::tests::verify_checks_the_buyers_side
+[XC41] xchain.rs: verify-funding accepts a spent escrow or authorizer
+  caught by (1): xchain::tests::verify_funding_refuses_a_spent_escrow
+[XC42] xchain.rs: verify-funding accepts a funding below final depth
+  caught by (1): xchain::tests::a_hashlock_trade_runs_end_to_end_and_completes_only_when_both_claims_are_final
+[XC43] xchain.rs: status takes an unrelated transaction for an attempted funding
+  caught by (1): xchain::tests::status_refuses_a_transaction_that_is_not_part_of_this_trade
+[XC44] xchain.rs: status completes the trade on a transaction that is not the claim
+  caught by (2): xchain::tests::status_refuses_a_transaction_that_is_not_part_of_this_trade, xchain::tests::verify_funding_refuses_a_spent_escrow
+[XC45] xchain.rs: status takes a refund for the claim
+  caught by (1): xchain::tests::verify_funding_refuses_a_spent_escrow
+[XC46] xchain.rs: status reports a spent funding as unspent
+  caught by (1): xchain::tests::verify_funding_refuses_a_spent_escrow
+[PT01] v2_cmd.rs: a partial trade's vault UTXOs are looked up as plain ones
+  caught by (4): v2_tests::a_partial_trade_funds_as_genesis_and_settles_in_tranches, v2_tests::a_partly_filled_vault_refunds_home, v2_tests::every_tranche_has_a_receipt_that_verifies_and_chains, v2_tests::tranche_faults_are_refused_with_their_codes
+[PT02] v2_cmd.rs: --tranche builds the final settle
+  caught by (4): v2_tests::a_partial_trade_funds_as_genesis_and_settles_in_tranches, v2_tests::a_partly_filled_vault_refunds_home, v2_tests::every_tranche_has_a_receipt_that_verifies_and_chains, v2_tests::tranche_faults_are_refused_with_their_codes
+[PT03] v2_cmd.rs: a tranche's kind is named as a final settle
+  caught by (2): v2_tests::a_partial_trade_funds_as_genesis_and_settles_in_tranches, v2_tests::a_partly_filled_vault_refunds_home
+[PT04] v2_cmd.rs: a tranche's trade outputs are counted as a final settle's
+  caught by (3): v2_tests::a_partial_trade_funds_as_genesis_and_settles_in_tranches, v2_tests::a_partly_filled_vault_refunds_home, v2_tests::every_tranche_has_a_receipt_that_verifies_and_chains
+[PT05] v2_cmd.rs: the settler cost line is not printed for a tranche
+  caught by (1): v2_tests::a_partly_filled_vault_refunds_home
+[RV01] receipt_v2.rs: the digest does not carry the version 2 byte
+  caught by (1): receipt_v2::tests::digest_known_answer
+[RV02] receipt_v2.rs: a receipt missing a quantity field is malformed, not missing
+  caught by (2): receipt_v2::tests::malformed_and_incomplete_receipts_are_told_apart, v2_tests::every_tranche_has_a_receipt_that_verifies_and_chains
+[RV03] receipt_v2.rs: a leg missing a quantity field is read as present
+  caught by (1): receipt_v2::tests::malformed_and_incomplete_receipts_are_told_apart
+[RV04] receipt_v2.rs: total_lots is not compared with the terms
+  caught by (1): receipt_v2::tests::quantities_must_follow_from_the_terms
+[RV05] receipt_v2.rs: lots above the cumulative pass
+  caught by (1): receipt_v2::tests::quantities_must_follow_from_the_terms
+[RV06] receipt_v2.rs: a first receipt may state a cumulative above its lots
+  caught by (1): receipt_v2::tests::quantities_must_follow_from_the_terms
+[RV07] receipt_v2.rs: a leg's total is not compared with the terms
+  caught by (1): receipt_v2::tests::quantities_must_follow_from_the_terms
+[RV08] receipt_v2.rs: the previous receipt's digest is not compared
+  caught by (1): receipt_v2::tests::a_chain_adds_up_and_each_link_is_the_continuation
+[RV09] receipt_v2.rs: the cumulative does not have to add up
+  caught by (1): receipt_v2::tests::a_chain_adds_up_and_each_link_is_the_continuation
+[RV10] receipt_v2.rs: a previous transaction that did not continue passes
+  caught by (1): receipt_v2::tests::a_chain_adds_up_and_each_link_is_the_continuation
+[RV11] receipt_v2.rs: the spent outpoint or the covenant may differ from the continuation
+  caught by (1): receipt_v2::tests::a_chain_adds_up_and_each_link_is_the_continuation
+[RV12] receipt_v2.rs: derive does not check the previous receipt against the transaction
+  caught by (1): receipt_v2::tests::a_chain_adds_up_and_each_link_is_the_continuation
+[RV13] receipt_v2.rs: the transaction's lots are not compared with the receipt's
+  caught by (1): v2_tests::every_tranche_has_a_receipt_that_verifies_and_chains
+[RV14] receipt_v2.rs: the transaction's lineage is not compared with the receipt's
+  caught by (1): v2_tests::every_tranche_has_a_receipt_that_verifies_and_chains
+[RV15] v2_cmd.rs: receipt verify does not compare the quantities with the terms
+  caught by (1): v2_tests::every_tranche_has_a_receipt_that_verifies_and_chains
+[RV16] v2_cmd.rs: receipt verify does not read the transaction again
+  caught by (1): v2_tests::every_tranche_has_a_receipt_that_verifies_and_chains
+[RV17] v2_cmd.rs: status signs a receipt for a transaction that is not a settle of the terms
+  caught by (1): v2_tests::status_states_a_quantity_only_for_a_v2_settle
+[XS01] xchain_solana.rs: a frozen escrow not refused
+  caught by (2): xchain::solana::tests::a_frozen_escrow_is_refused, xchain::tests::solana_source::a_frozen_escrow_is_refused_by_verify_counterpart_and_counterpart_claim
+[XS02] xchain_solana.rs: the freeze-authority warning dropped
+  caught by (3): xchain::solana::tests::a_mint_with_a_freeze_authority_gets_the_documented_warning, xchain::solana::tests::the_real_http_transport_reads_the_mock_cluster, xchain::tests::solana_source::verify_counterpart_warns_about_a_freeze_authority_before_the_ok
+[XS03] xchain_solana.rs: an escrow short of the amount read as funded
+  caught by (2): xchain::solana::tests::an_escrow_short_of_the_amount_is_not_funded, xchain::tests::solana_source::an_unfunded_or_unfinal_lock_is_refused
+[XS04] xchain_solana.rs: an escrow held by another address read as funded
+  caught by (1): xchain::solana::tests::an_escrow_held_by_another_address_is_not_funded
+[XS05] xchain_solana.rs: an account off its own seeds taken as a lock
+  caught by (1): xchain::solana::tests::an_account_off_its_own_seeds_is_not_a_lock
+[XS06] xchain_solana.rs: a failed transaction read as a claim
+  caught by (1): xchain::solana::tests::a_failed_transaction_is_neither_a_claim_nor_an_open
+[XS07] xchain_solana.rs: a cleartext rpc url to a remote host accepted
+  caught by (1): xchain::solana::tests::urls_name_a_program_and_refuse_cleartext_to_remote_hosts
+[XS08] xchain_solana.rs: an open instruction for another hash lock taken as the lock
+  caught by (1): xchain::solana::tests::an_open_for_another_hash_lock_is_not_the_lock
+[XS09] xchain_solana.rs: inner (CPI) instructions not read
+  caught by (1): xchain::solana::tests::a_claim_made_through_a_cpi_is_found
+[XS10] xchain_solana.rs: the history read as its newest page only
+  caught by (5): xchain::solana::tests::a_claim_and_an_open_behind_thirty_decoys_are_found, xchain::solana::tests::a_claim_made_through_a_cpi_is_found, xchain::solana::tests::a_claim_of_the_wrong_length_or_by_another_program_is_not_a_claim, xchain::solana::tests::a_failed_transaction_is_neither_a_claim_nor_an_open, xchain::solana::tests::an_open_for_another_hash_lock_is_not_the_lock
+[XS11] xchain_solana.rs: a history past the bound read as a miss
+  caught by (1): xchain::solana::tests::a_history_past_the_bound_is_an_error_not_a_miss
+[XS12] xchain_solana.rs: the claim search does not stop at the open
+  caught by (1): xchain::solana::tests::the_searches_stop_at_the_open
+[XS13] xchain_solana.rs: the funder search does not stop at the open it found
+  caught by (1): xchain::solana::tests::the_searches_stop_at_the_open
+[XS14] xchain_solana.rs: user information before the host accepted
+  caught by (1): xchain::solana::tests::urls_name_a_program_and_refuse_cleartext_to_remote_hosts
+[XS15] xchain_solana.rs: a password without a user name accepted
+  caught by (1): xchain::solana::tests::urls_name_a_program_and_refuse_cleartext_to_remote_hosts
+[XS16] xchain_solana.rs: a transport error echoes the rpc url
+  caught by (1): xchain::solana::tests::a_transport_error_never_echoes_the_rpc_url
+[SZ01] terms_file.rs: a file over its cap read whole
+  caught by (2): terms_file::tests::a_file_over_its_cap_is_refused, xchain::tests::the_daa_sample_file_grows_one_point_at_a_time
+[SZ02] terms_file.rs: a document read under the owner list's cap
+  caught by (1): terms_file::tests::a_file_over_its_cap_is_refused
+[SZ03] xchain_doc.rs: a DAA sample read without its cap
+  caught by (1): xchain::tests::the_daa_sample_file_grows_one_point_at_a_time
+[SZ04] xchain_solana.rs: an rpc reply over the cap buffered whole
+  caught by (1): xchain::solana::tests::a_reply_over_the_body_cap_is_refused
+[LG01] core:gate.rs: the settle tag read from the wrong push
+  caught by (5): linked::tests::a_builder_is_given_the_vault_of_its_own_role, linked::tests::an_opening_settle_is_evidence_and_nothing_else_is, linked::tests::the_opening_builds_without_evidence_and_the_return_needs_it, linked_tests::a_gate_whose_accepting_block_left_the_chain_or_lies_ahead_of_the_node_is_refused, linked_tests::an_open_and_a_return_settle_and_their_receipts_link_to_one_terms_hash
+[LG02] core:gate.rs: a transaction with one input passes the input-count guard
+  caught by (1): linked::tests::an_opening_settle_is_evidence_and_nothing_else_is
+[LG03] core:gate.rs: missing spent scripts are tolerated
+  caught by (1): linked::tests::an_opening_settle_is_evidence_and_nothing_else_is
+[LG04] core:gate.rs: input 1 is checked against the vault of leg 0
+  caught by (5): linked::tests::a_builder_is_given_the_vault_of_its_own_role, linked::tests::an_opening_settle_is_evidence_and_nothing_else_is, linked::tests::the_opening_builds_without_evidence_and_the_return_needs_it, linked_tests::a_gate_whose_accepting_block_left_the_chain_or_lies_ahead_of_the_node_is_refused, linked_tests::an_open_and_a_return_settle_and_their_receipts_link_to_one_terms_hash
+[LG04b] core:gate.rs: input 1 is checked against the first spent script
+  caught by (5): linked::tests::a_builder_is_given_the_vault_of_its_own_role, linked::tests::an_opening_settle_is_evidence_and_nothing_else_is, linked::tests::the_opening_builds_without_evidence_and_the_return_needs_it, linked_tests::a_gate_whose_accepting_block_left_the_chain_or_lies_ahead_of_the_node_is_refused, linked_tests::an_open_and_a_return_settle_and_their_receipts_link_to_one_terms_hash
+[LG04c] core:gate.rs: only input 0 is checked
+  caught by (1): linked::tests::an_opening_settle_is_evidence_and_nothing_else_is
+[LG05] core:gate.rs: the settle tag is not compared
+  caught by (1): linked::tests::an_opening_settle_is_evidence_and_nothing_else_is
+[LG06] core:gate.rs: the evidence names no sheet
+  caught by (2): linked::tests::an_opening_settle_is_evidence_and_nothing_else_is, linked::tests::the_opening_builds_without_evidence_and_the_return_needs_it
+[LG07] linked_cmd.rs: the accepting block need not be a chain block
+  caught by (1): linked_tests::a_gate_whose_accepting_block_left_the_chain_or_lies_ahead_of_the_node_is_refused
+[LG08] linked_cmd.rs: the depth is not compared with the minimum
+  caught by (2): linked_tests::a_gate_whose_accepting_block_left_the_chain_or_lies_ahead_of_the_node_is_refused, linked_tests::an_open_and_a_return_settle_and_their_receipts_link_to_one_terms_hash
+[LG09] linked_cmd.rs: the depth compare is off by one
+  caught by (1): linked_tests::a_gate_whose_accepting_block_left_the_chain_or_lies_ahead_of_the_node_is_refused
+[LG10] linked_cmd.rs: a virtual DAA score below the block's reads as depth zero
+  caught by (1): linked_tests::a_gate_whose_accepting_block_left_the_chain_or_lies_ahead_of_the_node_is_refused
+[XR01] xchain.rs: a claim with an unusable DAA sample is refused again
+  caught by (1): xchain::tests::a_mainnet_claim_never_blocks_on_the_daa_sample
+[XR02] xchain.rs: the claim fallback uses the sample-only rate, not the pinned one
+  caught by (1): xchain::tests::a_mainnet_claim_never_blocks_on_the_daa_sample
+[XR03] xchain.rs: the claim fallback warning goes nowhere
+  caught by (1): xchain::tests::a_mainnet_claim_never_blocks_on_the_daa_sample
+[XR04] xchain.rs: recovery over the value cap is refused again
+  caught by (1): xchain::tests::recovery_is_not_value_capped_but_funding_is
+[XR05] xchain.rs: the recovery cap warning goes nowhere
+  caught by (1): xchain::tests::recovery_is_not_value_capped_but_funding_is
+
+result: 313 of 313 mutants caught

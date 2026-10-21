@@ -1,0 +1,69 @@
+Template v4.1 against template v4.0: the cost of checking the covenant ID of every input (spec/V3-ZK.md 22.15)
+date: 2026-10-19
+machine: Apple M1 Max (the same laptop as docs/measurements/v4-zk-units.txt and docs/evidence/i21-proving-2026-10-15)
+pins: kaspa-txscript at rusty-kaspa a41a333 (covenants enabled, mainnet parameters); silverc from silverscript v1.0.0 (3ed97333); risc0-zkvm 3.0.4; Groth16 prover image of circuits/GROTH16_PROVER_IMAGE
+template v4.0 (retired): aad094cd22e417872a820fb0951076c55a4c74def86558f085f49e6bbdf25655 (contracts/impulse_vault_v4_0.sil)
+template v4.1: 89802d8ef614eb72c436a74ec15ec8f09e8878bb6d080278a7c6a2c82c5a0914 (contracts/impulse_vault_v4.sil)
+terms guest image ID: fd5a0071f09f0d22d4b71a276350a6c07ae117fab274d8d23fbf4fe9a4eacf07 for both (unchanged; scripts/build-guest.sh reproduced it in Docker on 2026-10-18 and again inside scripts/ci-zk.sh on 2026-10-19)
+
+All figures below are measured. Each names the command that produced it. The v4.0 figures of the live run are those of docs/measurements/v4-zk-units.txt at main dcefe89 (run 2026-10-18T00:18Z); the v4.1 figures are those of the same file as rewritten by scripts/ci-zk.sh on this branch (run 2026-10-19T03:51Z).
+
+1. Template size (scripts/build-template-v4.sh; compiled artifact with the placeholder state)
+  v4.0 2890 bytes, v4.1 3598 bytes: +708 bytes (two unrolled loops of eight iterations, one per entry)
+  vault input signature script (redeem script and entry arguments), every shape: 3162 -> 3870 bytes, +708
+
+2. Script units per vault input, probe build (verify call replaced by a comparison of sha256(J) with the proof)
+  command (v4.1): IMPULSE_V4_PROBE_OUT=<file> cargo test --locked -p impulse-engine-tests --test v4_script v4_probe_units_beside_v1
+  command (v4.0): the same with IMPULSE_VAULT_V4_SIL=contracts/impulse_vault_v4_0.sil (its output equals the v4.0 table of v4-zk-units.txt at main, digit for digit)
+  | Shape | v4.0 asset vault | v4.1 asset vault | delta | v4.0 cash vault | v4.1 cash vault | delta |
+  | --- | --- | --- | --- | --- | --- | --- |
+  | settle, KAS cash | 114180 | 116097 | +1917 | 114184 | 116101 | +1917 |
+  | settle, KCC-20 cash | 119193 | 121215 | +2022 | 119197 | 121219 | +2022 |
+  | settle, external cash | 110318 | 112098 | +1780 | none | none | |
+  | refund, asset leg, depositor | 110283 | 112063 | +1780 | n/a | n/a | |
+  | refund, KCC-20 cash leg, depositor | 110283 | 112063 | +1780 | n/a | n/a | |
+  | refund, KAS cash leg, depositor | 107576 | 109216 | +1640 | n/a | n/a | |
+  The vault input budget of the builders (VAULT_BASE_UNITS 200,000 plus the verification, 1,570 budget units) covers both; unchanged.
+
+3. Script units per vault input with real receipts (tests/engine/v4_live.rs through scripts/ci-zk.sh; random throwaway keys)
+  | Shape | Input | v4.0 | v4.1 | delta |
+  | --- | --- | --- | --- | --- |
+  | settle, KAS cash | asset vault | 15618749 | 15620666 | +1917 |
+  | settle, KAS cash | cash vault | 15618753 | 15620670 | +1917 |
+  | settle, KCC-20 cash | asset vault | 15623762 | 15625784 | +2022 |
+  | settle, KCC-20 cash | cash vault | 15623766 | 15625788 | +2022 |
+  | settle, external cash | asset vault | 15614887 | 15616667 | +1780 |
+  | refund, asset leg, depositor | vault | 15614852 | 15616632 | +1780 |
+  | refund, asset leg, counterparty | vault | 15614852 | 15616632 | +1780 |
+  | refund, cash leg (KAS), authority | vault | 15612145 | 15613785 | +1640 |
+  | refund, cash leg (KCC-20), depositor | vault | 15614852 | 15616632 | +1780 |
+
+4. Masses of the builders' plans (impulse-core builder_plan_masses, mainnet parameters, committed budgets)
+  | Plan | compute v4.0 | compute v4.1 | delta | transient v4.0 | transient v4.1 | storage |
+  | --- | --- | --- | --- | --- | --- | --- |
+  | settle-kas-asset | 325322 | 326738 | +1416 | 34288 | 39952 | 32548 both |
+  | settle-kcc20-asset | 327960 | 329376 | +1416 | 42160 | 47824 | 48401 both |
+  | settle-external-asset | 164694 | 165402 | +708 | 21216 | 24048 | 28263 both |
+  | refund-asset-depositor | 164696 | 165404 | +708 | 21224 | 24056 | 28263 both |
+  | refund-kas-cash-counterparty | 162255 | 162963 | +708 | 14140 | 16972 | 63 both |
+  | refund-asset-depositor-earmarked | 164696 | 165404 | +708 | 21224 | 24056 | 28263 both |
+  All under the D63 caps (compute 450,000, transient 900,000, storage 450,000). Compute grows by the redeem script's 708 bytes per vault input; the relay fee at 100 sompi per gram grows by 70,800 sompi per vault input.
+
+5. Proving (the terms guest is unchanged and J has the same length, so the work proved is the same)
+  raw: the PROVE lines of docs/measurements/v4-zk-units.txt (v4.1, this branch) and of the same file at main dcefe89 (v4.0); each is the prover's own timings file (impulse-zk-prove-terms --timings)
+  | Receipt | user cycles v4.0 | user cycles v4.1 | segments (both) | total ms v4.0 | total ms v4.1 (not comparable: machine under load) |
+  | --- | --- | --- | --- | --- | --- |
+  | kas-0 | 2233589 | 2233589 | 3 | 361087 | 829160 |
+  | kas-1 | 2091513 | 2091513 | 3 | 334302 | 702131 |
+  | kcc20-0 | 2713850 | 2713850 | 3 | 421898 | 674569 |
+  | kcc20-1 | 2733198 | 2733198 | 3 | 409549 | 610447 |
+  | external-0 | 1945067 | 1945067 | 2 | 285975 | 510619 |
+  | refund-asset-depositor | 2075346 | 2075346 | 3 | 331783 | 655551 |
+  | refund-asset-counterparty | 2074923 | 2074923 | 3 | 337205 | 535942 |
+  | refund-cash-authority | 1651807 | 1651807 | 2 | 294120 | 497374 |
+  | refund-cash-depositor | 2138535 | 2138535 | 3 | 333780 | 563561 |
+  | refund-earmarked | 2075592 | 2075599 | 3 | 336891 | 693964 |
+  | refund-asset-v4.1 (new test) | | 2081847 | 3 | | 931619 |
+  | refund-asset-v4.0 (new test, a v4.0 vault) | 2081847 | | 3 | 692315 | |
+  Cycles and segments are identical for every shape both runs proved (refund-earmarked differs by 7 user cycles: its throwaway keys are drawn per run). The new test proves the same refund shape for a v4.1 and a v4.0 vault with the same cycle count.
+  Wall time is not comparable between the two runs: the v4.1 run shared the laptop with other proving and test jobs (1-minute load average 87 at the start of scripts/ci-zk.sh, between about 80 and 280 during the run, against about 20 for the v4.0 run). No proving-time delta is claimed. The idle-machine checkpoint of the terms guest remains docs/evidence/i21-proving-2026-10-15 (total 514.6 / 532.0 / 565.1 s, settle-kcc20-asset witness), valid for v4.1 because the guest, its image ID and the journal length are unchanged.

@@ -1,0 +1,7 @@
+# Highest MSRV across the pins: silverscript v1.0.0 declares 1.94.0, rusty-kaspa a41a333 declares 1.91.0.
+# wasm32-unknown-unknown added in I9 for impulse-wasm.
+[toolchain]
+channel = "1.94.0"
+components = ["rustfmt", "clippy"]
+targets = ["wasm32-unknown-unknown"]
+profile = "minimal"

@@ -1,0 +1,1 @@
+proof written: ~/impulse/docs/evidence/i21-proving-2026-10-15/raw/run1-proof.json (journal_hash c8ee30ea9c21baaebebb40bb19c889aa9cc1de012a7d8e46d4bedc882fe62163)

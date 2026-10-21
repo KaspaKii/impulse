@@ -1,0 +1,5 @@
+# Added in I9. getrandom 0.3, reached through rusty-kaspa (ahash), compiles on
+# wasm32-unknown-unknown only with an explicit backend; impulse-wasm enables the matching
+# `wasm_js` feature. Native builds are unaffected.
+[target.wasm32-unknown-unknown]
+rustflags = ["--cfg", 'getrandom_backend="wasm_js"']

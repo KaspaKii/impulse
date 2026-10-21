@@ -1,0 +1,18 @@
+# Copyright (c) 2026 the Impulse authors. A KiiLabs product. Licensed under the Apache License, Version 2.0.
+# No workspace inheritance: the terms guest depends on this crate by path from its own workspace.
+# The statement of spec/V3-ZK.md section 22.4 as plain functions: the guest, the host checker and
+# the differential test against template v1 call the same code.
+[package]
+name = "impulse-terms-core"
+version = "0.3.0-alpha"
+edition = "2021"
+license = "Apache-2.0"
+
+[lib]
+name = "terms_core"
+
+[dependencies]
+blake2b_simd = { version = "1.0.3", default-features = false }
+blake3 = { version = "1.8.3", default-features = false }
+sha2 = { version = "0.10.9", default-features = false }
+k256 = { version = "=0.13.4", default-features = false, features = ["arithmetic"] }

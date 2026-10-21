@@ -1,0 +1,12 @@
+{
+  "name": "09-manifest-testnet",
+  "description": "A list manifest for the three-entry fixture list, testnet, a later version.",
+  "network": "testnet",
+  "list_id": "fixture-list-3",
+  "list_version": 2,
+  "issued_at": 1760086400,
+  "list_root": "a864dee9ceffae07ba81ad8f25bc472c107ddfa4f4f260c31a6462709c962721",
+  "manifest": "01010e666978747572652d6c6973742d33000000020000000068e8c980a864dee9ceffae07ba81ad8f25bc472c107ddfa4f4f260c31a6462709c962721",
+  "digest_key": "Impulse/zk/manifest/v1",
+  "manifest_digest": "7318c5eef43f631cdb03004cc221cc5fed8213e19653041c55b7287e7bcceadd"
+}

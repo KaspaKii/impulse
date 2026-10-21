@@ -1,0 +1,25 @@
+
+# D5 evidence only: build against rusty-kaspa v2.1.0 (01b532e).
+[patch."https://github.com/kaspanet/rusty-kaspa"]
+kaspa-addresses = { path = "/private/tmp/scratch/d5/rk/crypto/addresses" }
+kaspa-consensus = { path = "/private/tmp/scratch/d5/rk/consensus" }
+kaspa-consensus-client = { path = "/private/tmp/scratch/d5/rk/consensus/client" }
+kaspa-consensus-core = { path = "/private/tmp/scratch/d5/rk/consensus/core" }
+kaspa-consensus-notify = { path = "/private/tmp/scratch/d5/rk/consensus/notify" }
+kaspa-consensusmanager = { path = "/private/tmp/scratch/d5/rk/components/consensusmanager" }
+kaspa-core = { path = "/private/tmp/scratch/d5/rk/core" }
+kaspa-database = { path = "/private/tmp/scratch/d5/rk/database" }
+kaspa-hashes = { path = "/private/tmp/scratch/d5/rk/crypto/hashes" }
+kaspa-math = { path = "/private/tmp/scratch/d5/rk/math" }
+kaspa-merkle = { path = "/private/tmp/scratch/d5/rk/crypto/merkle" }
+kaspa-muhash = { path = "/private/tmp/scratch/d5/rk/crypto/muhash" }
+kaspa-notify = { path = "/private/tmp/scratch/d5/rk/notify" }
+kaspa-pow = { path = "/private/tmp/scratch/d5/rk/consensus/pow" }
+kaspa-seq-commit = { path = "/private/tmp/scratch/d5/rk/consensus/seq-commit" }
+kaspa-smt = { path = "/private/tmp/scratch/d5/rk/crypto/smt" }
+kaspa-smt-store = { path = "/private/tmp/scratch/d5/rk/consensus/smt-store" }
+kaspa-txscript = { path = "/private/tmp/scratch/d5/rk/crypto/txscript" }
+kaspa-txscript-errors = { path = "/private/tmp/scratch/d5/rk/crypto/txscript/errors" }
+kaspa-txscript-zk-sdk = { path = "/private/tmp/scratch/d5/rk/crypto/txscript/zk-sdk" }
+kaspa-utils = { path = "/private/tmp/scratch/d5/rk/utils" }
+kaspa-wasm-core = { path = "/private/tmp/scratch/d5/rk/wasm/core" }

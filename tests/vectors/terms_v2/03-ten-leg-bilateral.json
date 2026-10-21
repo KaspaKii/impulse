@@ -1,0 +1,205 @@
+{
+  "name": "03-ten-leg-bilateral",
+  "description": "The ten-leg bilateral list of the I16 brief: two parties, nine KCC-20 legs alternating between them and one KAS leg, with a settlement authority. The parties agreed the list; Impulse settles it and computes nothing from it. Mainnet.",
+  "terms": {
+    "version": 2,
+    "network": "mainnet",
+    "nonce": "1313754702",
+    "authority_key": "4a90052e5c90a8b21e84a231dd14be0ea3b5ba32eda078aca4419b891af63427",
+    "legs": [
+      {
+        "depositor_key": "3688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c",
+        "asset": {
+          "kind": "kcc20",
+          "covenant_id": "1010101010101010101010101010101010101010101010101010101010101010",
+          "template_hash": "2a5713a61a2c350c9f76583746d95054ef6bb4160e1c338239249549929b9c9c",
+          "template_prefix_len": 1,
+          "template_suffix_len": 1460,
+          "amount": "1000"
+        },
+        "delivery": {
+          "identifier_type": "pubkey",
+          "identifier": "624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f"
+        },
+        "refund": {
+          "identifier_type": "pubkey",
+          "identifier": "3688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c"
+        }
+      },
+      {
+        "depositor_key": "624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f",
+        "asset": {
+          "kind": "kcc20",
+          "covenant_id": "1111111111111111111111111111111111111111111111111111111111111111",
+          "template_hash": "2a5713a61a2c350c9f76583746d95054ef6bb4160e1c338239249549929b9c9c",
+          "template_prefix_len": 1,
+          "template_suffix_len": 1460,
+          "amount": "2000"
+        },
+        "delivery": {
+          "identifier_type": "pubkey",
+          "identifier": "3688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c"
+        },
+        "refund": {
+          "identifier_type": "pubkey",
+          "identifier": "624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f"
+        }
+      },
+      {
+        "depositor_key": "3688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c",
+        "asset": {
+          "kind": "kcc20",
+          "covenant_id": "1212121212121212121212121212121212121212121212121212121212121212",
+          "template_hash": "2a5713a61a2c350c9f76583746d95054ef6bb4160e1c338239249549929b9c9c",
+          "template_prefix_len": 1,
+          "template_suffix_len": 1460,
+          "amount": "3000"
+        },
+        "delivery": {
+          "identifier_type": "pubkey",
+          "identifier": "624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f"
+        },
+        "refund": {
+          "identifier_type": "pubkey",
+          "identifier": "3688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c"
+        }
+      },
+      {
+        "depositor_key": "624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f",
+        "asset": {
+          "kind": "kcc20",
+          "covenant_id": "1313131313131313131313131313131313131313131313131313131313131313",
+          "template_hash": "2a5713a61a2c350c9f76583746d95054ef6bb4160e1c338239249549929b9c9c",
+          "template_prefix_len": 1,
+          "template_suffix_len": 1460,
+          "amount": "4000"
+        },
+        "delivery": {
+          "identifier_type": "pubkey",
+          "identifier": "3688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c"
+        },
+        "refund": {
+          "identifier_type": "pubkey",
+          "identifier": "624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f"
+        }
+      },
+      {
+        "depositor_key": "3688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c",
+        "asset": {
+          "kind": "kcc20",
+          "covenant_id": "1414141414141414141414141414141414141414141414141414141414141414",
+          "template_hash": "2a5713a61a2c350c9f76583746d95054ef6bb4160e1c338239249549929b9c9c",
+          "template_prefix_len": 1,
+          "template_suffix_len": 1460,
+          "amount": "5000"
+        },
+        "delivery": {
+          "identifier_type": "pubkey",
+          "identifier": "624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f"
+        },
+        "refund": {
+          "identifier_type": "pubkey",
+          "identifier": "3688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c"
+        }
+      },
+      {
+        "depositor_key": "624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f",
+        "asset": {
+          "kind": "kcc20",
+          "covenant_id": "1515151515151515151515151515151515151515151515151515151515151515",
+          "template_hash": "2a5713a61a2c350c9f76583746d95054ef6bb4160e1c338239249549929b9c9c",
+          "template_prefix_len": 1,
+          "template_suffix_len": 1460,
+          "amount": "6000"
+        },
+        "delivery": {
+          "identifier_type": "pubkey",
+          "identifier": "3688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c"
+        },
+        "refund": {
+          "identifier_type": "pubkey",
+          "identifier": "624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f"
+        }
+      },
+      {
+        "depositor_key": "3688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c",
+        "asset": {
+          "kind": "kcc20",
+          "covenant_id": "1616161616161616161616161616161616161616161616161616161616161616",
+          "template_hash": "2a5713a61a2c350c9f76583746d95054ef6bb4160e1c338239249549929b9c9c",
+          "template_prefix_len": 1,
+          "template_suffix_len": 1460,
+          "amount": "7000"
+        },
+        "delivery": {
+          "identifier_type": "pubkey",
+          "identifier": "624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f"
+        },
+        "refund": {
+          "identifier_type": "pubkey",
+          "identifier": "3688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c"
+        }
+      },
+      {
+        "depositor_key": "624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f",
+        "asset": {
+          "kind": "kcc20",
+          "covenant_id": "1717171717171717171717171717171717171717171717171717171717171717",
+          "template_hash": "2a5713a61a2c350c9f76583746d95054ef6bb4160e1c338239249549929b9c9c",
+          "template_prefix_len": 1,
+          "template_suffix_len": 1460,
+          "amount": "8000"
+        },
+        "delivery": {
+          "identifier_type": "pubkey",
+          "identifier": "3688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c"
+        },
+        "refund": {
+          "identifier_type": "pubkey",
+          "identifier": "624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f"
+        }
+      },
+      {
+        "depositor_key": "3688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c",
+        "asset": {
+          "kind": "kcc20",
+          "covenant_id": "1818181818181818181818181818181818181818181818181818181818181818",
+          "template_hash": "2a5713a61a2c350c9f76583746d95054ef6bb4160e1c338239249549929b9c9c",
+          "template_prefix_len": 1,
+          "template_suffix_len": 1460,
+          "amount": "9000"
+        },
+        "delivery": {
+          "identifier_type": "pubkey",
+          "identifier": "624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f"
+        },
+        "refund": {
+          "identifier_type": "pubkey",
+          "identifier": "3688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c"
+        }
+      },
+      {
+        "depositor_key": "624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f",
+        "asset": {
+          "kind": "kas",
+          "amount": "300000000"
+        },
+        "delivery": {
+          "identifier_type": "pubkey",
+          "identifier": "3688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c"
+        },
+        "refund": {
+          "identifier_type": "script_hash",
+          "identifier": "6511b5280f1cebe32de116c06c4c68f8d6f3cee94ac028df8b3f57bbb8fa0e74"
+        }
+      }
+    ],
+    "earliest_daa": "1000000",
+    "expiry_daa": "2000000",
+    "funding_mode": "revocable",
+    "partial": null,
+    "trade_ref": "2a5495227823385a86971651a3b6b68ed71311d73f43e9fd3a92ab53f1c4d7ce"
+  },
+  "canonical": "02004e4e4e4e00000000014a90052e5c90a8b21e84a231dd14be0ea3b5ba32eda078aca4419b891af634270a3688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c0110101010101010101010101010101010101010101010101010101010101010102a5713a61a2c350c9f76583746d95054ef6bb4160e1c338239249549929b9c9c01000000b4050000e80300000000000000624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f003688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f0111111111111111111111111111111111111111111111111111111111111111112a5713a61a2c350c9f76583746d95054ef6bb4160e1c338239249549929b9c9c01000000b4050000d007000000000000003688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c00624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f3688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c0112121212121212121212121212121212121212121212121212121212121212122a5713a61a2c350c9f76583746d95054ef6bb4160e1c338239249549929b9c9c01000000b4050000b80b00000000000000624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f003688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f0113131313131313131313131313131313131313131313131313131313131313132a5713a61a2c350c9f76583746d95054ef6bb4160e1c338239249549929b9c9c01000000b4050000a00f000000000000003688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c00624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f3688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c0114141414141414141414141414141414141414141414141414141414141414142a5713a61a2c350c9f76583746d95054ef6bb4160e1c338239249549929b9c9c01000000b4050000881300000000000000624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f003688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f0115151515151515151515151515151515151515151515151515151515151515152a5713a61a2c350c9f76583746d95054ef6bb4160e1c338239249549929b9c9c01000000b40500007017000000000000003688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c00624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f3688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c0116161616161616161616161616161616161616161616161616161616161616162a5713a61a2c350c9f76583746d95054ef6bb4160e1c338239249549929b9c9c01000000b4050000581b00000000000000624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f003688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f0117171717171717171717171717171717171717171717171717171717171717172a5713a61a2c350c9f76583746d95054ef6bb4160e1c338239249549929b9c9c01000000b4050000401f000000000000003688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c00624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f3688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c0118181818181818181818181818181818181818181818181818181818181818182a5713a61a2c350c9f76583746d95054ef6bb4160e1c338239249549929b9c9c01000000b4050000282300000000000000624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f003688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f0000a3e11100000000003688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c016511b5280f1cebe32de116c06c4c68f8d6f3cee94ac028df8b3f57bbb8fa0e740140420f000000000080841e000000000000002a5495227823385a86971651a3b6b68ed71311d73f43e9fd3a92ab53f1c4d7ce",
+  "terms_hash": "3c60cc7c2646996074eff9557f4a24cfab0acfdbcd09defb0b9d13256c4008d8"
+}

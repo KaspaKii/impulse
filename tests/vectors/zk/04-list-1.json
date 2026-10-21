@@ -1,0 +1,47 @@
+{
+  "name": "04-list-1",
+  "description": "A list of one entry (owner A). The path of entry 0 has 20 siblings: the empty subtrees of height 0 to 19.",
+  "depth": 20,
+  "entry_count": 1,
+  "entries": [
+    {
+      "owner_type": "pubkey",
+      "owner_id": "79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798",
+      "owner_spk": "00002079be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798ac",
+      "salt": "4504be1d15a03522fbdb52ec1950dff20234f59a95a9666822944e298cf118dc",
+      "leaf": "ddbd1cd0d8647ded9dd814821b90e3dab400b6e54732315862b4d76aacebf4ad"
+    }
+  ],
+  "root": "9bcc938724ce3c153bb7c53dec8ca7a7a722b5e8161c66a61946363e2a5e0929",
+  "paths": [
+    {
+      "index": 0,
+      "owner_type": "pubkey",
+      "owner_id": "79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798",
+      "owner_spk": "00002079be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798ac",
+      "salt": "4504be1d15a03522fbdb52ec1950dff20234f59a95a9666822944e298cf118dc",
+      "siblings": [
+        "0000000000000000000000000000000000000000000000000000000000000000",
+        "ae0798d0ecaed2b778eddebf18f071a561c53658c05e76cedecc27cafbdbc577",
+        "90534fe0aff6db9edb29eee74e78a386916a581c8e6465349493e1a6c87241e1",
+        "bea16162721bca4b6e1782cbdc695a471522157c6716f508db47c599195340f4",
+        "30765fef341bdfe749c391bf956a9f03d363941b2eb8f85ab16bb6eb0d3c4def",
+        "f1a0a71a6550c41bc8d4dac4f186b6d274a839f2f95ad9e3bb651d45810c5a1f",
+        "c6984907d2e534964351393bc85f04374065b63870cc859c68192def090c1017",
+        "dc0606b906238dd157e69cb261e75696007e4d9a3f707a7ce10ce410d08bcfec",
+        "8e4b3745e5f2f7d48e36b192cb39242fa0f7a76fac1e36a519d8ebe00f3e21fb",
+        "bd752b8e76f5f891e5d3a10352dbf3ac25123b6eb48a3ad154020cd0c84d2176",
+        "29398d48e1a1a9f3c8e0f97b0f8c066d2beaf88a319baef02a5482d6157ebd2b",
+        "76dc94f187362590f6fd2f1e2b1b8c8f06d7439080b4a499ae6b267ab1b5cc31",
+        "d100399f607ba956d68737045ea9eb3e75475dfa633b7cabecf0afa05c9f3af8",
+        "3e46222c092b9baa5a16df1dc2864c7cb5fb79609d096ac2a10d64f824d1c73a",
+        "8cf2c9bd2369a3b9e0bbdd2cee634605440adb2d70b15263dbe7d0d16ebfc03d",
+        "fbbb942587ef256738d2bbb0506423880206cfbfa2ed4d340d796b0f7e290980",
+        "bbc84bb1eca9b98b546708cadcf829983dd03da168f65aeae21724003072c21a",
+        "669b03f8ec7153d9f9db779449f504489942359aab734d938417889394394b09",
+        "a3f6714a23c8f9b91fb3dd6e311bd1cf5f8bcb3618dee8ae5cd7ab0ec40c0876",
+        "0bd2118fbd68fa6bb6733596bb879f571bd648821f7437419dcf49f5078f1db8"
+      ]
+    }
+  ]
+}

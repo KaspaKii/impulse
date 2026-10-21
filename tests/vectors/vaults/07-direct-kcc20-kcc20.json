@@ -1,0 +1,13 @@
+{
+  "name": "07-direct-kcc20-kcc20",
+  "terms_hash": "12e53ad167a7757bca77713754341e6f6deaa0fd8ef717f8c5d3a83995c0cb0b",
+  "template_hash": "ec92ce9d06ff2f57a4f547b724b6fdfe9d9fa62814e687d8670ae96d331e6f02",
+  "asset_vault": {
+    "leg_index": 0,
+    "refused": "TEMPLATE_NO_VAULT"
+  },
+  "cash_vault": {
+    "leg_index": 1,
+    "refused": "TEMPLATE_NO_VAULT"
+  }
+}

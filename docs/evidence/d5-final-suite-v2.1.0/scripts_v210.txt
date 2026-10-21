@@ -1,0 +1,5 @@
+building impulse with the offline-fake-node feature
+test-cli-scripts: 85 checks passed, 0 failed
+test-cli-scripts exit 0
+test-frost-scripts: ok
+test-frost-scripts exit 0

@@ -1,0 +1,5 @@
+target/
+artifacts/
+# Keep the generated seeds (seed-*); drop what the fuzzer found. scripts/fuzz.sh regenerates seeds.
+corpus/*/*
+!corpus/*/seed-*

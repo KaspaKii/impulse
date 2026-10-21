@@ -1,0 +1,87 @@
+diff --git a/Cargo.toml b/Cargo.toml
+index fb021cc..7a15113 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -36,3 +36,24 @@ proptest = { version = "1.11.0", default-features = false, features = ["std"] }
+ # Added in I3 (engine tests read the committed constructor args JSON, as silverc does). Since I4
+ # also a normal dependency of impulse-core, which parses the embedded template artifact.
+ serde_json = "1.0.151"
++
++# D5 evidence only (scratch copy): build every rusty-kaspa crate from tag v2.1.0 (01b532e).
++[patch."https://github.com/kaspanet/rusty-kaspa"]
++kaspa-addresses = { path = "/private/tmp/scratch/d5/rk/crypto/addresses" }
++kaspa-consensus-core = { path = "/private/tmp/scratch/d5/rk/consensus/core" }
++kaspa-core = { path = "/private/tmp/scratch/d5/rk/core" }
++kaspa-hashes = { path = "/private/tmp/scratch/d5/rk/crypto/hashes" }
++kaspa-math = { path = "/private/tmp/scratch/d5/rk/math" }
++kaspa-merkle = { path = "/private/tmp/scratch/d5/rk/crypto/merkle" }
++kaspa-muhash = { path = "/private/tmp/scratch/d5/rk/crypto/muhash" }
++kaspa-smt = { path = "/private/tmp/scratch/d5/rk/crypto/smt" }
++kaspa-txscript = { path = "/private/tmp/scratch/d5/rk/crypto/txscript" }
++kaspa-txscript-errors = { path = "/private/tmp/scratch/d5/rk/crypto/txscript/errors" }
++kaspa-txscript-zk-sdk = { path = "/private/tmp/scratch/d5/rk/crypto/txscript/zk-sdk" }
++kaspa-utils = { path = "/private/tmp/scratch/d5/rk/utils" }
++
++# D5 evidence only (scratch copy): silverscript v1.0.0 (3ed9733) vendored with the minimum
++# source adaptation to the v2.1.0 API (removed covenants_enabled flag and *_POST_TOCCATA helpers).
++[patch."https://github.com/kaspanet/silverscript"]
++silverscript-abi = { path = "/private/tmp/scratch/d5/ss/silverscript-abi" }
++silverscript-lang = { path = "/private/tmp/scratch/d5/ss/silverscript-lang" }
+diff --git a/crates/impulse-core/src/terms/validate.rs b/crates/impulse-core/src/terms/validate.rs
+index 64130a2..19f4af8 100644
+--- a/crates/impulse-core/src/terms/validate.rs
++++ b/crates/impulse-core/src/terms/validate.rs
+@@ -11,7 +11,7 @@ use super::{
+ use kaspa_consensus_core::constants::{LOCK_TIME_THRESHOLD, MAX_SOMPI};
+ use kaspa_consensus_core::tx::ScriptPublicKey;
+ use kaspa_txscript::script_class::ScriptClass;
+-use kaspa_txscript::MAX_SCRIPTS_SIZE_POST_TOCCATA;
++use kaspa_txscript::MAX_SCRIPTS_SIZE;
+ use secp256k1::{PublicKey, XOnlyPublicKey};
+ 
+ /// About one year of DAA score: 365 days at 10 DAA per second. Modelled, not measured: it
+@@ -20,7 +20,7 @@ pub const DEFAULT_MAX_EXPIRY_HORIZON_DAA: u64 = 365 * 24 * 60 * 60 * 10;
+ 
+ /// Upper bound on a KCC-20 template's prefix plus suffix length: the post-Toccata consensus
+ /// script size limit (rusty-kaspa a41a333), since the template is part of one script.
+-pub const MAX_TEMPLATE_LEN: u64 = MAX_SCRIPTS_SIZE_POST_TOCCATA as u64;
++pub const MAX_TEMPLATE_LEN: u64 = MAX_SCRIPTS_SIZE as u64;
+ 
+ /// What the creation checks compare the terms with.
+ #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+diff --git a/tests/engine/harness.rs b/tests/engine/harness.rs
+index c525fb9..e373fa3 100644
+--- a/tests/engine/harness.rs
++++ b/tests/engine/harness.rs
+@@ -421,7 +421,6 @@ pub fn sign(tx: &Transaction, entries: &[UtxoEntry], idx: usize, keypair: &Keypa
+ /// Engine flags as consensus sets them after Toccata on mainnet.
+ pub fn engine_flags() -> EngineFlags {
+     EngineFlags {
+-        covenants_enabled: true,
+         sigop_script_units: Gram(MAINNET_PARAMS.mass_per_sig_op).into(),
+     }
+ }
+@@ -459,6 +458,14 @@ fn run(tx: &Transaction, entries: &[UtxoEntry], idx: usize, limit: ScriptUnits)
+         limit,
+     );
+     let result = vm.execute();
++    // D5 instrumentation (scratch copy only): log every engine run when IMPULSE_D5_LOG is set.
++    if let Some(path) = std::env::var_os("IMPULSE_D5_LOG") {
++        use std::io::Write;
++        let test = std::thread::current().name().unwrap_or("?").to_string();
++        let mut f = std::fs::OpenOptions::new().create(true).append(true).open(path).expect("log");
++        let line = format!("{}::{}\tinput {}\tlimit {}\tunits {}\t{:?}\n", env!("CARGO_CRATE_NAME"), test, idx, limit.0, vm.used_script_units().0, result);
++        f.write_all(line.as_bytes()).expect("log");
++    }
+     Run {
+         result,
+         used: vm.used_script_units(),
+@@ -489,7 +496,7 @@ pub fn compute_mass(tx: &Transaction) -> u64 {
+ 
+ /// Mainnet per-block compute mass limit in grams.
+ pub fn block_compute_mass_limit() -> u64 {
+-    MAINNET_PARAMS.prior_block_mass_limits.compute
++    MAINNET_PARAMS.block_mass_limits.compute
+ }
+ 
+ /// Smallest compute budget whose allowance (budget units plus the free per-input allowance) covers `used`.

@@ -1,0 +1,2 @@
+impulse_core	223	0	3	0	0	ok	unittests src/lib.rs
+doctests:impulse_core	2	0	0	0	0	ok	doctests

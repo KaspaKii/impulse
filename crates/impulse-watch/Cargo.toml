@@ -1,0 +1,30 @@
+[package]
+name = "impulse-watch"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[[bin]]
+name = "impulse-watch"
+path = "src/main.rs"
+
+[dependencies]
+borsh.workspace = true
+clap.workspace = true
+impulse-core = { path = "../impulse-core" }
+kaspa-consensus-core.workspace = true
+kaspa-txscript.workspace = true
+kaspa-wrpc-client.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tokio = { workspace = true, features = ["macros"] }
+
+[dev-dependencies]
+# The fake wRPC node of tests/e2e.rs is a workflow-rpc server speaking the node's own Borsh
+# protocol. All three are in the lock already, at the versions kaspa-wrpc-client uses.
+async-trait = "0.1.88"
+# The e2e test's link-cutting proxy (net, io-util) and its waits (time); same tokio, features only.
+tokio = { workspace = true, features = ["net", "io-util", "time"] }
+workflow-rpc = { version = "0.18.0", default-features = false, features = ["rustls-tls-webpki-roots"] }
+workflow-serializer = "0.18.0"

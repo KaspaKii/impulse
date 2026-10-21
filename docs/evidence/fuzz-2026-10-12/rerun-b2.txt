@@ -1,0 +1,11 @@
+   Compiling impulse-fuzz v0.0.0 (~/impulse/fuzz)
+    Finished `release` profile [optimized + debuginfo] target(s) in 5.08s
+warning: the following packages contain code that will be rejected by a future version of Rust: block v0.1.6
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 1`
+==> cli_rpc_wire
+Done 1523764 runs in 601 second(s)
+stat::number_of_executed_units: 1523764
+stat::average_exec_per_sec:     2535
+stat::new_units_added:          413
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              381

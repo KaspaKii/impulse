@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<!-- Copyright (c) 2026 the Impulse authors. A KiiLabs product. Licensed under the Apache License, Version 2.0. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self'; connect-src 'self' wss: ws://localhost:* ws://127.0.0.1:*; img-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Impulse settlement console</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+<script type="module" src="main.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to the steps</a>
+<header class="topbar">
+  <div class="brand">
+    <h1><img class="brand-word" src="impulse-wordmark.svg" alt="Impulse" width="77" height="26"></h1>
+    <span class="brand-sub">Settlement console</span>
+  </div>
+  <nav class="tabs" aria-label="Pages"><a href="index.html" aria-current="page">Trade</a> <a href="decoder.html">Decoder</a></nav>
+  <details class="help-menu" id="warnings">
+    <summary>Help: before you send anything</summary>
+    <div class="help-pop">
+      <ul class="points">
+        <li>Read the four destinations before you fund: the role check does not say who controls a pinned script.</li>
+        <li>Fund only your own leg: the seller the asset vault, the buyer the cash vault.</li>
+        <li>Check the amount in KAS and in sompi (1 KAS is 100000000 sompi) in your wallet before you send.</li>
+        <li>A KCC-20 leg needs two outputs, the token and a little KAS: this page gives the vault address only.</li>
+        <li>Wallets here live in this page's memory only: reload, close or Wipe destroys the key and any KAS in it.</li>
+        <li>This page funds the buyer's KAS cash leg, and builds, signs and submits the settle, the Direct trade and the refund.</li>
+      </ul>
+      <details class="help">
+        <summary>Details</summary>
+        <p class="hint">The role check ran for the role and key you gave: your two destinations pay your key or equal the pins you gave, and neither pays the counterparty or the authority. It does not say who controls a script you pinned, and it does not read the token. Read the four destinations above.</p>
+        <p class="hint">Only the depositor of a leg funds its vault: the seller the asset vault, the buyer the cash vault. The page gives a funding URI and a QR code only for your own leg. Send nothing to the other vault.</p>
+        <p class="hint">The funding URI states the amount in sompi (1 KAS is 100000000 sompi). Whether your wallet reads the amount as sompi is not yet checked against real wallets: confirm the wallet shows exactly the amount in KAS and sompi given here before you send.</p>
+        <p class="hint">A KCC-20 leg is funded with two outputs, the escrowed token and a little KAS; no single URI can say that. This build gives the vault address and the token owner only.</p>
+        <p class="hint">The wallets in this page exist in this page's memory only. Reloading or closing the page, or pressing Wipe, destroys the key, and any KAS in that wallet is then unrecoverable. This page has no control that shows or exports a key, so it cannot back one up. Whatever a trade pays to a wallet's key cannot be spent from this page except as a fee input or token input of another transaction it builds. A deposit the buyer funds into a cash vault from a wallet can be taken back by the buyer only with a refund signed by that wallet's key (from the expiry, in earmarked mode), so closing the page or wiping that wallet before the trade settles leaves the refund to the seller's or the authority's goodwill.</p>
+        <p class="hint">This page funds one thing: the buyer's KAS cash leg, from a wallet of this page, with the wallet's own UTXOs. It does not fund a KCC-20 leg; the seller does that with the command line. It also builds, signs and submits the settle, the Direct trade and the refund, from the UTXOs the connected node reports. Whether a real node accepts what it builds has not been checked: the wire forms are written from the source of the node software and tested against an offline stand-in.</p>
+      </details>
+    </div>
+  </details>
+  <div class="topbar-state" aria-hidden="true">
+    <span class="net-badge"></span>
+    <span class="node-indicator"><span class="dot"></span><span class="node-word"></span></span>
+  </div>
+</header>
+
+<div class="banner-row">
+  <p id="status-banner" class="banner">This page refuses a trade whose declared KAS value, or whose native KAS leg, is above <span id="cap-kas">10.00000000</span> KAS. Non-custodial software, not advice or an offer.</p>
+  <details class="banner-details" id="banner-details">
+    <summary>Details</summary>
+    <p class="hint">For a token leg the value is the figure you declare, and nothing checks it. Nothing here is advice or an offer. Impulse is non-custodial, issues no asset or token, and does not check issuer terms or sanctions obligations; those stay your own responsibility. Use only funds you can afford to lose.</p>
+  </details>
+</div>
+
+<div class="shell">
+<nav class="rail" aria-label="Steps">
+  <p class="rail-label">Workflow</p>
+  <ol class="steps">
+    <li class="step" data-step="node"><a href="#network-panel"><span class="step-n">1</span><span class="step-name">Network and node</span></a></li>
+    <li class="step" data-step="wallets"><a href="#wallet-panel"><span class="step-n">2</span><span class="step-name">Wallets</span></a></li>
+    <li class="step" data-step="terms"><a href="#load-panel"><span class="step-n">3</span><span class="step-name">Terms</span></a></li>
+    <li class="step" data-step="role"><a href="#you"><span class="step-n">4</span><span class="step-name">Role check</span></a></li>
+    <li class="step" data-step="fund"><a href="#fund-options"><span class="step-n">5</span><span class="step-name">Fund</span></a></li>
+    <li class="step" data-step="settle"><a href="#settle-block"><span class="step-n">6</span><span class="step-name">Settle</span></a></li>
+    <li class="step" data-step="refund"><a href="#refund-options"><span class="step-n">7</span><span class="step-name">Refund</span></a></li>
+  </ol>
+  <p class="rail-label">Result</p>
+  <ul class="rail-states">
+    <li class="rail-state" data-for="result"><span class="dot"></span><a href="#result">Terms and role check</a></li>
+    <li class="rail-state" data-for="review"><span class="dot"></span><a href="#review-panel">Review and submit</a></li>
+  </ul>
+</nav>
+
+<main id="main">
+<div class="panel" id="step-node">
+  <h2 class="panel-title"><span class="step-tag">01</span>Network and node</h2>
+  <div class="split">
+    <section id="network-panel" class="sub">
+      <h3 class="sub-title">Network</h3>
+      <dl class="kv"><dt>Active network</dt><dd><strong id="network-name">testnet</strong></dd></dl>
+      <label class="switch"><input type="checkbox" id="mainnet-switch"> Enable mainnet (real funds)</label>
+      <div id="mainnet-notice" class="notice warn" role="alert" hidden>
+        <strong>Mainnet is on.</strong> This page moves real funds, and it refuses a trade whose declared KAS value or native KAS leg is above the cap, but a token leg's value is the figure you declare and nothing checks it. Use only funds you can lose. On mainnet this page refuses a creation DAA score you type; it must be read from the node you connect to, over wss://, or over ws:// to localhost or 127.0.0.1. The wallets below hold real keys: a wallet that is lost is lost with whatever KAS it holds, and on mainnet the SDK refuses any destination of your role, or any change, that pays a key of these wallets.
+      </div>
+    </section>
+
+    <section id="node-panel" class="sub">
+      <h3 class="sub-title">Node</h3>
+      <label>Node URL (wRPC JSON)
+        <input id="node-url" class="mono" autocomplete="off" spellcheck="false" placeholder="ws://127.0.0.1:18210">
+      </label>
+      <p class="hint"><code>wss://</code> to any host, or <code>ws://</code> to <code>localhost</code> or <code>127.0.0.1</code> only.</p>
+      <div class="row"><button type="button" class="primary" id="node-connect">Connect</button></div>
+      <p id="node-status" class="status-line" data-state="idle" aria-live="polite">Not connected.</p>
+      <details class="help">
+        <summary>Details</summary>
+        <p class="hint">The page talks to one node: the wRPC JSON address you type (a kaspad started with <code>--rpclisten-json</code>). It asks it for the DAA score and for the UTXOs of the addresses it names, and sends it one more thing, the signed transaction you submit. Nothing else leaves this page, and there is no default node.</p>
+        <p class="hint">This page's policy allows no other plaintext link than <code>ws://</code> to a kaspad on this machine, so a node reachable over the internet needs <code>wss://</code>.</p>
+      </details>
+    </section>
+  </div>
+</div>
+
+<section id="wallet-panel" class="panel">
+  <h2 class="panel-title"><span class="step-tag">02</span>Wallets</h2>
+  <p class="notice info">A wallet is a signing key and a source of fee inputs. Send a wallet only what it needs for fees.</p>
+  <div class="wallets">
+    <div class="wallet" id="wallet-a" data-wallet="a">
+      <div class="wallet-head">
+        <h3>Wallet A</h3>
+        <p class="wallet-state" data-state="none">No key yet.</p>
+      </div>
+      <p class="wallet-escrow" hidden></p>
+      <dl class="kv">
+        <dt>Public key</dt><dd class="wallet-key"></dd>
+        <dt>Address</dt><dd class="wallet-address"></dd>
+        <dt>Balance</dt><dd class="wallet-balance"></dd>
+      </dl>
+      <div class="row">
+        <button type="button" class="wallet-generate">Make a key</button>
+        <button type="button" class="wallet-wipe" disabled>Wipe</button>
+        <button type="button" class="wallet-refresh" disabled>Read balance</button>
+      </div>
+      <div class="row row-assign">
+        <span class="row-label">Use as</span>
+        <button type="button" class="wallet-use-me" disabled>I am this key</button>
+        <button type="button" class="wallet-use-seller" disabled>Seller key</button>
+        <button type="button" class="wallet-use-buyer" disabled>Buyer key</button>
+      </div>
+    </div>
+    <div class="wallet" id="wallet-b" data-wallet="b">
+      <div class="wallet-head">
+        <h3>Wallet B</h3>
+        <p class="wallet-state" data-state="none">No key yet.</p>
+      </div>
+      <p class="wallet-escrow" hidden></p>
+      <dl class="kv">
+        <dt>Public key</dt><dd class="wallet-key"></dd>
+        <dt>Address</dt><dd class="wallet-address"></dd>
+        <dt>Balance</dt><dd class="wallet-balance"></dd>
+      </dl>
+      <div class="row">
+        <button type="button" class="wallet-generate">Make a key</button>
+        <button type="button" class="wallet-wipe" disabled>Wipe</button>
+        <button type="button" class="wallet-refresh" disabled>Read balance</button>
+      </div>
+      <div class="row row-assign">
+        <span class="row-label">Use as</span>
+        <button type="button" class="wallet-use-me" disabled>I am this key</button>
+        <button type="button" class="wallet-use-seller" disabled>Seller key</button>
+        <button type="button" class="wallet-use-buyer" disabled>Buyer key</button>
+      </div>
+    </div>
+  </div>
+  <div class="row"><button type="button" id="wipe-all">Wipe both wallets</button></div>
+  <div id="wipe-confirm" class="notice warn" role="alertdialog" aria-labelledby="wipe-confirm-text" hidden data-names="">
+    <p id="wipe-confirm-text"></p>
+    <div class="row">
+      <button type="button" id="wipe-confirm-yes">Wipe anyway</button>
+      <button type="button" id="wipe-confirm-no">Keep the wallets</button>
+    </div>
+  </div>
+  <details class="help">
+    <summary>Details</summary>
+    <p class="hint">Two wallets made in this page, with keys the page draws from your browser's randomness. A key is held in memory only: this page's code never stores, shows, sends or logs a key, and has no button that exports one (the browser and the engine may keep copies of the bytes they handled, which the page cannot clear). It is wiped when you press Wipe, and when this page is hidden or closed. Pressing Wipe asks first when the last balance you read was above zero, and when the wallet funded a cash vault and this page has not seen that trade settled or refunded: the wallet's key is then the buyer's own way to refund the deposit, and a wipe destroys it.</p>
+    <p class="hint wallet-limits"><strong>A wallet is a signing key and a source of fee inputs, not a place to keep KAS.</strong> This page has no button that sends KAS from a wallet to an address you type: the only transactions it builds are the trade's own (the funding of the cash leg, the settle, the Direct trade, the refund). Whatever a trade pays to a wallet's key (the delivered token, the proceeds, a refund, the change) can be spent from this page only as an input of another transaction it builds, and is lost for good when the page is closed. So on mainnet the SDK refuses any destination of your role, and any change, that pays a key of these wallets: pin an address you control elsewhere for each of your destinations, and give a change address. On testnet it is allowed, and the result says so. Send a wallet only what it needs for fees.</p>
+  </details>
+</section>
+
+<section id="load-panel" class="panel">
+  <h2 class="panel-title"><span class="step-tag">03</span>Terms</h2>
+  <p class="hint">Fill the form, or load a golden vector. Party keys are public keys you type. The terms are not sent anywhere; the node you connect to sees the addresses you ask about and the transaction you build.</p>
+  <div class="load-row">
+    <label>Golden vector <select id="example"></select></label>
+    <button type="button" id="load-example">Load</button>
+  </div>
+  <label>Terms JSON <textarea id="terms-json" class="mono" rows="6" spellcheck="false" autocomplete="off"></textarea></label>
+  <div class="actions"><button type="button" id="load-json">Load JSON</button></div>
+  <p id="load-error" class="error" hidden></p>
+</section>
+
+<form id="terms-form" autocomplete="off" spellcheck="false">
+  <fieldset class="fields">
+    <legend>Trade</legend>
+    <input type="hidden" data-path="version" data-type="int">
+    <label>Network of the terms
+      <select data-path="network"><option>testnet</option><option>mainnet</option></select>
+    </label>
+    <label>Settlement mode
+      <select data-path="settlement_mode"><option>vault</option><option>direct</option></select>
+    </label>
+    <label>Funding mode
+      <select data-path="funding_mode"><option>earmarked</option><option>revocable</option></select>
+    </label>
+    <label>Nonce (u64)
+      <span class="inline"><input data-path="nonce" inputmode="numeric"><button type="button" id="new-nonce">New</button></span>
+    </label>
+    <label class="wide">Trade reference (32 bytes, hex)
+      <input data-path="trade_ref" class="mono">
+    </label>
+    <label>Earliest settlement DAA score (empty for none)
+      <input data-path="earliest_daa" data-type="nullable" inputmode="numeric">
+    </label>
+    <label>Expiry DAA score
+      <input data-path="expiry_daa" inputmode="numeric">
+    </label>
+  </fieldset>
+
+  <fieldset class="fields">
+    <legend>Parties (public keys, x-only, 64 hex digits)</legend>
+    <label class="wide">Seller key <input data-path="seller_key" class="mono"></label>
+    <label class="wide">Buyer key <input data-path="buyer_key" class="mono"></label>
+    <label class="wide">Settlement authority key (empty for none)
+      <input data-path="authority_key" data-type="nullable" class="mono">
+    </label>
+  </fieldset>
+
+  <fieldset class="fields">
+    <legend>Asset leg (funded by the seller)</legend>
+    <label>Kind
+      <select data-path="asset_leg.kind"><option>kcc20</option><option>kas</option><option>external</option></select>
+    </label>
+    <label>Amount (token units, or sompi for KAS) <input data-path="asset_leg.amount" inputmode="numeric"></label>
+    <div class="group" data-show-when="asset_leg.kind=kcc20">
+      <label class="wide">Token covenant id <input data-path="asset_leg.covenant_id" class="mono"></label>
+      <label class="wide">Token template hash <input data-path="asset_leg.template_hash" class="mono"></label>
+      <label>Template prefix length <input data-path="asset_leg.template_prefix_len" data-type="int" inputmode="numeric"></label>
+      <label>Template suffix length <input data-path="asset_leg.template_suffix_len" data-type="int" inputmode="numeric"></label>
+    </div>
+  </fieldset>
+
+  <fieldset class="fields">
+    <legend>Cash leg (funded by the buyer)</legend>
+    <label>Kind
+      <select data-path="cash_leg.kind"><option>kas</option><option>kcc20</option><option>external</option></select>
+    </label>
+    <label>Amount (sompi for KAS, token units, or opaque for external)
+      <input data-path="cash_leg.amount" inputmode="numeric">
+    </label>
+    <p class="echo" id="cash-kas"></p>
+    <div class="group" data-show-when="cash_leg.kind=kcc20">
+      <label class="wide">Token covenant id <input data-path="cash_leg.covenant_id" class="mono"></label>
+      <label class="wide">Token template hash <input data-path="cash_leg.template_hash" class="mono"></label>
+      <label>Template prefix length <input data-path="cash_leg.template_prefix_len" data-type="int" inputmode="numeric"></label>
+      <label>Template suffix length <input data-path="cash_leg.template_suffix_len" data-type="int" inputmode="numeric"></label>
+    </div>
+  </fieldset>
+
+  <fieldset class="fields span">
+    <legend>Destinations</legend>
+    <p class="hint wide">Where each leg goes on settlement or refund. A destination that names the counterparty's script pays your leg to the counterparty.</p>
+    <div class="dest" data-dest="buyer_delivery">
+      <label>Buyer delivery (asset arrives here)
+        <select data-path="buyer_delivery.kind"><option>kas</option><option>kcc20</option><option>off_chain</option></select>
+      </label>
+      <div class="group" data-show-when="buyer_delivery.kind=kas">
+        <label>Script version <input data-path="buyer_delivery.version" data-type="int"></label>
+        <label>Script (hex) <input data-path="buyer_delivery.script" class="mono"></label>
+      </div>
+      <div class="group" data-show-when="buyer_delivery.kind=kcc20">
+        <label>Owner type <select data-path="buyer_delivery.identifier_type"><option>pubkey</option><option>script_hash</option><option>covenant_id</option></select></label>
+        <label>Owner identifier (hex) <input data-path="buyer_delivery.identifier" class="mono"></label>
+      </div>
+    </div>
+    <div class="dest" data-dest="seller_proceeds">
+      <label>Seller proceeds (cash arrives here)
+        <select data-path="seller_proceeds.kind"><option>kas</option><option>kcc20</option><option>off_chain</option></select>
+      </label>
+      <div class="group" data-show-when="seller_proceeds.kind=kas">
+        <label>Script version <input data-path="seller_proceeds.version" data-type="int"></label>
+        <label>Script (hex) <input data-path="seller_proceeds.script" class="mono"></label>
+      </div>
+      <div class="group" data-show-when="seller_proceeds.kind=kcc20">
+        <label>Owner type <select data-path="seller_proceeds.identifier_type"><option>pubkey</option><option>script_hash</option><option>covenant_id</option></select></label>
+        <label>Owner identifier (hex) <input data-path="seller_proceeds.identifier" class="mono"></label>
+      </div>
+    </div>
+    <div class="dest" data-dest="seller_refund">
+      <label>Seller refund (asset returns here)
+        <select data-path="seller_refund.kind"><option>kas</option><option>kcc20</option><option>off_chain</option></select>
+      </label>
+      <div class="group" data-show-when="seller_refund.kind=kas">
+        <label>Script version <input data-path="seller_refund.version" data-type="int"></label>
+        <label>Script (hex) <input data-path="seller_refund.script" class="mono"></label>
+      </div>
+      <div class="group" data-show-when="seller_refund.kind=kcc20">
+        <label>Owner type <select data-path="seller_refund.identifier_type"><option>pubkey</option><option>script_hash</option><option>covenant_id</option></select></label>
+        <label>Owner identifier (hex) <input data-path="seller_refund.identifier" class="mono"></label>
+      </div>
+    </div>
+    <div class="dest" data-dest="buyer_refund">
+      <label>Buyer refund (cash returns here)
+        <select data-path="buyer_refund.kind"><option>kas</option><option>kcc20</option><option>off_chain</option></select>
+      </label>
+      <div class="group" data-show-when="buyer_refund.kind=kas">
+        <label>Script version <input data-path="buyer_refund.version" data-type="int"></label>
+        <label>Script (hex) <input data-path="buyer_refund.script" class="mono"></label>
+      </div>
+      <div class="group" data-show-when="buyer_refund.kind=kcc20">
+        <label>Owner type <select data-path="buyer_refund.identifier_type"><option>pubkey</option><option>script_hash</option><option>covenant_id</option></select></label>
+        <label>Owner identifier (hex) <input data-path="buyer_refund.identifier" class="mono"></label>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset class="fields span">
+    <legend>Creation and value</legend>
+    <label>Creation DAA score (typed by you, no default)
+      <span class="inline"><input id="creation-daa" inputmode="numeric" placeholder="the current virtual DAA score"><button type="button" id="read-daa">Read it from the node</button></span>
+    </label>
+    <label>KAS value of the larger leg, in sompi (required: the asset leg is a KCC-20 token)
+      <input id="kas-equivalent" inputmode="numeric">
+    </label>
+    <p class="echo" id="kas-equivalent-kas"></p>
+    <details class="help wide">
+      <summary>Details</summary>
+      <p class="hint">There is no default: read the current virtual DAA score from the node you connected to, or type it. A typed score is marked as typed, and a stale one makes the time left to expiry look longer than it is. Mainnet refuses a typed score; it takes only one the connected node gave, unedited.</p>
+      <p class="hint">The KAS value is your own figure: nothing on chain or in this page checks it. It is cleared each time terms are loaded, so every trade needs a fresh declaration.</p>
+    </details>
+  </fieldset>
+
+  <fieldset id="you" class="fields span">
+    <legend><span class="step-tag">04</span>Role check: you</legend>
+    <p class="hint wide">Say which party you are. Before it shows you anything to fund, the SDK checks that the two destinations of your role pay your key (or the destination you pin), and never the counterparty or the authority: the contract lets those parties trigger a refund, which pays your leg to your refund destination as the terms write it.</p>
+    <label>Your role
+      <select id="role"><option value="">choose</option><option value="buyer">buyer (pays the cash leg)</option><option value="seller">seller (delivers the asset leg)</option></select>
+    </label>
+    <label>Your public key (x-only, 64 hex digits; a public key only)
+      <input id="my-key" class="mono" autocomplete="off" spellcheck="false">
+    </label>
+    <details class="wide">
+      <summary>Pins: a destination you control that is not your key (a custodian or multisig)</summary>
+      <p class="hint">A Kaspa address of the terms' network in canonical form, or <code>kcc20:pubkey:&lt;hex&gt;</code>, <code>kcc20:script_hash:&lt;hex&gt;</code>, <code>kcc20:covenant_id:&lt;hex&gt;</code>. A pinned destination must equal the pin exactly. A destination that pays the counterparty or the authority is refused whatever you pin.</p>
+      <div class="pair">
+        <label>Receive pin (the buyer's delivery, or the seller's proceeds)
+          <input id="pin-receive" class="mono" autocomplete="off" spellcheck="false">
+        </label>
+        <label>Refund pin (your role's refund destination)
+          <input id="pin-refund" class="mono" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+    </details>
+    <details class="wide">
+      <summary>The other party's pins, when a wallet of this page is the other party</summary>
+      <p class="hint">Only for a trade where this page holds both parties' keys (for example a Direct trade between wallet A and wallet B): the wallet that is the other party signs under these pins, as yours signs under the ones above. They are given to no other wallet.</p>
+      <div class="pair">
+        <label>Receive pin of the other party
+          <input id="pin-other-receive" class="mono" autocomplete="off" spellcheck="false">
+        </label>
+        <label>Refund pin of the other party
+          <input id="pin-other-refund" class="mono" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+    </details>
+  </fieldset>
+</form>
+
+<section id="result" class="panel" aria-live="polite">
+  <h2 class="panel-title">Result</h2>
+  <p id="status" data-state="idle">Loading.</p>
+  <dl id="summary" class="kv"></dl>
+  <div id="destinations" hidden>
+    <h3 class="sub-title">The four destinations</h3>
+    <p class="hint">Where each leg goes on settlement or refund, decoded by the SDK. The contract lets the counterparty or the authority trigger a refund, which pays a leg to its refund destination as written here. A destination marked as paying the other party's key or the authority's key gives your leg away.</p>
+    <ul id="destination-list"></ul>
+  </div>
+  <div id="legs"></div>
+  <details id="decoded" hidden>
+    <summary>Decoded terms (read the four destinations before funding)</summary>
+    <pre id="terms-decoded"></pre>
+  </details>
+</section>
+
+<section id="actions" class="panel" hidden>
+  <h2 class="panel-title"><span class="step-tag">05-07</span>Fund, settle or refund</h2>
+  <details class="help">
+    <summary>Details</summary>
+    <p class="hint">Build from the node's UTXOs, read the review, sign with the wallets of this page, and submit. The page asks the node for the UTXOs of the addresses the SDK names, and chooses among them by the SDK's rules; the review shows which it chose. The fee comes from one wallet's own UTXOs, never from a leg. A transaction that needs a key this page does not hold (the seller's token in a Direct trade) is handed over as text under the review, signed with the command line, and its signatures are added back below the review.</p>
+  </details>
+  <h3 class="sub-title">Transaction settings</h3>
+  <div class="fields">
+    <label class="wide">Asset token artifact (the silverscript ABI artifact JSON of the asset token; needed to check any document)
+      <textarea id="asset-artifact" class="mono" rows="3" spellcheck="false" autocomplete="off"></textarea>
+    </label>
+    <label class="wide">Cash token artifact (only when the cash leg is a KCC-20 token)
+      <textarea id="cash-artifact" class="mono" rows="3" spellcheck="false" autocomplete="off"></textarea>
+    </label>
+    <label>Fee payer
+      <select id="fee-payer"><option value="a">Wallet A</option><option value="b">Wallet B</option></select>
+    </label>
+    <label>Fee in sompi, or auto
+      <input id="fee" value="auto" autocomplete="off" spellcheck="false">
+    </label>
+    <p class="hint wide" id="fee-note">Auto is the minimum relay fee of the transaction and a tenth more. The command line's automatic fee is the minimum itself, so the same transaction built on both sides needs the same fee typed on both.</p>
+    <label class="wide">Change address (where the fee wallet's change goes; empty, back to the fee wallet's own key)
+      <input id="change-address" class="mono" autocomplete="off" spellcheck="false" placeholder="kaspa:... or kaspatest:...">
+    </label>
+    <p class="hint wide">A Kaspa address of the terms' network, in canonical form. The wallet's own key is a key that lives only in this page: on mainnet the SDK refuses a change that pays it, so give an address you control elsewhere. The wallet that signs the fee input is told the same address and signs only a document whose change pays it.</p>
+    <details id="limits" class="wide">
+      <summary>Limits the fee wallet signs under</summary>
+      <p class="hint">A wallet that signs a fee input refuses a document in which the fee is above twice the minimum relay fee, or the fee inputs also pay more than nothing into the trade outputs (a counterparty who funded a vault's authorizer below the minimum makes the fee wallet pay the difference), or the change goes anywhere but the address above. These two fields raise the first two limits for a document you have read; empty keeps the defaults.</p>
+      <div class="pair">
+        <label>Most fee I accept, in sompi
+          <input id="max-fee" inputmode="numeric" autocomplete="off" spellcheck="false">
+        </label>
+        <label>Most top-up of under-funded outputs I accept, in sompi
+          <input id="max-topup" inputmode="numeric" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+    </details>
+  </div>
+  <div class="action-grid">
+    <fieldset id="fund-options" class="action" hidden>
+      <legend><span class="step-tag">05</span>Fund the cash leg</legend>
+      <p class="notice info">Buyer only, after the seller's asset leg is listed by the node. Closing or reloading this page, or a wipe, destroys the wallet key that refunds the deposit.</p>
+      <div class="row"><button type="button" class="primary" id="build-fund">Build the funding of the cash leg</button></div>
+      <details class="help">
+        <summary>Details</summary>
+        <p class="hint">Only the buyer funds a KAS cash vault, with one output of exactly the cash amount. The wallet chosen as fee payer above pays it, and the fee, from its own UTXOs; it must hold the buyer's key. The change goes to the change address, or back to the wallet's key. A KCC-20 leg is not funded here: the seller funds the asset leg with the command line (<code>impulse fund build</code>), and the page funds no token whose template is not a pinned kcc20.sil build (<code>SDK_TEMPLATE_UNPINNED</code>, no override).</p>
+        <p class="hint">Fund it after the seller's asset leg has been accepted, not before. The page asks the node for the asset vault and the token escrowed in it and refuses to build the funding while the seller's asset leg is not listed (<code>SDK_FUND_ASSET_NOT_FUNDED</code>), and when the cash vault already holds a deposit of exactly the cash amount (<code>SDK_FUND_ALREADY_FUNDED</code>). Until the trade settles, your only way to take the deposit back yourself is a refund signed with this wallet's key, from the expiry in earmarked mode: closing or reloading this page, or wiping the wallet, destroys that key, and the page asks before it wipes a wallet that funded a cash vault. The seller or the authority can also trigger that refund, and nothing makes them. After the funding is submitted, wait until the node lists the deposit before you build the settle; the page expects the node to list the UTXOs of accepted blocks, which has not been observed against a real node. A settle is refused at or after the expiry, so fund with time to spare: the review of the funding says how long the trade has left to settle.</p>
+      </details>
+    </fieldset>
+    <div id="settle-block" class="action">
+      <p class="action-title"><span class="step-tag">06</span>Settle</p>
+      <div class="row"><button type="button" class="primary" id="build-settle">Build the settle</button></div>
+    </div>
+    <fieldset id="refund-options" class="action">
+      <legend><span class="step-tag">07</span>Refund</legend>
+      <div class="pair">
+        <label>Leg
+          <select id="refund-leg"><option value="0">asset leg</option><option value="1">cash leg</option></select>
+        </label>
+        <label>Signed by
+          <select id="refund-signer"><option value="depositor">the depositor</option><option value="counterparty">the counterparty</option><option value="authority">the authority</option></select>
+        </label>
+      </div>
+      <label class="switch"><input type="checkbox" id="refund-token" checked> Carry the escrowed token home too (unchecked, the token stays escrowed in the vault)</label>
+      <div class="row"><button type="button" class="primary" id="build-refund">Build the refund</button></div>
+    </fieldset>
+  </div>
+  <p id="action-status" class="status-line" data-state="idle" aria-live="polite"></p>
+</section>
+
+<section id="review-panel" class="panel" hidden>
+  <h2 id="review-title" class="panel-title">Review</h2>
+  <p class="hint">What you are about to sign, as the SDK read it from the document. Check every amount and every address. The names are matches against the terms; "not named by the terms" is not an error by itself (the fee payer's change is one).</p>
+  <dl id="review-facts" class="kv"></dl>
+  <ul id="review-notes" class="notice-list"></ul>
+  <h3 class="sub-title">Inputs</h3>
+  <div class="table-wrap">
+  <table id="review-inputs">
+    <thead><tr><th>#</th><th>Amount</th><th>Address</th><th>What</th><th>Covenant</th><th>Signature</th></tr></thead>
+    <tbody id="review-inputs-body"></tbody>
+  </table>
+  </div>
+  <h3 class="sub-title">Outputs</h3>
+  <div class="table-wrap">
+  <table id="review-outputs">
+    <thead><tr><th>#</th><th>Amount</th><th>Address</th><th>What</th><th>Covenant</th></tr></thead>
+    <tbody id="review-outputs-body"></tbody>
+  </table>
+  </div>
+  <p id="review-pending"></p>
+  <div id="sign-buttons" class="row"></div>
+  <div class="row"><button type="button" class="primary" id="submit" disabled>Submit the signed transaction</button></div>
+  <p id="submit-status" class="status-line" data-state="idle" aria-live="polite"></p>
+  <div class="row"><button type="button" id="ipst-copy">Copy the partially signed transaction (IPST) to the clipboard</button></div>
+  <p id="ipst-copy-status" class="status-line" data-state="idle" aria-live="polite"></p>
+  <details id="ipst-export">
+    <summary>The partially signed transaction (IPST), to hand to a key this page does not hold</summary>
+    <p class="hint">The transaction as text, with the signatures it holds so far. It holds no key. Give it to the holder of a key this page does not have: <code>impulse ipst sign</code> checks it against the agreed terms and adds that key's signatures. The copy button above puts this text on your clipboard and nowhere else.</p>
+    <pre id="ipst-text"></pre>
+  </details>
+  <div id="ipst-import">
+    <h3 class="sub-title">Add signatures made elsewhere</h3>
+    <p class="hint">Paste the IPST text that <code>impulse ipst sign</code> (or <code>impulse ipst merge</code>) wrote. The page adds to the document above only the signatures it lacks, and only if the pasted transaction is exactly this one (the same terms, inputs and outputs) and each signature verifies for its input. It never takes the pasted document in place of the one you reviewed; it reads the review again for the result.</p>
+    <label>Signed IPST text <textarea id="import-text" class="mono" rows="5" spellcheck="false" autocomplete="off"></textarea></label>
+    <div class="row"><button type="button" id="import-apply">Add its signatures</button></div>
+    <p id="import-status" class="status-line" data-state="idle" aria-live="polite"></p>
+  </div>
+</section>
+</main>
+
+</div>
+
+<footer>
+  <p>Impulse by WarpCore. Apache License 2.0. Static page: no analytics, no third-party scripts. <a href="LICENSE">Licence</a></p>
+</footer>
+</body>
+</html>

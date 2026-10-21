@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "network": "testnet",
+  "settlement_mode": "vault",
+  "nonce": "7989634765647131680",
+  "seller_key": "95e2f4e4fe97ed99e78ac44930508f03b408bde943a16d35bd8f1d0228a8bc3e",
+  "buyer_key": "67b2e7c8dfe143ccdad9cdd0929b9bfff2ed9039ef21a146a2caab1c2b542de3",
+  "authority_key": "146c937a7572d914e7cfec44a313b3a0327926634f78d81134d4c671c43ec50d",
+  "asset_leg": {
+    "kind": "kcc20",
+    "covenant_id": "fe904de9baa7fe17d441105dd757e7911e192998e4e096d3c84f4711c6b3dd0d",
+    "template_hash": "a227fc3aa2f3d922b7f8d7dfdca462660dbe51bd1735508f9dda9a656100c794",
+    "template_prefix_len": 40,
+    "template_suffix_len": 1420,
+    "amount": "1"
+  },
+  "cash_leg": {
+    "kind": "kas",
+    "amount": "100000000"
+  },
+  "buyer_delivery": {
+    "kind": "kcc20",
+    "identifier_type": "pubkey",
+    "identifier": "67b2e7c8dfe143ccdad9cdd0929b9bfff2ed9039ef21a146a2caab1c2b542de3"
+  },
+  "seller_proceeds": {
+    "kind": "kas",
+    "version": 0,
+    "script": "aa2041676ec30d33948991f4bb2356f437abfa0efb1c9845a7ddff7b2cafb29bf77487"
+  },
+  "seller_refund": {
+    "kind": "kcc20",
+    "identifier_type": "script_hash",
+    "identifier": "41676ec30d33948991f4bb2356f437abfa0efb1c9845a7ddff7b2cafb29bf774"
+  },
+  "buyer_refund": {
+    "kind": "kas",
+    "version": 0,
+    "script": "210267b2e7c8dfe143ccdad9cdd0929b9bfff2ed9039ef21a146a2caab1c2b542de3ab"
+  },
+  "earliest_daa": "400036000",
+  "expiry_daa": "425920000",
+  "funding_mode": "earmarked",
+  "trade_ref": "2a8205042970c0bf8b1cf30b9db2353987ae7aa9824788f8c6feb552300ed77d"
+}

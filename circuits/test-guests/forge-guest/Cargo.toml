@@ -1,0 +1,18 @@
+# Copyright (c) 2026 the Impulse authors. A KiiLabs product. Licensed under the Apache License, Version 2.0.
+# TEST ONLY. The forging guest of spec/V3-ZK.md section 13.2 (v3_forging_guest_refused): it commits
+# whatever J it is given without checking any path. Its receipts carry another image ID, so the
+# template refuses them. The prover CLI never proves with it.
+[package]
+name = "forge-guest"
+version = "0.3.0-alpha"
+edition = "2021"
+license = "Apache-2.0"
+
+[workspace]
+
+[dependencies]
+risc0-zkvm = { version = "=3.0.4", default-features = false, features = ["std"] }
+
+[profile.release]
+codegen-units = 1
+lto = "fat"

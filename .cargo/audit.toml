@@ -1,0 +1,17 @@
+# cargo audit runs with --deny warnings. Each ignore below is a known transitive advisory
+# through the pinned rusty-kaspa or silverscript sources, unfixable without a pin change
+# (rule 3, docs/ENGINEERING-RULES.md). Reviewed 2026-10-06 in I0. A new advisory fails CI.
+[advisories]
+ignore = [
+    "RUSTSEC-2025-0052", # async-std unmaintained (rusty-kaspa)
+    "RUSTSEC-2024-0375", # atty unmaintained (rusty-kaspa)
+    "RUSTSEC-2021-0145", # atty unsound: unaligned read on Windows only; not a target here
+    "RUSTSEC-2024-0388", # derivative unmaintained (rusty-kaspa)
+    "RUSTSEC-2024-0384", # instant unmaintained (rusty-kaspa)
+    "RUSTSEC-2024-0436", # paste unmaintained (rusty-kaspa)
+    "RUSTSEC-2024-0370", # proc-macro-error unmaintained (rusty-kaspa build-time)
+    "RUSTSEC-2026-0306", # faster-hex 0.9.0 unsound hex_decode_unchecked AVX2; Impulse must not call it (I2 codec uses checked decode)
+    "RUSTSEC-2024-0449", # unsafe-libyaml unmaintained (notice, no known vulnerability), via serde_yaml -> log4rs -> kaspa-core at the pinned rev; Impulse loads no YAML. Approved by the owner 2026-10-13 (D59)
+    "RUSTSEC-2026-0381", # webpki-roots 0.26.11 distrusted emSign roots: 0.26.11 is the last 0.26 release, a shim that re-exports webpki-roots 1, which the lock holds at the fixed 1.0.10; reached through kaspa-wrpc-client -> workflow-websocket -> tokio-tungstenite 0.23.1 at the pinned rev, which cannot take webpki-roots 1 directly without a pin change. Triaged 2026-10-21
+    "RUSTSEC-2025-0055", # tracing-subscriber 0.2.25 ANSI log poisoning, via silverscript-lang -> kaspa-txscript-zk-sdk -> risc0-groth16 -> ark-relations. Re-reviewed in I3: silverscript-lang is only a dev-dependency of impulse-engine-tests (`cargo tree -i tracing-subscriber@0.2.25 -e normal,build` prints nothing), no shipped crate links it, and the tests install no subscriber that logs input. Revisit if silverscript-lang becomes a normal dependency (I1, I3)
+]

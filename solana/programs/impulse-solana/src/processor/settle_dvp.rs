@@ -1,0 +1,357 @@
+// Copyright (c) 2026 the Impulse authors. A KiiLabs product. Licensed under the Apache License, Version 2.0.
+// Derived from solana-foundation/dvp (commit df9919e), Copyright (c) 2026 Solana Foundation, MIT
+// licence in solana/LICENSE-MIT; the Impulse modifications are Apache-2.0.
+use crate::{
+    error::DvpSwapProgramError,
+    processor::shared::account_check::{verify_account_owner, verify_signer},
+    processor::shared::token_utils::{
+        get_mint_authority, get_mint_decimals, get_token_account_balance, transfer_checked_cpi,
+        validate_mint_extensions, verify_ata_recipient, verify_ata_recipient_if_initialized,
+        verify_canonical_ata,
+    },
+    processor::shared::utils::split_leg_remaining_accounts,
+    require,
+    state::swap_dvp::SwapDvp,
+};
+use pinocchio::{
+    account::AccountView,
+    address::Address,
+    cpi::Signer,
+    error::ProgramError,
+    sysvars::{clock::Clock, Sysvar},
+    ProgramResult,
+};
+use pinocchio_token_2022::instructions::CloseAccount;
+
+/// Length of the fixed account prefix; anything beyond this is treated
+/// as transfer-hook remaining accounts split between the two legs.
+const FIXED_ACCOUNTS_LEN: usize = 13;
+
+/// Processes the SettleDvp instruction.
+///
+/// Atomically delivers the asset leg to `dvp.user_b_settlement_destination`
+/// (defaults to `user_b`, the buyer) and the cash leg to
+/// `dvp.user_a_settlement_destination` (defaults to `user_a`, the seller),
+/// then closes the SwapDvp PDA and both escrow ATAs. Rent lamports from
+/// the three closed accounts are swept to the settlement authority.
+///
+/// Each leg transfers exactly `dvp.amount_x` to the counterparty. Any
+/// surplus held in the escrow above the leg amount (e.g. an over-deposit
+/// via raw SPL Transfer, the canonical funding path) is refunded to
+/// the leg's depositor on their own mint before the escrow is closed.
+/// This ensures the counterparty receives exactly the agreed amount and
+/// cannot capture an over-deposit.
+///
+/// Mint ownership and extensions are **re-validated** here. Create is
+/// the consent point, but a leg left unfunded until the counterparty
+/// commits can be closed (zero supply) and recreated at the same address
+/// under the other token program or with a deny-listed extension (e.g.
+/// `TransferFee`), either of which would deliver a counterfeit or short
+/// leg while settlement still reported success. Re-checking binds Settle
+/// to the same guarantees Create enforced. This does not strand funds:
+/// if a mint mutated out from under the agreement, Settle rejects and
+/// the honest party recovers via Reject/Reclaim, which stay tolerant so
+/// a leg is never locked.
+///
+/// # Account Layout
+/// 0.  `[signer, writable]` settlement_authority - Must equal `dvp.settlement_authority`; receives closed-account rent
+/// 1.  `[writable]` swap_dvp - SwapDvp PDA (signs CPIs as authority, then closed)
+/// 2.  `[]` mint_a - Must equal `dvp.mint_a`
+/// 3.  `[]` mint_b - Must equal `dvp.mint_b`
+/// 4.  `[writable]` dvp_ata_a - Escrow for the asset leg (drained, then closed)
+/// 5.  `[writable]` dvp_ata_b - Escrow for the cash leg (drained, then closed)
+/// 6.  `[writable]` user_a_destination_ata_b - dvp.user_a_settlement_destination's ATA for mint_b; receives the cash leg (caller must pre-initialize). The destination defaults to user_a at Create.
+/// 7.  `[writable]` user_b_destination_ata_a - dvp.user_b_settlement_destination's ATA for mint_a; receives the asset leg (caller must pre-initialize). Defaults to user_b.
+/// 8.  `[writable]` user_a_ata_a - user_a's ATA for mint_a; receives any asset-leg surplus refund. Required: anyone can dust the escrow, so a surplus refund can always fire, a missing ATA reverts the whole Settle. Pre-initialize it.
+/// 9.  `[writable]` user_b_ata_b - user_b's ATA for mint_b; receives any cash-leg surplus refund. Required: same as user_a_ata_a, pre-initialize it.
+/// 10. `[]` token_program_a - SPL Token or Token-2022; must own mint_a
+/// 11. `[]` token_program_b - SPL Token or Token-2022; must own mint_b
+/// 12. `[]` memo_program - SPL Memo program; only used for destinations that require a memo
+///
+/// Trailing accounts (variable):
+/// - First `leg_a_extras_count` go to leg A's `TransferChecked` CPI
+///   (hook program, validation PDA, and any accounts resolved from
+///   `ExtraAccountMetaList`).
+/// - The rest go to leg B's `TransferChecked` CPI.
+///
+/// # Instruction Data
+/// * `leg_a_extras_count` (u8) - Split point between leg A and leg B
+///   trailing accounts.
+/// * `terms_hash` ([u8; 32]) - Impulse: the terms hash the authority
+///   settles; must equal `dvp.terms_hash` (TermsHashMismatch otherwise).
+pub fn process_settle_dvp(
+    program_id: &Address,
+    accounts: &[AccountView],
+    instruction_data: &[u8],
+) -> ProgramResult {
+    let (fixed, leg_a_extras, leg_b_extras) =
+        split_leg_remaining_accounts(accounts, instruction_data, FIXED_ACCOUNTS_LEN)?;
+    let [settlement_authority_info, swap_dvp_info, mint_a_info, mint_b_info, dvp_ata_a_info, dvp_ata_b_info, user_a_destination_ata_b_info, user_b_destination_ata_a_info, user_a_ata_a_info, user_b_ata_b_info, token_program_a_info, token_program_b_info, memo_program_info] =
+        fixed
+    else {
+        return Err(ProgramError::NotEnoughAccountKeys);
+    };
+
+    verify_signer(settlement_authority_info, true)?;
+    verify_account_owner(swap_dvp_info, program_id)?;
+
+    let dvp = {
+        let data = swap_dvp_info.try_borrow()?;
+        SwapDvp::try_from_bytes(&data)?
+    };
+
+    require!(
+        settlement_authority_info.address() == &dvp.settlement_authority,
+        DvpSwapProgramError::SettlementAuthorityMismatch
+    );
+
+    // Impulse: the authority names the terms hash it settles. The SwapDvp
+    // address is derived from the stored hash, so this refuses a Settle
+    // issued against any other term sheet. Bytes 1..33 of the data
+    // (byte 0 is leg_a_extras_count, read by the split above).
+    let named_terms_hash = instruction_data
+        .get(1..33)
+        .ok_or(ProgramError::InvalidInstructionData)?;
+    require!(
+        named_terms_hash == dvp.terms_hash,
+        DvpSwapProgramError::TermsHashMismatch
+    );
+
+    // Bind mints and token programs to state.
+    require!(
+        mint_a_info.address() == &dvp.mint_a && mint_b_info.address() == &dvp.mint_b,
+        ProgramError::InvalidAccountData
+    );
+    require!(
+        token_program_a_info.address() == &dvp.token_program_a
+            && token_program_b_info.address() == &dvp.token_program_b,
+        ProgramError::IncorrectProgramId
+    );
+
+    // Rebind each mint to the token program captured at Create. A
+    // zero-supply mint can be closed and recreated at the same address
+    // under the other token program with a fresh mint authority, and the
+    // token programs themselves don't reject a MintTo/TransferChecked
+    // whose mint lives in the other program's domain. Without this check
+    // such a leg would settle with post-create counterfeit issuance.
+    require!(
+        mint_a_info.owned_by(&dvp.token_program_a) && mint_b_info.owned_by(&dvp.token_program_b),
+        ProgramError::InvalidAccountOwner
+    );
+
+    // Re-check both mints against the Create deny-list: a leg recreated
+    // with a blocked extension (e.g. TransferFee) after Create must not
+    // reach a "successful" short settlement. Recovery paths stay tolerant.
+    validate_mint_extensions(mint_a_info)?;
+    validate_mint_extensions(mint_b_info)?;
+
+    // Pin each mint's authority to the value captured at Create. A mint
+    // recreated under the same program with a fresh authority passes the
+    // owner and extension rechecks above but could be minted into after
+    // consent; without this it would settle counterfeit. A mint with no
+    // authority is stored as the default pubkey, matched here the same way.
+    require!(
+        get_mint_authority(mint_a_info)?.unwrap_or_default() == dvp.mint_a_authority
+            && get_mint_authority(mint_b_info)?.unwrap_or_default() == dvp.mint_b_authority,
+        DvpSwapProgramError::MintAuthorityChanged
+    );
+
+    let now = Clock::get()?.unix_timestamp;
+    require!(now <= dvp.expiry_timestamp, DvpSwapProgramError::DvpExpired);
+    if let Some(earliest) = dvp.earliest_settlement_timestamp {
+        require!(now >= earliest, DvpSwapProgramError::SettlementTooEarly);
+    }
+
+    // All six ATAs must be canonical. Note the cross at Settle: each
+    // side receives the *other* leg's mint, so destination_a (user_a's
+    // proceeds wallet, defaulted to user_a at Create) pairs with mint_b
+    // and destination_b with mint_a. The surplus refund ATAs follow the
+    // Cancel/Reject pairing (each *user* gets their own mint back:
+    // destinations receive settlement proceeds only, never refunds).
+    // dvp_ata_a: DvP PDA's escrow for mint_a (asset, drained to user_b).
+    verify_canonical_ata(
+        dvp_ata_a_info,
+        swap_dvp_info.address(),
+        &dvp.mint_a,
+        token_program_a_info,
+    )?;
+    // dvp_ata_b: DvP PDA's escrow for mint_b (cash, drained to user_a).
+    verify_canonical_ata(
+        dvp_ata_b_info,
+        swap_dvp_info.address(),
+        &dvp.mint_b,
+        token_program_b_info,
+    )?;
+    // user_a_destination_ata_b: destination_a's ATA for mint_b:
+    // receives the cash leg. Delivery always fires, so require the
+    // account still belong to the destination: a canonical address alone
+    // doesn't prove it, since a legacy SPL account can be owner-reassigned
+    // without changing its ATA pubkey.
+    verify_canonical_ata(
+        user_a_destination_ata_b_info,
+        &dvp.user_a_settlement_destination,
+        &dvp.mint_b,
+        token_program_b_info,
+    )?;
+    verify_ata_recipient(
+        user_a_destination_ata_b_info,
+        &dvp.user_a_settlement_destination,
+        &dvp.mint_b,
+    )?;
+    // user_b_destination_ata_a: destination_b's ATA for mint_a:
+    // receives the asset leg.
+    verify_canonical_ata(
+        user_b_destination_ata_a_info,
+        &dvp.user_b_settlement_destination,
+        &dvp.mint_a,
+        token_program_a_info,
+    )?;
+    verify_ata_recipient(
+        user_b_destination_ata_a_info,
+        &dvp.user_b_settlement_destination,
+        &dvp.mint_a,
+    )?;
+    // user_a_ata_a: seller's ATA for mint_a, surplus refund destination
+    // for the asset leg. Only touched if surplus > 0; tolerated when
+    // uninitialized, but if it exists its owner/mint must still match so
+    // a reassigned account can't capture the surplus.
+    verify_canonical_ata(
+        user_a_ata_a_info,
+        &dvp.user_a,
+        &dvp.mint_a,
+        token_program_a_info,
+    )?;
+    verify_ata_recipient_if_initialized(user_a_ata_a_info, &dvp.user_a, &dvp.mint_a)?;
+    // user_b_ata_b: buyer's ATA for mint_b, surplus refund destination
+    // for the cash leg. Same address-only treatment as above.
+    verify_canonical_ata(
+        user_b_ata_b_info,
+        &dvp.user_b,
+        &dvp.mint_b,
+        token_program_b_info,
+    )?;
+    verify_ata_recipient_if_initialized(user_b_ata_b_info, &dvp.user_b, &dvp.mint_b)?;
+
+    // Both legs must hold *at least* their target amount. Any balance
+    // above the target is treated as an over-deposit by the leg's
+    // depositor and refunded to them below, so the counterparty always
+    // receives exactly the agreed `dvp.amount_x`.
+    let escrow_a_balance = get_token_account_balance(dvp_ata_a_info)?;
+    require!(
+        escrow_a_balance >= dvp.amount_a,
+        DvpSwapProgramError::LegNotFunded
+    );
+    let escrow_b_balance = get_token_account_balance(dvp_ata_b_info)?;
+    require!(
+        escrow_b_balance >= dvp.amount_b,
+        DvpSwapProgramError::LegNotFunded
+    );
+
+    let decimals_a = get_mint_decimals(mint_a_info)?;
+    let decimals_b = get_mint_decimals(mint_b_info)?;
+
+    let (nonce_bytes, bump_bytes) = dvp.seed_buffers();
+    let swap_dvp_seeds = dvp.signing_seeds(&nonce_bytes, &bump_bytes);
+    let signer_seeds = [Signer::from(&swap_dvp_seeds)];
+
+    // Cash to seller, then asset to buyer. Order is irrelevant for
+    // correctness (the whole tx is atomic); spec lists cash first.
+    transfer_checked_cpi(
+        dvp_ata_b_info,
+        mint_b_info,
+        user_a_destination_ata_b_info,
+        swap_dvp_info,
+        dvp.amount_b,
+        decimals_b,
+        token_program_b_info.address(),
+        memo_program_info,
+        leg_b_extras,
+        &signer_seeds,
+    )?;
+
+    transfer_checked_cpi(
+        dvp_ata_a_info,
+        mint_a_info,
+        user_b_destination_ata_a_info,
+        swap_dvp_info,
+        dvp.amount_a,
+        decimals_a,
+        token_program_a_info.address(),
+        memo_program_info,
+        leg_a_extras,
+        &signer_seeds,
+    )?;
+
+    // Refund any surplus to each leg's depositor so the escrows close
+    // empty and over-deposits don't leak to the counterparty.
+    //
+    // The surplus CPI reuses the leg's hook extras but transfers to a
+    // different destination and amount than the delivery. Hooks whose
+    // ExtraAccountMetaList resolves accounts from the transfer destination
+    // or amount (rare but spec-valid) will reject this CPI and revert the
+    // whole Settle. Recovery: depositor calls Reclaim, re-funds exactly
+    // amount_x, retries Settle. See the upstream README (solana-foundation/dvp df9919e), "TransferHook + over-deposit
+    // caveat".
+    let asset_surplus = escrow_a_balance - dvp.amount_a;
+    if asset_surplus > 0 {
+        transfer_checked_cpi(
+            dvp_ata_a_info,
+            mint_a_info,
+            user_a_ata_a_info,
+            swap_dvp_info,
+            asset_surplus,
+            decimals_a,
+            token_program_a_info.address(),
+            memo_program_info,
+            leg_a_extras,
+            &signer_seeds,
+        )?;
+    }
+
+    let cash_surplus = escrow_b_balance - dvp.amount_b;
+    if cash_surplus > 0 {
+        transfer_checked_cpi(
+            dvp_ata_b_info,
+            mint_b_info,
+            user_b_ata_b_info,
+            swap_dvp_info,
+            cash_surplus,
+            decimals_b,
+            token_program_b_info.address(),
+            memo_program_info,
+            leg_b_extras,
+            &signer_seeds,
+        )?;
+    }
+
+    // Close both escrow ATAs; rent lamports go to settlement_authority.
+    CloseAccount {
+        account: dvp_ata_a_info,
+        destination: settlement_authority_info,
+        authority: swap_dvp_info,
+        token_program: token_program_a_info.address(),
+    }
+    .invoke_signed(&signer_seeds)?;
+
+    CloseAccount {
+        account: dvp_ata_b_info,
+        destination: settlement_authority_info,
+        authority: swap_dvp_info,
+        token_program: token_program_b_info.address(),
+    }
+    .invoke_signed(&signer_seeds)?;
+
+    // Close the SwapDvp PDA. There's no SPL-style CloseAccount for a
+    // program-owned non-token account: drain its lamports manually,
+    // then `close()` zeroes the data and reassigns to the system program.
+    let authority_lamports = settlement_authority_info.lamports();
+    settlement_authority_info.set_lamports(
+        authority_lamports
+            .checked_add(swap_dvp_info.lamports())
+            .ok_or(ProgramError::ArithmeticOverflow)?,
+    );
+    swap_dvp_info.set_lamports(0);
+    swap_dvp_info.close()?;
+
+    Ok(())
+}

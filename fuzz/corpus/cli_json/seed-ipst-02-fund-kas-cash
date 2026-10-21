@@ -1,0 +1,46 @@
+{
+  "ipst": 1,
+  "terms": "0100014e4e4e4e0000000095e2f4e4fe97ed99e78ac44930508f03b408bde943a16d35bd8f1d0228a8bc3e67b2e7c8dfe143ccdad9cdd0929b9bfff2ed9039ef21a146a2caab1c2b542de301146c937a7572d914e7cfec44a313b3a0327926634f78d81134d4c671c43ec50d01a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a52a5713a61a2c350c9f76583746d95054ef6bb4160e1c338239249549929b9c9c01000000b4050000e8030000000000000000e1f50500000000010067b2e7c8dfe143ccdad9cdd0929b9bfff2ed9039ef21a146a2caab1c2b542de3000000220000002095e2f4e4fe97ed99e78ac44930508f03b408bde943a16d35bd8f1d0228a8bc3eac010095e2f4e4fe97ed99e78ac44930508f03b408bde943a16d35bd8f1d0228a8bc3e000000220000002067b2e7c8dfe143ccdad9cdd0929b9bfff2ed9039ef21a146a2caab1c2b542de3ac0140420f000000000080841e0000000000017e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e",
+  "lock_time": "0",
+  "inputs": [
+    {
+      "transaction_id": "d78e13440ccbd81b719ed669f1078c7ec061b9fcc80b04832bf92a15fb8cd49d",
+      "index": 0,
+      "sequence": "0",
+      "compute_budget": 10,
+      "utxo": {
+        "amount": "1000000000",
+        "script_public_key": {
+          "version": 0,
+          "script": "20b85da2179243aa9a5c10920ef0b3aa219ab13d6b9df2910424d18e1efbaf91ccac"
+        },
+        "block_daa_score": "100",
+        "is_coinbase": false,
+        "covenant_id": null
+      },
+      "signer": "b85da2179243aa9a5c10920ef0b3aa219ab13d6b9df2910424d18e1efbaf91cc",
+      "sighash": "a7b99e9c11ef7cfc8011a8684ecc5842d15f5fae6bc715687b3728c291dee9ea",
+      "signature": null,
+      "script_before": "",
+      "script_after": ""
+    }
+  ],
+  "outputs": [
+    {
+      "value": "100000000",
+      "script_public_key": {
+        "version": 0,
+        "script": "aa20e1f2917fe8078d99fdf56e37a10468f32230c8b871d15033af369c2ea97d8e4287"
+      },
+      "covenant": null
+    },
+    {
+      "value": "895000000",
+      "script_public_key": {
+        "version": 0,
+        "script": "20b85da2179243aa9a5c10920ef0b3aa219ab13d6b9df2910424d18e1efbaf91ccac"
+      },
+      "covenant": null
+    }
+  ]
+}

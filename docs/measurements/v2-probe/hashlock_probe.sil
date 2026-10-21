@@ -1,0 +1,61 @@
+// Copyright (c) 2026 the Impulse authors. A KiiLabs product. Licensed under the Apache License, Version 2.0.
+pragma silverscript ^0.1.0;
+// Feasibility probe for spec/V2.md only. Not the hashlock template.
+contract ImpulseHashlockProbe(
+    byte initVersion, byte initNetwork, byte[8] initNonce, pubkey initSellerKey, pubkey initBuyerKey,
+    byte[32] initAssetCovenantId, byte[32] initAssetTemplateHash, int initAssetPrefixLen, int initAssetSuffixLen, int initAmount,
+    byte initBuyerDeliveryType, byte[32] initBuyerDeliveryId, byte initSellerRefundType, byte[32] initSellerRefundId,
+    byte[32] initHashLock, int initExpiryDaa, byte[32] initCounterpartHash, byte[32] initTradeRef
+) {
+    byte version = initVersion;
+    byte network = initNetwork;
+    byte[8] nonce = initNonce;
+    pubkey sellerKey = initSellerKey;
+    pubkey buyerKey = initBuyerKey;
+    byte[32] assetCovenantId = initAssetCovenantId;
+    byte[32] assetTemplateHash = initAssetTemplateHash;
+    int assetPrefixLen = initAssetPrefixLen;
+    int assetSuffixLen = initAssetSuffixLen;
+    int amount = initAmount;
+    byte buyerDeliveryType = initBuyerDeliveryType;
+    byte[32] buyerDeliveryId = initBuyerDeliveryId;
+    byte sellerRefundType = initSellerRefundType;
+    byte[32] sellerRefundId = initSellerRefundId;
+    byte[32] hashLock = initHashLock;
+    int expiryDaa = initExpiryDaa;
+    byte[32] counterpartHash = initCounterpartHash;
+    byte[32] tradeRef = initTradeRef;
+
+    struct KCC20State { byte[32] ownerIdentifier; byte identifierType; int amount; bool isMinter; }
+    byte constant IDENTIFIER_SCRIPT_HASH = 0x01;
+
+    entry settleWithPreimage(byte[] secret) {
+        require(this.activeInputIndex == 0);
+        require(secret.length == 32);
+        require(sha256(secret) == hashLock);
+        require(OpCovInputCount(assetCovenantId) == 1);
+        require(OpCovInputIdx(assetCovenantId, 0) == 1);
+        KCC20State escrowed = readInputStateWithTemplate(1, assetPrefixLen, assetSuffixLen, assetTemplateHash);
+        require(escrowed.identifierType == IDENTIFIER_SCRIPT_HASH);
+        require(this.activeScriptPubKey == byte[](new ScriptPubKeyP2SH(escrowed.ownerIdentifier)));
+        require(escrowed.amount == amount);
+        require(!escrowed.isMinter);
+        require(OpOutputCovenantId(0) == assetCovenantId);
+        require(tx.outputs[0].value >= tx.inputs[1].value);
+        KCC20State expected = KCC20State { ownerIdentifier: buyerDeliveryId, identifierType: buyerDeliveryType, amount: amount, isMinter: false };
+        validateOutputStateWithInputTemplate(0, expected, 1, assetPrefixLen, assetSuffixLen, assetTemplateHash);
+        require(tx.outputs[1].scriptPubKey == byte[](new ScriptPubKeyP2PK(sellerKey)));
+        require(tx.outputs[1].value >= tx.inputs[0].value);
+    }
+
+    entry refund(sig s, pubkey signer) {
+        require(signer == sellerKey || signer == buyerKey);
+        require(checkSig(s, signer));
+        if (signer == sellerKey) {
+            require(tx.daa >= expiryDaa);
+        }
+        require(this.activeInputIndex == 0);
+        require(tx.outputs[0].value == tx.inputs[0].value);
+        require(tx.outputs[0].scriptPubKey == byte[](new ScriptPubKeyP2PK(sellerKey)));
+    }
+}

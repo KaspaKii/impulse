@@ -1,0 +1,10 @@
+20:47  up 1 day, 12:52, 1 user, load averages: 22.34 57.14 51.87
+ %CPU COMM
+ 96.2 /System/Library/PrivateFrameworks/FileProvider.framework/Support/fileproviderd
+ 46.5 /usr/sbin/spindump
+ 45.1 /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/Metadata.framework/Versions/A/Support/mds_stores
+ 37.4 /usr/libexec/syspolicyd
+ 13.2 /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/Metadata.framework/Versions/A/Support/mds
+  7.0 /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/Metadata.framework/Versions/A/Support/mdworker_shared
+  6.7 /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/Metadata.framework/Versions/A/Support/mdworker_shared
+running containers: 0

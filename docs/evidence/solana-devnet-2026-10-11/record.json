@@ -1,0 +1,123 @@
+{
+  "cluster": "devnet",
+  "genesis_hash": "EtWTRABZaYq6iMfeYKouRu166VU2xqa1wcaWoxPkrZBG",
+  "htlc": [
+    {
+      "amount": 100000,
+      "close_signature": "2LLbn6XK6RaUBMMQbTMDq688THHfzi2qjQ2MrsAeaVx5nHWWTmM4HRbMFsUiAJLb3bnbA1tWXgWFkXBcYazujH7x",
+      "escrow": "CP4rbGGc357LQgbmH4TSLGFkj9a3Fc4Tfs6yjC2VGvGp",
+      "funder_and_refund_owner": "9Uxg6FYi1mWR8CQhsyeWbDaREfbJqVb43nhKMq8YFVX3",
+      "hash_lock": "13490add8b611b43795a076e340fe5883ce454dcdb7ba0d857c6c4a8b6e1562c",
+      "htlc": "CkeM2NaR5BhA4YbCT3zB5P6Db2NU5tAthcZidxf622hE",
+      "kind": "claim",
+      "open_signature": "4RenBohQXr3LyR5kWFrXfs2AFpRUucLi5k1qUksp9Gm7YvjjMhuprmdY81GN4dNfcEe311aVwkbPJH7FjYnvm5wr",
+      "preimage_published_by_claim": "4c8d10e0c75f5cdff8482e90f0f7562959e80e00539462b71de95ea4e0973bec",
+      "recipient": "4eGTVW1Xp3ENBxjsFx6wmwbQUY9j7aq9NkvWafrYwYTw",
+      "timeout": 1791759760
+    },
+    {
+      "amount": 100000,
+      "close_signature": "itCpkG8nsMUCmBs8o2R9UEhgF37aH5xW2HeZX98dcav2CA553jAJXAea6dg84wsNREzxQLcGLhkFtqda8jLfjeP",
+      "escrow": "DrJUAvJPG3TMPzB1gS2FRLb6X1USm28wzQpJkgsZzZyp",
+      "funder_and_refund_owner": "9Uxg6FYi1mWR8CQhsyeWbDaREfbJqVb43nhKMq8YFVX3",
+      "hash_lock": "88f8c66b696a835abef1c7d03e135188464015dc91c68554b88956ab28fdc4ad",
+      "htlc": "5nhy9EQR8eynF7QiFjFRPVXEC1WZB5sysuZv77AaZCpH",
+      "kind": "refund",
+      "open_signature": "3w2a55Tnmit7wG4B4hH47VV2hj2RrMmDgtgdHy1qPAUsJt11ETK1a6UCApmFjRnCVvZUmYW4cJQgHkNk4tM2qcfn",
+      "preimage_published_by_claim": "",
+      "recipient": "4eGTVW1Xp3ENBxjsFx6wmwbQUY9j7aq9NkvWafrYwYTw",
+      "timeout": 1791756182
+    }
+  ],
+  "impulse_htlc_program": "EGzCZqc5fYqYqcUYWmXJpuqi4uqNWC91kgVozTc8BmqH",
+  "impulse_solana_program": "5G4u8j3dXuXvurs4mxJ2pNXLihHMgZRdomTSRhswi2Rf",
+  "note": "TEST-ASSET and TEST-USDC are test SPL mints created by this run; TEST-USDC stands in for USDC and is not USDC. All keys were throwaway keys generated for this run and deleted after it.",
+  "party_a": "9Uxg6FYi1mWR8CQhsyeWbDaREfbJqVb43nhKMq8YFVX3",
+  "party_b": "4eGTVW1Xp3ENBxjsFx6wmwbQUY9j7aq9NkvWafrYwYTw",
+  "payer_and_settlement_authority": "F9U9axxuz35ffk28tZp9r6C3n8yx3MEbibY5Yuydmg7M",
+  "result": "pass",
+  "settlement": {
+    "after": {
+      "swap_dvp_and_escrows_closed": true,
+      "user_a_ata_a": 0,
+      "user_a_ata_b": 2500000,
+      "user_b_ata_a": 1000000,
+      "user_b_ata_b": 0
+    },
+    "amount_a": 1000000,
+    "amount_b": 2500000,
+    "decimals": 6,
+    "dvp_ata_a": "ByHQ35DCepQjSN6dSwuyojaUJFsoByiJ7pLAVU4BLt62",
+    "dvp_ata_b": "HjQBE9E9gKgj3JkR7RmkbQt5GX1RYkFcnLC5ARWthK2j",
+    "expiry_timestamp": 1791759734,
+    "mint_a_test_asset": "3CrHSZvzMkXQ8sYP2k8pd8RAygo8uEZmnjhnoiNwCLMR",
+    "mint_b_test_usdc_stand_in": "BHYPZ3kXDbMcz7Xa6mktKaPKdsbZVjW2FQ6i4y56HT8t",
+    "nonce": 7,
+    "nonce_tombstone": "ES4xwSvGUDXnNJ2GXyXMMwjSGyFiPrawroCJnF8ZPRM7",
+    "settlement_authority": "F9U9axxuz35ffk28tZp9r6C3n8yx3MEbibY5Yuydmg7M",
+    "swap_dvp": "8YELxv8DCDcbVvYANK8kkZPKdFg4kLjDnCVpfGggWMFd",
+    "term_sheet": "external-cash",
+    "terms_hash": "a573bee279b5f70f9226ee34f8480947d19ec0a79939a8f8f78c231ec0d04927",
+    "terms_vector": "05-vault-external-earmarked-kcc20",
+    "user_a": "9Uxg6FYi1mWR8CQhsyeWbDaREfbJqVb43nhKMq8YFVX3",
+    "user_b": "4eGTVW1Xp3ENBxjsFx6wmwbQUY9j7aq9NkvWafrYwYTw"
+  },
+  "transactions": [
+    {
+      "signature": "4wRo7a36AyeacJ8aTAEFcB1zJ9W8bQMmo31Az3wkQdcuKkPTT9nZ41HNQvdMWHbuUYE7hHS9e13euDWFsBAa1dHj",
+      "step": "create mint TEST-ASSET (leg A)"
+    },
+    {
+      "signature": "3bYLfRWvUzQ9kE186c38uQ9ueXZN6SuTtF4fHPYdnc4mZzxnZEtSTyQPn1CKTJqb78C2a7AaE6WG8mnKEQdd4ikH",
+      "step": "create mint TEST-USDC (leg B, stands in for USDC)"
+    },
+    {
+      "signature": "5zfzWaiZoQExAXtqgC2Kn5Xq5FTupvM4zFASuWFke2qn7ooo8rHf1dhWYB57T6nXbEeWpFRtFRuacw2cnWgnkKuH",
+      "step": "create party ATAs"
+    },
+    {
+      "signature": "5uYu4Rb1jF12nSHsYREZUMYz8D6TM668xDrbzKeJEfLAXB3qYe1nCutVbCnr1Ly3Vu3p584DfdFfKRSUqDjCXbom",
+      "step": "mint leg A to party A"
+    },
+    {
+      "signature": "63rwKNAAf1bnAWkjMFoPcYTh97yRrgpK5b9B1RMpCeLdLxeFD1KY9STqsRh6SgFJVZW9RmPqyRNXqDUdZ84dHGoe",
+      "step": "mint leg B to party B"
+    },
+    {
+      "signature": "QY8NZg6EGvGuazx4dfoKZFFfLf6nT7QKBgFdWktJs3JzkSxX1DiPay3WpL14GURGgQFmZodiEr9K9JSxrg68JEj",
+      "step": "CreateDvp"
+    },
+    {
+      "signature": "4hg9mTZ2AMGmhTPrzWWJbfg4NrEy4rBMhp8EpvUm9m6i5Ue5x779ak8nVD4KobiskVviZ3B74Sb6bthWvBfxtMvD",
+      "step": "fund leg A (party A)"
+    },
+    {
+      "signature": "co6dS1ZotPQLDyDfdViLLBQL1jCCuySfpzjzt9a8WeMeGy1NfyKgdoCPoPJr1Xcq2Uw94QQq6CVqW7ppEpXoBLX",
+      "step": "fund leg B (party B)"
+    },
+    {
+      "signature": "3hde8P5W93HaBo7oKAsmj3cQ7PvXWTfKG1VaCbGQDVUpyAaXpB1uLomu6GJjwcujuBF3Qt3aQpnLpjCQWVJFWGBg",
+      "step": "SettleDvp"
+    },
+    {
+      "signature": "3HRTCtj5Gk5SBAf8Rb2q2xCNfA23FvrmjBuPR6XQLwZXyuYanDBZDdB57bFkK46bzVk1qY7TGwBW5Ur4fUmSkgqf",
+      "step": "send party A SOL for HTLC rent"
+    },
+    {
+      "signature": "4RenBohQXr3LyR5kWFrXfs2AFpRUucLi5k1qUksp9Gm7YvjjMhuprmdY81GN4dNfcEe311aVwkbPJH7FjYnvm5wr",
+      "step": "HTLC open (claim)"
+    },
+    {
+      "signature": "2LLbn6XK6RaUBMMQbTMDq688THHfzi2qjQ2MrsAeaVx5nHWWTmM4HRbMFsUiAJLb3bnbA1tWXgWFkXBcYazujH7x",
+      "step": "HTLC claim"
+    },
+    {
+      "signature": "3w2a55Tnmit7wG4B4hH47VV2hj2RrMmDgtgdHy1qPAUsJt11ETK1a6UCApmFjRnCVvZUmYW4cJQgHkNk4tM2qcfn",
+      "step": "HTLC open (refund)"
+    },
+    {
+      "signature": "itCpkG8nsMUCmBs8o2R9UEhgF37aH5xW2HeZX98dcav2CA553jAJXAea6dg84wsNREzxQLcGLhkFtqda8jLfjeP",
+      "step": "HTLC refund"
+    }
+  ]
+}

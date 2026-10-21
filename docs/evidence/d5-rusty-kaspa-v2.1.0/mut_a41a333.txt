@@ -1,0 +1,135 @@
+[E1] caught
+[E2] caught
+[E3] caught
+[E4] caught
+[E5] caught
+[E6] caught
+[S8] caught
+[S9] caught
+[D1] caught
+[D2] caught
+[S1] caught
+[S7] caught
+[S2] caught
+[S3] caught
+[S4] caught
+[S5] caught
+[S6] caught
+[R1] caught
+[R2] caught
+[R3] caught
+[R4] caught
+[R5] caught
+[R6] caught
+[R7] caught
+[R11] caught
+[R8] caught
+[R9] caught
+[R12] caught
+[R14] caught
+[R10] caught
+[R13] caught
+Mutation run, contracts/impulse_vault.sil (tests/engine/mutation.py)
+source sha256 7ad37f06cb4e7c1b43c4fb42b6cacee313eb41074c18e5e4d9de2a595a251132
+TEMPLATE_HASH 1877344751ca7b4491ba6d19e20139995c83321b3106e539f1c1be4384a65fcd
+requires 31, mutants 31, test targets escrow_release, settle, refund, locktime
+
+baseline: all tests pass
+
+[E1] require(OpCovInputCount(cov) == 1);
+  expected flip: escrow_release::second_escrow_deposit_cannot_ride_along_a_settle -> FLIPPED
+  also flipped (2): settle::e1_escrow_without_covenant_binding, settle::external_cash_leg_vault_never_settles
+[E2] require(OpCovInputIdx(cov, 0) == idx);
+  expected flip: settle::e2_escrow_under_another_covenant_real_asset_elsewhere -> FLIPPED
+  also flipped (1): settle::e2_escrow_without_covenant_binding_real_asset_elsewhere
+[E3] require(escrowed.identifierType == IDENTIFIER_SCRIPT_HASH);
+  expected flip: settle::e3_escrow_owner_type_pubkey -> FLIPPED
+  also flipped (0): none
+[E4] require(this.activeScriptPubKey == byte[](new ScriptPubKeyP2SH(escrowed.ownerIdentifier)));
+  expected flip: settle::e4_escrow_owned_by_another_vault -> FLIPPED
+  also flipped (1): settle::e4_escrow_owned_by_the_cash_vault
+[E5] require(escrowed.amount == amount);
+  expected flip: settle::e5_escrow_over_funded -> FLIPPED
+  also flipped (3): settle::e5_cash_escrow_over_funded, settle::e5_cash_escrow_under_funded, settle::e5_escrow_under_funded
+[E6] require(!escrowed.isMinter);
+  expected flip: settle::e6_minter_escrow_cannot_hand_minting_to_a_stranger -> FLIPPED
+  also flipped (0): none
+[S8] require(tx.outputs[k].scriptPubKey == byte[](new ScriptPubKeyP2PK(depositor)));
+  expected flip: settle::s8_seller_authorizer_return_to_stranger -> FLIPPED
+  also flipped (4): settle::s8_buyer_authorizer_return_omitted, settle::s8_buyer_authorizer_return_to_stranger, settle::s8_external_cash_seller_return_omitted, settle::s8_seller_authorizer_return_omitted
+[S9] require(tx.outputs[k].value >= tx.inputs[this.activeInputIndex].value);
+  expected flip: settle::s9_seller_return_short -> FLIPPED
+  also flipped (2): settle::s9_buyer_return_short, settle::s9_external_cash_seller_return_short
+[D1] require(OpOutputCovenantId(k) == cov);
+  expected flip: settle::d1_output0_under_decoy_covenant -> FLIPPED
+  also flipped (1): settle::d1_cash_output1_under_decoy_covenant
+[D2] require(tx.outputs[k].value >= tx.inputs[templateIdx].value);
+  expected flip: settle::d2_asset_delivery_carrier_kas_short -> FLIPPED
+  also flipped (2): settle::d2_cash_delivery_carrier_kas_short, settle::d2_external_cash_asset_delivery_carrier_kas_short
+[S1] require(this.activeInputIndex == legIndex);
+  expected flip: settle::s1_second_kas_cash_deposit_cannot_settle_off_its_index -> FLIPPED
+  also flipped (1): settle::s1_asset_vault_refuses_input_1
+[S7] require(hasAuthority);
+  expected flip: settle::s7_external_cash_without_authority -> FLIPPED
+  also flipped (1): settle::s7_self_settling_external_cash_never_settles
+[S2] require(tx.inputs[this.activeInputIndex].value == amountB);
+  expected flip: settle::s2_kas_cash_vault_under_funded -> FLIPPED
+  also flipped (1): settle::s2_kas_cash_vault_over_funded
+[S3] require(tx.daa >= earliestDaa);
+  expected flip: locktime::s3_settle_one_daa_before_earliest -> FLIPPED
+  also flipped (2): locktime::s3_settle_with_finalized_vault_input, locktime::s3_settle_with_timestamp_lock_time
+[S4] require(tx.outputs[1].scriptPubKey == sellerProceedsSpk);
+  expected flip: settle::s4_kas_proceeds_to_stranger -> FLIPPED
+  also flipped (0): none
+[S5] require(tx.outputs[1].value == amountB);
+  expected flip: settle::s5_kas_proceeds_short -> FLIPPED
+  also flipped (0): none
+[S6] require(checkSig(authSig, authorityKey));
+  expected flip: settle::s6_authority_signature_from_stranger -> FLIPPED
+  also flipped (2): settle::s6_authority_signature_from_a_party, settle::s6_authority_signature_missing
+[R1] require(signer == depositor || signer == counterparty || (hasAuthority && signer == authorityKey));
+  expected flip: refund::r1_stranger_signer -> FLIPPED
+  also flipped (1): refund::r1_authority_key_without_authority_flag
+[R2] require(checkSig(s, signer));
+  expected flip: refund::r2_depositor_named_stranger_signs -> FLIPPED
+  also flipped (1): refund::r2_authority_named_counterparty_signs
+[R3] require(tx.daa >= expiryDaa);
+  expected flip: locktime::r3_depositor_earmarked_refund_one_daa_before_expiry -> FLIPPED
+  also flipped (3): locktime::r3_cash_depositor_earmarked_refund_one_daa_before_expiry, locktime::r3_depositor_earmarked_refund_with_finalized_input, locktime::r3_unknown_funding_mode_is_earmarked
+[R4] require(this.activeInputIndex == 0);
+  expected flip: refund::r4_second_kas_cash_deposit_cannot_refund_off_input_0 -> FLIPPED
+  also flipped (0): none
+[R5] require(tx.outputs[0].value == tx.inputs[0].value);
+  expected flip: refund::r5_authorizer_kas_short -> FLIPPED
+  also flipped (1): refund::r5_kas_cash_short
+[R6] require(tx.outputs[0].scriptPubKey == buyerRefundSpk);
+  expected flip: refund::r6_kas_cash_to_stranger -> FLIPPED
+  also flipped (0): none
+[R7] require(tx.outputs[0].scriptPubKey == byte[](new ScriptPubKeyP2PK(depositor)));
+  expected flip: refund::r7_authorizer_kas_to_stranger -> FLIPPED
+  also flipped (1): refund::r7_authorizer_kas_to_counterparty
+[R11] require(tokenInputs == 1);
+  expected flip: refund::r11_counterparty_cannot_refund_asset_authorizer_without_token -> FLIPPED
+  also flipped (3): refund::r11_authority_cannot_refund_asset_authorizer_without_token, refund::r11_authority_cannot_refund_cash_authorizer_without_token, refund::r11_counterparty_cannot_refund_cash_authorizer_without_token
+[R8] require(tokenInputs == 1);
+  expected flip: escrow_release::second_escrow_deposit_cannot_ride_along_a_refund -> FLIPPED
+  also flipped (0): none
+[R9] require(OpCovInputIdx(cov, 0) == REFUND_TOKEN_INPUT);
+  expected flip: refund::r9_decoy_token_at_input_1_real_escrow_elsewhere -> FLIPPED
+  also flipped (1): escrow_release::second_vault_utxo_via_refund_cannot_release_escrow_held_at_another_index
+[R12] require(this.activeScriptPubKey == byte[](new ScriptPubKeyP2SH(escrowed.ownerIdentifier)));
+  expected flip: refund::r12_counterparty_cannot_substitute_a_foreign_token -> FLIPPED
+  also flipped (0): none
+[R14] require(escrowed.amount == legAmount);
+  expected flip: refund::r14_asset_decoy_amount_0 -> FLIPPED
+  also flipped (7): refund::r14_asset_decoy_amount_0_by_authority, refund::r14_asset_decoy_amount_1, refund::r14_asset_decoy_amount_leg_minus_1, refund::r14_cash_decoy_amount_0, refund::r14_cash_decoy_amount_1, refund::r14_cash_decoy_amount_leg_minus_1, refund::r14_counterparty_cannot_refund_under_funded_escrow
+[R10] require(OpOutputCovenantId(REFUND_TOKEN_OUTPUT) == cov);
+  expected flip: refund::r10_home_output_under_decoy_covenant -> FLIPPED
+  also flipped (0): none
+[R13] require(tx.outputs[REFUND_TOKEN_OUTPUT].value >= tx.inputs[REFUND_TOKEN_INPUT].value);
+  expected flip: refund::r13_token_carrier_kas_short -> FLIPPED
+  also flipped (0): none
+
+result: 31 of 31 requires caught by their named test
+
+EXIT 0

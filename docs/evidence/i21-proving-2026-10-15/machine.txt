@@ -1,0 +1,62 @@
+date_utc: 2026-10-15T19:26:23Z
+commit: 2f9445cafac248eac56c181a9faeec95c0dbf177 (working tree 57 changed paths)
+cpu: Apple M1 Max
+hw.memsize: 34359738368
+hw.ncpu: 10
+ProductName:		macOS
+ProductVersion:		27.0.1
+BuildVersion:		26A434
+--- docker version
+Client:
+ Version:           29.8.2
+ API version:       1.56
+ Go version:        go1.26.8
+ Git commit:        7fc2dff
+ Built:             Wed Sep 30 19:32:03 2026
+ OS/Arch:           darwin/arm64
+ Context:           desktop-linux
+
+Server: Docker Desktop 4.95.0 (242831)
+ Engine:
+  Version:          29.8.2
+  API version:      1.56 (minimum version 1.40)
+  Go version:       go1.26.8
+  Git commit:       8af9fe3
+  Built:            Wed Sep 30 19:31:50 2026
+  OS/Arch:          linux/arm64
+  Experimental:     false
+ containerd:
+  Version:          v2.3.6
+  GitCommit:        ee2735368117d2eb259779949d5e75cdafec9761
+ runc:
+  Version:          1.5.1
+  GitCommit:        v1.5.1-0-g8f2685a4
+ docker-init:
+  Version:          0.19.0
+  GitCommit:        de40ad0
+--- docker VM limits
+NCPU=10 MemTotal=8319504384 OperatingSystem=Docker Desktop Architecture=aarch64
+--- rzup show
+Installed components:
+--------------------
+
+cargo-risczero
+* 3.0.6
+  3.0.5
+
+cpp
+* 2024.1.5
+
+r0vm
+* 3.0.6
+  3.0.5
+
+rust
+* 1.97.0
+  1.91.1
+
+rzup home: ~/.risc0
+--- groth16 prover image
+sha256:55236d558d1e16e27f86f73237215c49f686521cab7652931c61c96d62cabcfc [risczero/risc0-groth16-prover@sha256:55236d558d1e16e27f86f73237215c49f686521cab7652931c61c96d62cabcfc] arm64
+--- impulse-zk-prove-terms --image-id
+fd5a0071f09f0d22d4b71a276350a6c07ae117fab274d8d23fbf4fe9a4eacf07

@@ -1,0 +1,53 @@
+{
+  "name": "13-fund-kas-partial-genesis",
+  "description": "Funding of the KAS leg (leg 1) of terms vector 06 as its own KIP-20 genesis: output 0 is bound to a covenant ID made over the first payer input and that output alone.",
+  "ipst": {
+    "ipst": 2,
+    "terms": "02004e4e4e4e00000000014a90052e5c90a8b21e84a231dd14be0ea3b5ba32eda078aca4419b891af63427023688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c0110101010101010101010101010101010101010101010101010101010101010102a5713a61a2c350c9f76583746d95054ef6bb4160e1c338239249549929b9c9c01000000b4050000e80300000000000000624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f003688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f0000e1f50500000000003688ad76c44a518256c9af690e016f3e41fef3153a1dddb8f097ae579299316c016511b5280f1cebe32de116c06c4c68f8d6f3cee94ac028df8b3f57bbb8fa0e740140420f000000000080841e00000000000001040000000000000001000000000000002a5495227823385a86971651a3b6b68ed71311d73f43e9fd3a92ab53f1c4d7ce",
+    "lock_time": "0",
+    "inputs": [
+      {
+        "transaction_id": "4824662edab8967134a449b712ab2a3ca25853b60d44aad82536769efc0ae9ed",
+        "index": 0,
+        "sequence": "0",
+        "compute_budget": 10,
+        "utxo": {
+          "amount": "5000000000",
+          "script_public_key": {
+            "version": 0,
+            "script": "20624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133fac"
+          },
+          "block_daa_score": "100",
+          "is_coinbase": false,
+          "covenant_id": null
+        },
+        "signer": "624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133f",
+        "sighash": "f4251a01bbce1442adc1ad4166e7491e4ed827ce9d41e72f0072190ec1bfcb76",
+        "signature": null,
+        "script_before": "",
+        "script_after": ""
+      }
+    ],
+    "outputs": [
+      {
+        "value": "100000000",
+        "script_public_key": {
+          "version": 0,
+          "script": "aa20efd4a8fe8a9550e680e43aa51fe17abdc195cb0af8e4299ed55ce899d278e27c87"
+        },
+        "covenant": {
+          "authorizing_input": 0,
+          "covenant_id": "3ec41b95205800a3564484389cd516cc8d8d3cf7d030c1b5bca8713d2f979187"
+        }
+      },
+      {
+        "value": "4850000000",
+        "script_public_key": {
+          "version": 0,
+          "script": "20624c2fbd46fa3ce605786199d7a70d3e89aad0bb0b349409f524e657ea78133fac"
+        },
+        "covenant": null
+      }
+    ]
+  }
+}

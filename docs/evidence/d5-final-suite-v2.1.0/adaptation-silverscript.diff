@@ -1,0 +1,162 @@
+diff Cargo.toml
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -46,3 +46,28 @@
+ silverscript-abi = { path = "silverscript-abi" }
+ silverscript-debug-artifact = { path = "silverscript-debug-artifact" }
+ thiserror = "1.0.61"
++
++# D5 evidence only: build against rusty-kaspa v2.1.0 (01b532e).
++[patch."https://github.com/kaspanet/rusty-kaspa"]
++kaspa-addresses = { path = "/private/tmp/scratch/d5final/rk/crypto/addresses" }
++kaspa-consensus = { path = "/private/tmp/scratch/d5final/rk/consensus" }
++kaspa-consensus-client = { path = "/private/tmp/scratch/d5final/rk/consensus/client" }
++kaspa-consensus-core = { path = "/private/tmp/scratch/d5final/rk/consensus/core" }
++kaspa-consensus-notify = { path = "/private/tmp/scratch/d5final/rk/consensus/notify" }
++kaspa-consensusmanager = { path = "/private/tmp/scratch/d5final/rk/components/consensusmanager" }
++kaspa-core = { path = "/private/tmp/scratch/d5final/rk/core" }
++kaspa-database = { path = "/private/tmp/scratch/d5final/rk/database" }
++kaspa-hashes = { path = "/private/tmp/scratch/d5final/rk/crypto/hashes" }
++kaspa-math = { path = "/private/tmp/scratch/d5final/rk/math" }
++kaspa-merkle = { path = "/private/tmp/scratch/d5final/rk/crypto/merkle" }
++kaspa-muhash = { path = "/private/tmp/scratch/d5final/rk/crypto/muhash" }
++kaspa-notify = { path = "/private/tmp/scratch/d5final/rk/notify" }
++kaspa-pow = { path = "/private/tmp/scratch/d5final/rk/consensus/pow" }
++kaspa-seq-commit = { path = "/private/tmp/scratch/d5final/rk/consensus/seq-commit" }
++kaspa-smt = { path = "/private/tmp/scratch/d5final/rk/crypto/smt" }
++kaspa-smt-store = { path = "/private/tmp/scratch/d5final/rk/consensus/smt-store" }
++kaspa-txscript = { path = "/private/tmp/scratch/d5final/rk/crypto/txscript" }
++kaspa-txscript-errors = { path = "/private/tmp/scratch/d5final/rk/crypto/txscript/errors" }
++kaspa-txscript-zk-sdk = { path = "/private/tmp/scratch/d5final/rk/crypto/txscript/zk-sdk" }
++kaspa-utils = { path = "/private/tmp/scratch/d5final/rk/utils" }
++kaspa-wasm-core = { path = "/private/tmp/scratch/d5final/rk/wasm/core" }
+diff silverscript-abi/src/lib.rs
+--- a/silverscript-abi/src/lib.rs
++++ b/silverscript-abi/src/lib.rs
+@@ -898,7 +898,7 @@
+ }
+ 
+ fn script_builder() -> ScriptBuilder {
+-    ScriptBuilder::with_flags(EngineFlags { covenants_enabled: true, ..Default::default() })
++    ScriptBuilder::with_flags(EngineFlags::default())
+ }
+ 
+ fn push_sig_arg(
+@@ -1201,7 +1201,7 @@
+ }
+ 
+ fn deserialize_fixed_i64(bytes: &[u8]) -> CodecResult<i64> {
+-    deserialize_script_i64(bytes, false).map_err(|err| CodecError::InvalidPush(err.to_string()))
++    deserialize_script_i64(bytes).map_err(|err| CodecError::InvalidPush(err.to_string()))
+ }
+ 
+ fn expect_int(value: &ArtifactValue) -> CodecResult<i64> {
+diff silverscript-lang/src/compiler/compile/expression.rs
+--- a/silverscript-lang/src/compiler/compile/expression.rs
++++ b/silverscript-lang/src/compiler/compile/expression.rs
+@@ -4,7 +4,7 @@
+ use crate::compiler::builtin_types::constructor_parameters;
+ use kaspa_txscript::opcodes::{OP_DATA_MAX_VAL, OP_DATA_MIN_VAL};
+ use kaspa_txscript::script_builder::ScriptBuilderError;
+-use kaspa_txscript::{max_script_element_size, max_scripts_size};
++use kaspa_txscript::{MAX_SCRIPT_ELEMENT_SIZE, MAX_SCRIPTS_SIZE};
+ 
+ mod builtin;
+ 
+@@ -728,11 +728,11 @@
+ pub(super) fn data_prefix(data_len: usize) -> Result<Vec<u8>, CompilerError> {
+     let encoded_size = explicit_push_encoded_size(data_len)?;
+     // Match the covenant-enabled script builder's validation order without allocating the payload.
+-    let script_limit = max_scripts_size(true);
++    let script_limit = MAX_SCRIPTS_SIZE;
+     if encoded_size > script_limit {
+         return Err(ScriptBuilderError::DataRejected(encoded_size, script_limit).into());
+     }
+-    let element_limit = max_script_element_size(true);
++    let element_limit = MAX_SCRIPT_ELEMENT_SIZE;
+     if data_len > element_limit {
+         return Err(ScriptBuilderError::ElementExceedsMaxSize(data_len, element_limit).into());
+     }
+@@ -756,7 +756,7 @@
+ 
+     #[test]
+     fn data_prefix_matches_builder_encoding_and_size_errors() {
+-        let limit = max_scripts_size(true);
++        let limit = MAX_SCRIPTS_SIZE;
+         for data_len in [0, 1, 74, 75, 76, 254, 255, 256, 65534, 65535, 65536, limit - 5, limit - 4, limit, limit + 1] {
+             let mut builder = script_builder();
+             let data = vec![0; data_len];
+diff silverscript-lang/src/compiler/compile/stack_analysis/stack.rs
+--- a/silverscript-lang/src/compiler/compile/stack_analysis/stack.rs
++++ b/silverscript-lang/src/compiler/compile/stack_analysis/stack.rs
+@@ -59,7 +59,7 @@
+     /// Pop a known nonnegative integer used as a stack index or argument count.
+     pub(super) fn pop_count(&mut self, at: &Location<'_>) -> Result<usize, CompilerError> {
+         if let Value::Bytes(bytes) = self.pop(at)?
+-            && let Ok(number) = deserialize_i64(&bytes, false)
++            && let Ok(number) = deserialize_i64(&bytes)
+             && let Ok(count) = usize::try_from(number)
+         {
+             return Ok(count);
+diff silverscript-lang/src/compiler/compile.rs
+--- a/silverscript-lang/src/compiler/compile.rs
++++ b/silverscript-lang/src/compiler/compile.rs
+@@ -12,7 +12,7 @@
+ use kaspa_txscript::opcodes::codes::*;
+ use kaspa_txscript::script_builder::ScriptBuilder;
+ use kaspa_txscript::serialize_i64;
+-use kaspa_txscript::{EngineFlags, MAX_STACK_SIZE, NO_COST_OPCODE, max_ops_per_script, max_scripts_size, parse_script};
++use kaspa_txscript::{EngineFlags, MAX_OPS_PER_SCRIPT, MAX_SCRIPTS_SIZE, MAX_STACK_SIZE, NO_COST_OPCODE, parse_script};
+ use std::collections::{BTreeMap, HashMap, HashSet};
+ 
+ mod analysis;
+@@ -35,7 +35,7 @@
+ use statement::*;
+ 
+ fn script_builder() -> ScriptBuilder {
+-    ScriptBuilder::with_flags(EngineFlags { covenants_enabled: true, ..Default::default() })
++    ScriptBuilder::with_flags(EngineFlags::default())
+ }
+ 
+ pub(super) fn compile_contract_impl<'i>(
+@@ -169,9 +169,9 @@
+ }
+ 
+ fn validate_txscript_bytecode_limits(bytecode: &[u8]) -> Result<(), CompilerError> {
+-    let maximum_operations = usize::try_from(max_ops_per_script(true))
++    let maximum_operations = usize::try_from(MAX_OPS_PER_SCRIPT)
+         .map_err(|_| CompilerError::BytecodeLimitAnalysis("negative opcode limit".to_string()))?;
+-    validate_txscript_bytecode_limits_with(bytecode, max_scripts_size(true), maximum_operations)
++    validate_txscript_bytecode_limits_with(bytecode, MAX_SCRIPTS_SIZE, maximum_operations)
+ }
+ 
+ fn validate_txscript_bytecode_limits_with(
+@@ -200,7 +200,7 @@
+     entrypoints: &[&FunctionAst<'i>],
+     constants: &HashMap<String, Expr<'i>>,
+ ) -> Result<(), CompilerError> {
+-    let max_signature_script_len = MAINNET_PARAMS.new_max_signature_script_len;
++    let max_signature_script_len = MAINNET_PARAMS.max_signature_script_len;
+     if bytecode.len() > max_signature_script_len {
+         return Err(CompilerError::RedeemScriptTooLarge { actual: bytecode.len(), maximum: max_signature_script_len });
+     }
+diff silverscript-lang/src/compiler/type_check.rs
+--- a/silverscript-lang/src/compiler/type_check.rs
++++ b/silverscript-lang/src/compiler/type_check.rs
+@@ -1,6 +1,6 @@
+ use std::collections::HashMap;
+ 
+-use kaspa_txscript::{max_script_element_size, script_builder::ScriptBuilderError};
++use kaspa_txscript::{MAX_SCRIPT_ELEMENT_SIZE, script_builder::ScriptBuilderError};
+ 
+ use crate::ast::{
+     ArrayDim, BinaryOp, ContractFieldAst, Expr, ExprKind, FunctionAst, SplitPart, TypeBase, TypeRef, UnaryOp, UnarySuffixKind,
+@@ -157,7 +157,7 @@
+     };
+ 
+     if let Some(actual_size) = fixed_type_size(&actual, ctx.constants)? {
+-        let maximum = max_script_element_size(true);
++        let maximum = MAX_SCRIPT_ELEMENT_SIZE;
+         if actual_size > maximum {
+             return Err(ScriptBuilderError::ElementExceedsMaxSize(actual_size, maximum).into());
+         }

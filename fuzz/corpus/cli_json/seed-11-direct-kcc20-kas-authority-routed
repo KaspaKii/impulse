@@ -1,0 +1,49 @@
+{
+  "terms": {
+    "version": 1,
+    "network": "mainnet",
+    "settlement_mode": "direct",
+    "nonce": "10444080595097004798",
+    "seller_key": "95e2f4e4fe97ed99e78ac44930508f03b408bde943a16d35bd8f1d0228a8bc3e",
+    "buyer_key": "67b2e7c8dfe143ccdad9cdd0929b9bfff2ed9039ef21a146a2caab1c2b542de3",
+    "authority_key": "146c937a7572d914e7cfec44a313b3a0327926634f78d81134d4c671c43ec50d",
+    "asset_leg": {
+      "kind": "kcc20",
+      "covenant_id": "fe904de9baa7fe17d441105dd757e7911e192998e4e096d3c84f4711c6b3dd0d",
+      "template_hash": "a227fc3aa2f3d922b7f8d7dfdca462660dbe51bd1735508f9dda9a656100c794",
+      "template_prefix_len": 40,
+      "template_suffix_len": 1420,
+      "amount": "2500"
+    },
+    "cash_leg": {
+      "kind": "kas",
+      "amount": "25000000000"
+    },
+    "buyer_delivery": {
+      "kind": "kcc20",
+      "identifier_type": "pubkey",
+      "identifier": "67b2e7c8dfe143ccdad9cdd0929b9bfff2ed9039ef21a146a2caab1c2b542de3"
+    },
+    "seller_proceeds": {
+      "kind": "kas",
+      "version": 0,
+      "script": "2095e2f4e4fe97ed99e78ac44930508f03b408bde943a16d35bd8f1d0228a8bc3eac"
+    },
+    "seller_refund": {
+      "kind": "kcc20",
+      "identifier_type": "pubkey",
+      "identifier": "95e2f4e4fe97ed99e78ac44930508f03b408bde943a16d35bd8f1d0228a8bc3e"
+    },
+    "buyer_refund": {
+      "kind": "kas",
+      "version": 0,
+      "script": "2067b2e7c8dfe143ccdad9cdd0929b9bfff2ed9039ef21a146a2caab1c2b542de3ac"
+    },
+    "earliest_daa": "400036000",
+    "expiry_daa": "400864000",
+    "funding_mode": "revocable",
+    "trade_ref": "af93e959e3b5d3bd5e033bbad7344ebf7fb8827a2926a02620b4b3ff53b07b76"
+  },
+  "canonical": "010000feaa4e54f7d3f09095e2f4e4fe97ed99e78ac44930508f03b408bde943a16d35bd8f1d0228a8bc3e67b2e7c8dfe143ccdad9cdd0929b9bfff2ed9039ef21a146a2caab1c2b542de301146c937a7572d914e7cfec44a313b3a0327926634f78d81134d4c671c43ec50d01fe904de9baa7fe17d441105dd757e7911e192998e4e096d3c84f4711c6b3dd0da227fc3aa2f3d922b7f8d7dfdca462660dbe51bd1735508f9dda9a656100c794280000008c050000c4090000000000000000ba1dd205000000010067b2e7c8dfe143ccdad9cdd0929b9bfff2ed9039ef21a146a2caab1c2b542de3000000220000002095e2f4e4fe97ed99e78ac44930508f03b408bde943a16d35bd8f1d0228a8bc3eac010095e2f4e4fe97ed99e78ac44930508f03b408bde943a16d35bd8f1d0228a8bc3e000000220000002067b2e7c8dfe143ccdad9cdd0929b9bfff2ed9039ef21a146a2caab1c2b542de3ac01a010d8170000000000b3e4170000000000af93e959e3b5d3bd5e033bbad7344ebf7fb8827a2926a02620b4b3ff53b07b76",
+  "terms_hash": "a4b6544357d09ff67a0db0c75fc58cd97436a89a27cbf0a9bd60f4183242b0d0"
+}

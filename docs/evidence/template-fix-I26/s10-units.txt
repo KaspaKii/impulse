@@ -1,0 +1,161 @@
+Template v1 with [S10] (I26, the other leg's vault in a settle): sizes, script units and compute mass, before and after
+Recorded 2026-10-19 on Apple M1 Max, Rust 1.94.0, rusty-kaspa a41a333 (kaspa-txscript, covenants enabled), silverscript v1.0.0, mainnet parameters.
+Base: e49630f (fix/public-scope), working tree with the I26 contracts.
+Before: contracts/impulse_vault.sil at e49630f, TEMPLATE_HASH 54f67adec9fde967160bb7435a1cdcb2c021a7c29a667d6aeed6d57bddaa9478.
+After: contracts/impulse_vault.sil of I26, TEMPLATE_HASH ec92ce9d06ff2f57a4f547b724b6fdfe9d9fa62814e687d8670ae96d331e6f02.
+Template v3 is measured in docs/measurements/v3-zk-units.txt (scripts/measure-v3-units.sh, real receipts).
+
+Method: tests/engine/measure.rs, both tests, run once against each source with one fee input
+(sizes_units_and_mass_per_entry_and_mode: every vault and token input at its exact covering budget,
+proven at the boundary, and the transaction's compute mass) and with fee inputs up to the bound of
+12 inputs (settle_units_at_the_bound_stay_within_the_builder_rule, which also asserts that each
+settle vault input stays within the builders' rule 100,000 + 45,000 + 17 per template byte read).
+The "before" run points the same tests at the earlier source through IMPULSE_VAULT_SIL. Commands:
+  IMPULSE_VAULT_SIL=<earlier source> cargo test --locked -q -p impulse-engine-tests --test measure -- --nocapture --test-threads 1
+  cargo test --locked -q -p impulse-engine-tests --test measure -- --nocapture --test-threads 1
+
+Template sizes (bytes, from scripts/build-template.sh, compiled artifact with empty KAS scriptPubKey fields):
+  v1  before 3854 (suffix 3345), after 3946 (suffix 3437)
+  v3  before 4839 (suffix 4264), after 4931 (suffix 4356)
+
+Raw output (cargo warning lines removed; nothing else edited):
+=== before
+
+running 2 tests
+| Settle | Vault input | 1 fee input | 12 inputs | Units per extra input | Builder rule |
+| --- | --- | --- | --- | --- | --- |
+| authority, KAS cash | 0 | 136427 | 138307 | 235 | 169837 |
+| authority, KAS cash | 1 | 124752 | 126640 | 236 | 169837 |
+| authority, KCC-20 cash | 0 | 154100 | 155738 | 234 | 198057 |
+| authority, KCC-20 cash | 1 | 155466 | 157111 | 235 | 198057 |
+| authority, external cash | 0 | 135964 | 138079 | 235 | 169837 |
+| self-settling, KAS cash | 0 | 36329 | 38209 | 235 | 169837 |
+| self-settling, KAS cash | 1 | 24654 | 26542 | 236 | 169837 |
+| self-settling, KCC-20 cash | 0 | 54002 | 55640 | 234 | 198057 |
+| self-settling, KCC-20 cash | 1 | 55368 | 57013 | 235 | 198057 |
+.
+| Spend | Redeem script (bytes) | Sigscript (bytes) | Script units | Compute budget (units) | Budget mass (grams) |
+| --- | --- | --- | --- | --- | --- |
+| Settle, authority, KAS cash: settle, input 0 | 3927 | 4001 | 136427 | 13 | 1300 |
+| Settle, authority, KAS cash: settle, input 1 | 3927 | 4001 | 124752 | 12 | 1200 |
+| Settle, authority, KAS cash: KCC-20 transfer, input 2 | 1507 | 1629 | 11186 | 1 | 100 |
+| Settle, authority, KCC-20 cash: settle, input 0 | 3854 | 3928 | 154100 | 15 | 1500 |
+| Settle, authority, KCC-20 cash: settle, input 1 | 3854 | 3928 | 155466 | 15 | 1500 |
+| Settle, authority, KCC-20 cash: KCC-20 transfer, input 2 | 1507 | 1629 | 11186 | 1 | 100 |
+| Settle, authority, KCC-20 cash: KCC-20 transfer, input 3 | 1706 | 1827 | 12392 | 1 | 100 |
+| Settle, authority, external cash: settle, input 0 | 3854 | 3928 | 135964 | 13 | 1300 |
+| Settle, authority, external cash: KCC-20 transfer, input 1 | 1507 | 1629 | 11186 | 1 | 100 |
+| Settle, self-settling, KAS cash: settle, input 0 | 3927 | 4001 | 36329 | 3 | 300 |
+| Settle, self-settling, KAS cash: settle, input 1 | 3927 | 4001 | 24654 | 2 | 200 |
+| Settle, self-settling, KAS cash: KCC-20 transfer, input 2 | 1507 | 1629 | 11186 | 1 | 100 |
+| Settle, self-settling, KCC-20 cash: settle, input 0 | 3854 | 3928 | 54002 | 5 | 500 |
+| Settle, self-settling, KCC-20 cash: settle, input 1 | 3854 | 3928 | 55368 | 5 | 500 |
+| Settle, self-settling, KCC-20 cash: KCC-20 transfer, input 2 | 1507 | 1629 | 11186 | 1 | 100 |
+| Settle, self-settling, KCC-20 cash: KCC-20 transfer, input 3 | 1706 | 1827 | 12392 | 1 | 100 |
+| Refund asset leg, depositor, revocable: refund, input 0 | 3854 | 3961 | 136094 | 13 | 1300 |
+| Refund asset leg, depositor, revocable: KCC-20 transfer, input 1 | 1507 | 1629 | 11188 | 1 | 100 |
+| Refund asset leg, counterparty, revocable: refund, input 0 | 3854 | 3961 | 136129 | 13 | 1300 |
+| Refund asset leg, counterparty, revocable: KCC-20 transfer, input 1 | 1507 | 1629 | 11188 | 1 | 100 |
+| Refund asset leg, authority, revocable: refund, input 0 | 3854 | 3961 | 136129 | 13 | 1300 |
+| Refund asset leg, authority, revocable: KCC-20 transfer, input 1 | 1507 | 1629 | 11188 | 1 | 100 |
+| Refund asset leg, depositor, earmarked: refund, input 0 | 3854 | 3961 | 136112 | 13 | 1300 |
+| Refund asset leg, depositor, earmarked: KCC-20 transfer, input 1 | 1507 | 1629 | 11188 | 1 | 100 |
+| Refund asset leg, counterparty, earmarked: refund, input 0 | 3854 | 3961 | 136129 | 13 | 1300 |
+| Refund asset leg, counterparty, earmarked: KCC-20 transfer, input 1 | 1507 | 1629 | 11188 | 1 | 100 |
+| Refund asset leg, authority, earmarked: refund, input 0 | 3854 | 3961 | 136129 | 13 | 1300 |
+| Refund asset leg, authority, earmarked: KCC-20 transfer, input 1 | 1507 | 1629 | 11188 | 1 | 100 |
+| Refund KAS cash leg, depositor, earmarked: refund, input 0 | 3927 | 4034 | 108861 | 10 | 1000 |
+| Refund KCC-20 cash leg, counterparty, earmarked: refund, input 0 | 3854 | 3961 | 139568 | 13 | 1300 |
+| Refund KCC-20 cash leg, counterparty, earmarked: KCC-20 transfer, input 1 | 1706 | 1827 | 12392 | 1 | 100 |
+| Refund authorizer without token, depositor, earmarked: refund, input 0 | 3854 | 3961 | 108907 | 10 | 1000 |
+
+| Transaction | Inputs | Outputs | Budgets per input | Compute mass (grams) | Of pre-Toccata cap 100000 |
+| --- | --- | --- | --- | --- | --- |
+| Settle, authority, KAS cash | 4 | 4 | [13, 12, 1, 0] | 14247 | 14.2% |
+| Settle, authority, KCC-20 cash | 5 | 5 | [15, 15, 1, 1, 0] | 17039 | 17.0% |
+| Settle, authority, external cash | 3 | 3 | [13, 1, 0] | 8507 | 8.5% |
+| Settle, self-settling, KAS cash | 4 | 4 | [3, 2, 1, 0] | 12247 | 12.2% |
+| Settle, self-settling, KCC-20 cash | 5 | 5 | [5, 5, 1, 1, 0] | 15039 | 15.0% |
+| Refund asset leg, depositor, revocable | 3 | 3 | [13, 1, 0] | 8540 | 8.5% |
+| Refund asset leg, counterparty, revocable | 3 | 3 | [13, 1, 0] | 8540 | 8.5% |
+| Refund asset leg, authority, revocable | 3 | 3 | [13, 1, 0] | 8540 | 8.5% |
+| Refund asset leg, depositor, earmarked | 3 | 3 | [13, 1, 0] | 8540 | 8.5% |
+| Refund asset leg, counterparty, earmarked | 3 | 3 | [13, 1, 0] | 8540 | 8.5% |
+| Refund asset leg, authority, earmarked | 3 | 3 | [13, 1, 0] | 8540 | 8.5% |
+| Refund KAS cash leg, depositor, earmarked | 2 | 2 | [10, 0] | 6084 | 6.1% |
+| Refund KCC-20 cash leg, counterparty, earmarked | 3 | 3 | [13, 1, 0] | 8738 | 8.7% |
+| Refund authorizer without token, depositor, earmarked | 2 | 2 | [10, 0] | 6000 | 6.0% |
+Mainnet block compute mass limit: 500000 grams. Grams per compute budget unit: 100.
+.
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 24.30s
+
+=== after
+
+running 2 tests
+| Settle | Vault input | 1 fee input | 12 inputs | Units per extra input | Builder rule |
+| --- | --- | --- | --- | --- | --- |
+| authority, KAS cash | 0 | 157552 | 159432 | 235 | 169837 |
+| authority, KAS cash | 1 | 145878 | 147766 | 236 | 169837 |
+| authority, KCC-20 cash | 0 | 174710 | 176348 | 234 | 198057 |
+| authority, KCC-20 cash | 1 | 176077 | 177722 | 235 | 198057 |
+| authority, external cash | 0 | 136150 | 138265 | 235 | 169837 |
+| self-settling, KAS cash | 0 | 57454 | 59334 | 235 | 169837 |
+| self-settling, KAS cash | 1 | 45780 | 47668 | 236 | 169837 |
+| self-settling, KCC-20 cash | 0 | 74612 | 76250 | 234 | 198057 |
+| self-settling, KCC-20 cash | 1 | 75979 | 77624 | 235 | 198057 |
+.
+| Spend | Redeem script (bytes) | Sigscript (bytes) | Script units | Compute budget (units) | Budget mass (grams) |
+| --- | --- | --- | --- | --- | --- |
+| Settle, authority, KAS cash: settle, input 0 | 4019 | 4093 | 157552 | 15 | 1500 |
+| Settle, authority, KAS cash: settle, input 1 | 4019 | 4093 | 145878 | 14 | 1400 |
+| Settle, authority, KAS cash: KCC-20 transfer, input 2 | 1507 | 1629 | 11186 | 1 | 100 |
+| Settle, authority, KCC-20 cash: settle, input 0 | 3946 | 4020 | 174710 | 17 | 1700 |
+| Settle, authority, KCC-20 cash: settle, input 1 | 3946 | 4020 | 176077 | 17 | 1700 |
+| Settle, authority, KCC-20 cash: KCC-20 transfer, input 2 | 1507 | 1629 | 11186 | 1 | 100 |
+| Settle, authority, KCC-20 cash: KCC-20 transfer, input 3 | 1706 | 1827 | 12392 | 1 | 100 |
+| Settle, authority, external cash: settle, input 0 | 3946 | 4020 | 136150 | 13 | 1300 |
+| Settle, authority, external cash: KCC-20 transfer, input 1 | 1507 | 1629 | 11186 | 1 | 100 |
+| Settle, self-settling, KAS cash: settle, input 0 | 4019 | 4093 | 57454 | 5 | 500 |
+| Settle, self-settling, KAS cash: settle, input 1 | 4019 | 4093 | 45780 | 4 | 400 |
+| Settle, self-settling, KAS cash: KCC-20 transfer, input 2 | 1507 | 1629 | 11186 | 1 | 100 |
+| Settle, self-settling, KCC-20 cash: settle, input 0 | 3946 | 4020 | 74612 | 7 | 700 |
+| Settle, self-settling, KCC-20 cash: settle, input 1 | 3946 | 4020 | 75979 | 7 | 700 |
+| Settle, self-settling, KCC-20 cash: KCC-20 transfer, input 2 | 1507 | 1629 | 11186 | 1 | 100 |
+| Settle, self-settling, KCC-20 cash: KCC-20 transfer, input 3 | 1706 | 1827 | 12392 | 1 | 100 |
+| Refund asset leg, depositor, revocable: refund, input 0 | 3946 | 4053 | 136278 | 13 | 1300 |
+| Refund asset leg, depositor, revocable: KCC-20 transfer, input 1 | 1507 | 1629 | 11188 | 1 | 100 |
+| Refund asset leg, counterparty, revocable: refund, input 0 | 3946 | 4053 | 136313 | 13 | 1300 |
+| Refund asset leg, counterparty, revocable: KCC-20 transfer, input 1 | 1507 | 1629 | 11188 | 1 | 100 |
+| Refund asset leg, authority, revocable: refund, input 0 | 3946 | 4053 | 136313 | 13 | 1300 |
+| Refund asset leg, authority, revocable: KCC-20 transfer, input 1 | 1507 | 1629 | 11188 | 1 | 100 |
+| Refund asset leg, depositor, earmarked: refund, input 0 | 3946 | 4053 | 136296 | 13 | 1300 |
+| Refund asset leg, depositor, earmarked: KCC-20 transfer, input 1 | 1507 | 1629 | 11188 | 1 | 100 |
+| Refund asset leg, counterparty, earmarked: refund, input 0 | 3946 | 4053 | 136313 | 13 | 1300 |
+| Refund asset leg, counterparty, earmarked: KCC-20 transfer, input 1 | 1507 | 1629 | 11188 | 1 | 100 |
+| Refund asset leg, authority, earmarked: refund, input 0 | 3946 | 4053 | 136313 | 13 | 1300 |
+| Refund asset leg, authority, earmarked: KCC-20 transfer, input 1 | 1507 | 1629 | 11188 | 1 | 100 |
+| Refund KAS cash leg, depositor, earmarked: refund, input 0 | 4019 | 4126 | 109045 | 10 | 1000 |
+| Refund KCC-20 cash leg, counterparty, earmarked: refund, input 0 | 3946 | 4053 | 139752 | 13 | 1300 |
+| Refund KCC-20 cash leg, counterparty, earmarked: KCC-20 transfer, input 1 | 1706 | 1827 | 12392 | 1 | 100 |
+| Refund authorizer without token, depositor, earmarked: refund, input 0 | 3946 | 4053 | 109091 | 10 | 1000 |
+
+| Transaction | Inputs | Outputs | Budgets per input | Compute mass (grams) | Of pre-Toccata cap 100000 |
+| --- | --- | --- | --- | --- | --- |
+| Settle, authority, KAS cash | 4 | 4 | [15, 14, 1, 0] | 14831 | 14.8% |
+| Settle, authority, KCC-20 cash | 5 | 5 | [17, 17, 1, 1, 0] | 17623 | 17.6% |
+| Settle, authority, external cash | 3 | 3 | [13, 1, 0] | 8599 | 8.6% |
+| Settle, self-settling, KAS cash | 4 | 4 | [5, 4, 1, 0] | 12831 | 12.8% |
+| Settle, self-settling, KCC-20 cash | 5 | 5 | [7, 7, 1, 1, 0] | 15623 | 15.6% |
+| Refund asset leg, depositor, revocable | 3 | 3 | [13, 1, 0] | 8632 | 8.6% |
+| Refund asset leg, counterparty, revocable | 3 | 3 | [13, 1, 0] | 8632 | 8.6% |
+| Refund asset leg, authority, revocable | 3 | 3 | [13, 1, 0] | 8632 | 8.6% |
+| Refund asset leg, depositor, earmarked | 3 | 3 | [13, 1, 0] | 8632 | 8.6% |
+| Refund asset leg, counterparty, earmarked | 3 | 3 | [13, 1, 0] | 8632 | 8.6% |
+| Refund asset leg, authority, earmarked | 3 | 3 | [13, 1, 0] | 8632 | 8.6% |
+| Refund KAS cash leg, depositor, earmarked | 2 | 2 | [10, 0] | 6176 | 6.2% |
+| Refund KCC-20 cash leg, counterparty, earmarked | 3 | 3 | [13, 1, 0] | 8830 | 8.8% |
+| Refund authorizer without token, depositor, earmarked | 2 | 2 | [10, 0] | 6092 | 6.1% |
+Mainnet block compute mass limit: 500000 grams. Grams per compute budget unit: 100.
+.
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 45.99s
+

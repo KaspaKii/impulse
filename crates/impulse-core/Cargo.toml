@@ -1,0 +1,49 @@
+[package]
+name = "impulse-core"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[features]
+# I13: the FROST threshold settlement authority, `impulse_core::threshold`. Off by default: the
+# default build holds no secret material and links no share-handling code, so keyless consumers
+# (the WASM SDK, the watcher) stay keyless. spec/THRESHOLD.md, "Key material".
+# I20: proof-carrying settlement, `impulse_core::zk` (spec/V3-ZK.md). Off by default for the same
+# reason: the default build, which the WASM SDK and the watcher use, links none of it. It holds no
+# private key; salts of an issuer list come from the operating system's random number generator.
+zk = ["dep:ark-bn254", "dep:ark-groth16", "dep:ark-serialize", "dep:kaspa-txscript-errors", "dep:rand", "dep:serde", "dep:zeroize"]
+# I21: the hashed-terms vault, `impulse_core::zkh` (spec/V3-ZK.md section 22). Off by default.
+zk-hashed = ["dep:impulse-terms-core", "dep:kaspa-txscript-errors", "dep:serde"]
+threshold = ["dep:frost-core", "dep:frost-secp256k1-tr", "dep:rand", "dep:zeroize"]
+# I18: the hashlock secret generator, `impulse_core::htlc::HashlockSecret`. Off by default, as the
+# threshold feature is: only the seller's command line makes a secret (spec/V2.md section 10.5), so
+# the default build, which the WASM SDK and the watcher use, holds and generates none (D50).
+htlc-secret = ["dep:rand", "dep:zeroize"]
+
+[dependencies]
+ark-bn254 = { workspace = true, optional = true }
+ark-groth16 = { workspace = true, optional = true }
+ark-serialize = { workspace = true, optional = true }
+blake2b_simd.workspace = true
+borsh.workspace = true
+frost-core = { workspace = true, optional = true }
+frost-secp256k1-tr = { workspace = true, optional = true }
+impulse-terms-core = { path = "../../circuits/terms-core", optional = true }
+kaspa-addresses.workspace = true
+kaspa-consensus-core.workspace = true
+kaspa-txscript.workspace = true
+kaspa-txscript-errors = { workspace = true, optional = true }
+rand = { workspace = true, optional = true }
+secp256k1.workspace = true
+serde = { workspace = true, optional = true }
+serde_json.workspace = true
+# I18: sha256 of the hashlock preimage (spec/V2.md section 13, the version already in the lock).
+sha2.workspace = true
+silverscript-abi.workspace = true
+# I13 phase 2: encodings of secret threshold values come back in buffers zeroed on drop.
+zeroize = { workspace = true, optional = true }
+
+[dev-dependencies]
+proptest.workspace = true
+zeroize.workspace = true

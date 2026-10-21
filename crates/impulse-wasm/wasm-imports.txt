@@ -1,0 +1,120 @@
+# Every import of the built module, npm/pkg/impulse_wasm_bg.wasm, as "<module> <name>". ci.sh
+# fails unless the module imports exactly these. The hex suffix is wasm-bindgen's hash of the
+# declaring crate's name and version and the import's signature, so it changes only with them.
+# After a dependency or binding change, list the imports again and review each difference:
+#   node -e 'const m = new WebAssembly.Module(require("fs").readFileSync(
+#     "npm/pkg/impulse_wasm_bg.wasm")); for (const i of WebAssembly.Module.imports(m))
+#     console.log(i.module + " " + i.name)'
+# Every import is a function of "wbg", the generated glue (npm/pkg/impulse_wasm.js). An import
+# from any other module is a symbol the link left unresolved (see ci.sh on the LLVM archiver).
+
+# wasm-bindgen's own intrinsics.
+wbg __wbindgen_boolean_get
+wbg __wbindgen_debug_string
+wbg __wbindgen_error_new
+wbg __wbindgen_init_externref_table
+wbg __wbindgen_is_null
+wbg __wbindgen_is_object
+wbg __wbindgen_is_string
+wbg __wbindgen_is_undefined
+wbg __wbindgen_memory
+wbg __wbindgen_number_get
+wbg __wbindgen_number_new
+wbg __wbindgen_string_get
+wbg __wbindgen_string_new
+wbg __wbindgen_throw
+
+# impulse-wasm's bindings, through js-sys. Reflect: reading JSON-form values and building
+# results. Uint8Array, ArrayBuffer.isView: byte arguments and results. Array and String
+# length, Array index: walking keys. Error and its name: ImpulseError. JSON.parse: Terms.toJson.
+wbg __wbg_get_67b2ba62fc30de12
+wbg __wbg_getOwnPropertyDescriptor_5e8ddf002549cc1f
+wbg __wbg_getPrototypeOf_08aaacea7e300a38
+wbg __wbg_has_a5ea9117f258a0ec
+wbg __wbg_ownKeys_3930041068756f1f
+wbg __wbg_set_bb8cecf6a62b9f46
+wbg __wbg_new_405e22f390576ce2
+wbg __wbg_new_38c4c79f20c9ed56
+wbg __wbg_new_a12002a7f91c75be
+wbg __wbg_newwithbyteoffsetandlength_d97e637ebe145a9a
+wbg __wbg_buffer_609cc3eee51ed158
+wbg __wbg_set_65595bdd868b3009
+wbg __wbg_isView_45918552f958bbb8
+wbg __wbg_instanceof_Uint8Array_17156bcf118086a9
+wbg __wbg_length_a446193dc22c12f8
+wbg __wbg_length_d56737991078581b
+wbg __wbg_length_e2d2a49132c1b256
+wbg __wbg_get_b9b93047fe3cf45b
+wbg __wbg_new_c68d7209be747379
+wbg __wbg_setname_6df54b7ebf9404a9
+wbg __wbg_parse_def2e24ef1252aff
+
+# Phase 2 bindings (api.rs, lib.rs): Array.isArray, caught, for the plain-array reader; bigint
+# type test and BigInt.prototype.toString for u64 arguments; Array push and index for results;
+# Function.prototype.call and Uint8Array construction used by both.
+wbg __wbindgen_is_bigint
+wbg __wbindgen_is_function
+wbg __wbg_isArray_2d8d177662e27ba0
+wbg __wbg_push_737cfc8c1432c2c6
+wbg __wbg_toString_b5d4438bc26b267c
+wbg __wbg_new_78feb108b6472713
+wbg __wbg_newwithlength_a381634e90c276d4
+wbg __wbg_subarray_aa9065fa9dc5df96
+wbg __wbg_call_7cccdd69e0791ae2
+
+# Randomness. getrandom 0.3's wasm_js backend (reached through rusty-kaspa's dependencies, ahash
+# among them, and since I11 phase 2 through Wallet.generate) draws from crypto.getRandomValues
+# (the browser, Node 19 or later), probing process.versions and module.require for older Node.
+# Two of these imports are called by nothing but Wallet.generate, which draws the 32 bytes of a
+# key: getrandom 0.3's, which `getrandom::fill` uses, and getrandom 0.2's, which rand 0.8 would
+# use and nothing calls. Checked on every run of ci.sh by rng-count.mjs, which wraps these
+# imports when each instance is made and counts calls in every test process, beside a positive
+# control (a module that imports a function of such a name and calls it once must count 1); the
+# tests count the keys they ask for (test/sdk.ts), and every process must show as many calls as
+# keys. libsecp256k1's global context is not randomised on wasm32 (secp256k1 0.29 compiles that
+# out) and signing uses no auxiliary randomness. A build that starts calling these for anything
+# else fails ci.sh.
+wbg __wbg_crypto_86f2631e91b51511
+wbg __wbg_msCrypto_d562bbe83e0d4b91
+wbg __wbg_process_3975fd6c72f520aa
+wbg __wbg_versions_4e31226f5e8dc909
+wbg __wbg_node_e1f24f89a7336c2e
+wbg __wbg_require_b74f47fc2d022fd6
+wbg __wbg_randomFillSync_f8c153b79f285817
+wbg __wbg_getRandomValues_b3f15fcbfabb0f8b
+wbg __wbg_getRandomValues_1c61fac11405ffdc
+
+# Linked from rusty-kaspa's wasm32 code and the workflow crates it uses, not called by
+# impulse-wasm. js-sys's lookup of the global object: globalThis, self, global, window, and as a
+# last resort `new Function("return this")`, which a Content-Security-Policy without
+# 'unsafe-eval' blocks (I11). workflow-panic-hook's console hook: new Error, its stack,
+# console.error. workflow-core's Abortable.
+wbg __wbg_static_accessor_GLOBAL_THIS_56578be7e9f832b0
+wbg __wbg_static_accessor_SELF_37c5d418e4bf5819
+wbg __wbg_static_accessor_GLOBAL_88a902d13a557d07
+wbg __wbg_static_accessor_WINDOW_5de37043a91a9c40
+wbg __wbg_newnoargs_105ed471475aaf50
+wbg __wbg_call_672a4d21634d4a24
+wbg __wbg_new_f5f8a7325e1cb479
+wbg __wbg_stack_c99a96ed42647c4c
+wbg __wbg_error_5edc95999c70d386
+wbg __wbg_aborted_new
+
+# Dormant DOM surface, accepted: workflow-panic-hook 0.18.0's browser hook writes panic logs into
+# a full-screen DIV through these. Only initBrowserPanicHook and presentPanicHookLogs reach them.
+# The generated module exports both (pkg/impulse_wasm.js); the package entry does not, and
+# impulse-wasm never calls them. The browser demo (I11) must not call them either: the hook
+# writes text into innerHTML.
+wbg __wbg_instanceof_Window_def73ea0955fc569
+wbg __wbg_document_d249400bd7bd996d
+wbg __wbg_body_942ea927546a04ba
+wbg __wbg_createElement_8c9931a732ee2fea
+wbg __wbg_appendChild_8204974b7328bf98
+wbg __wbg_setAttribute_2704501201f15687
+wbg __wbg_removeAttribute_e419cd6726b4c62f
+wbg __wbg_innerHTML_e1553352fe93921a
+wbg __wbg_setinnerHTML_31bde41f835786f7
+
+# I11 phase 2 (node_api.rs): Wallet.sign returns an object holding a new Ipst, which the glue
+# wraps in its JavaScript class.
+wbg __wbg_ipst_new

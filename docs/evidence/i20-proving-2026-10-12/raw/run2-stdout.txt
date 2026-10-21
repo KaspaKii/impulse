@@ -1,0 +1,1 @@
+proof written: docs/evidence/i20-proving-2026-10-12/raw/run2-proof.json (journal_hash 71c0fd59f82693f98519e6ee71101f434a1d7594f9ef32826430b7652f8bc12a)

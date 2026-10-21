@@ -1,0 +1,190 @@
+<!doctype html>
+<!-- Copyright (c) 2026 the Impulse authors. A KiiLabs product. Licensed under the Apache License, Version 2.0. -->
+<!-- demo/visual/index.html: the cross-chain settlement monitor of the hash lock demo (I11). Test networks
+     and test tokens only. No framework, no script from elsewhere, no font download, no analytics. The page
+     talks to its own origin only (server.py), or reads one recorded events file with ?replay. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'none'">
+<title>Impulse: cross-chain settlement monitor</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<svg width="0" height="0" class="sprite" aria-hidden="true">
+  <defs>
+    <symbol id="i-solana" viewBox="0 0 24 20"><path d="M5 2h18l-4 4H1l4-4Zm0 12h18l-4 4H1l4-4ZM1 8h18l4 4H5L1 8Z" fill="currentColor"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 16 16"><path d="M5 1.5h7.5A1.5 1.5 0 0 1 14 3v8.5h-1.5V3H5V1.5ZM3.5 4.5h6A1.5 1.5 0 0 1 11 6v7.5A1.5 1.5 0 0 1 9.5 15h-6A1.5 1.5 0 0 1 2 13.5V6a1.5 1.5 0 0 1 1.5-1.5Zm0 1.5v7.5h6V6h-6Z" fill="currentColor"/></symbol>
+  </defs>
+</svg>
+
+<div id="app" class="mode-live nocap" data-state="idle">
+
+  <header id="top">
+    <div class="brand">
+      <img class="brand-word" src="impulse-wordmark.svg" alt="Impulse" width="92" height="31">
+      <span class="brand-sep" aria-hidden="true"></span>
+      <span class="brand-sub">Settlement console</span>
+    </div>
+    <div class="top-right">
+      <span id="node" class="node" data-state="wait" role="status"><i class="dot" aria-hidden="true"></i><span id="node-label">Driver</span></span>
+      <span id="mode-pill" class="badge">LIVE</span>
+      <span id="net-badge" class="badge badge-net">TESTNET</span>
+      <span id="net-pill" class="badge badge-net">TEST NETWORKS</span>
+      <button id="next" type="button" class="next" data-mode="idle"><span id="next-label">Start</span><kbd>Space</kbd></button>
+    </div>
+  </header>
+
+  <nav id="timeline" aria-label="Steps">
+    <ol>
+      <li data-step="1"><span class="n">1</span><span class="t">Secret and vault</span></li>
+      <li data-step="2"><span class="n">2</span><span class="t">Buyer checks terms</span></li>
+      <li data-step="3"><span class="n">3</span><span class="t">Lock on Kaspa</span></li>
+      <li data-step="4"><span class="n">4</span><span class="t">Lock on Solana</span></li>
+      <li data-step="5"><span class="n">5</span><span class="t">Claim on Solana</span></li>
+      <li data-step="6"><span class="n">6</span><span class="t">Claim on Kaspa</span></li>
+      <li data-step="7"><span class="n">7</span><span class="t">Final depth</span></li>
+    </ol>
+  </nav>
+
+  <main id="stage">
+    <section id="panel-kaspa" class="ledger kaspa" aria-label="Kaspa TN10 ledger">
+      <header class="ledger-head">
+        <img class="mark" src="kaspa-mark.svg" alt="">
+        <h2>Kaspa</h2>
+        <span class="net">TN10</span>
+        <span class="ledger-asset">Test KCC-20 asset, units</span>
+        <span class="active-tag">ACTIVE</span>
+      </header>
+      <table class="ltable">
+        <colgroup><col class="c-party"><col class="c-addr"><col class="c-num"><col class="c-num"><col class="c-status"></colgroup>
+        <thead><tr><th scope="col">Account</th><th scope="col">Address</th><th scope="col" class="num">Before</th><th scope="col" class="num">Now</th><th scope="col" class="st">Status</th></tr></thead>
+        <tbody>
+          <tr id="k-seller"><th scope="row">Seller</th><td data-role="addr"><span class="muted">pending</span></td><td class="num" data-role="before">-</td><td class="num now" data-role="now">-</td><td class="st" data-role="status"></td></tr>
+          <tr id="k-buyer"><th scope="row">Buyer</th><td data-role="addr"><span class="muted">pending</span></td><td class="num" data-role="before">-</td><td class="num now" data-role="now">-</td><td class="st" data-role="status"></td></tr>
+        </tbody>
+        <tbody class="contract">
+          <tr class="group"><th colspan="5" scope="colgroup">Contract</th></tr>
+          <tr id="vault"><th scope="row" title="Hash lock vault (ImpulseVault covenant)">Vault</th><td data-role="addr"><span class="muted">not derived</span></td><td class="num" data-role="before"></td><td class="num now" data-role="now">0</td><td class="st" data-role="status"><span class="chip chip-none">NONE</span></td></tr>
+        </tbody>
+      </table>
+      <table class="ltable txtable">
+        <colgroup><col class="c-step"><col class="c-kind"><col class="c-tx"><col class="c-status"></colgroup>
+        <thead><tr><th scope="col">Step</th><th scope="col">Transaction</th><th scope="col">Txid</th><th scope="col" class="st">Status</th></tr></thead>
+        <tbody>
+          <tr id="tx-k-lock"><td>3</td><td>Lock, funds the vault</td><td data-role="tx"><span class="muted">-</span></td><td class="st" data-role="status"><span class="chip chip-none">PENDING</span></td></tr>
+          <tr id="tx-k-claim"><td>6</td><td>Claim, opens the vault</td><td data-role="tx"><span class="muted">-</span></td><td class="st" data-role="status"><span class="chip chip-none">PENDING</span></td></tr>
+        </tbody>
+      </table>
+      <dl class="kv">
+        <dt>Contract</dt><dd>ImpulseVault covenant, hash lock path</dd>
+        <dt>Asset covenant</dt><dd id="k-covenant"><span class="muted">-</span></dd>
+      </dl>
+    </section>
+
+    <section id="centre" aria-label="Shared hash lock">
+      <div id="hash" class="hash" data-state="none">
+        <div class="hash-head"><span class="label">Shared hash lock</span><span class="algo">SHA-256</span></div>
+        <div class="hash-val" id="hash-val"><span class="muted">not set</span></div>
+        <dl class="kv kv-stack">
+          <dt>Kaspa vault</dt><dd id="bind-k"><span class="chip chip-none">UNBOUND</span></dd>
+          <dt>Solana escrow</dt><dd id="bind-s"><span class="chip chip-none">UNBOUND</span></dd>
+          <dt>Terms</dt><dd id="terms"><span class="chip chip-none">UNCHECKED</span></dd>
+          <dt>Preimage</dt><dd id="preimage"><span class="chip chip-none">NOT MADE</span></dd>
+        </dl>
+        <div class="hash-note" id="hash-sub">One hash binds both legs.</div>
+      </div>
+      <div class="link link-l" aria-hidden="true"></div>
+      <div class="link link-r" aria-hidden="true"></div>
+    </section>
+
+    <section id="panel-solana" class="ledger solana" aria-label="Solana devnet ledger">
+      <header class="ledger-head">
+        <svg class="mark mark-sol" aria-hidden="true"><use href="#i-solana"/></svg>
+        <h2>Solana</h2>
+        <span class="net" id="sol-net">DEVNET</span>
+        <span class="ledger-asset">Test USDC</span>
+        <span class="active-tag">ACTIVE</span>
+      </header>
+      <table class="ltable">
+        <colgroup><col class="c-party"><col class="c-addr"><col class="c-num"><col class="c-num"><col class="c-status"></colgroup>
+        <thead><tr><th scope="col">Account</th><th scope="col">Address</th><th scope="col" class="num">Before</th><th scope="col" class="num">Now</th><th scope="col" class="st">Status</th></tr></thead>
+        <tbody>
+          <tr id="s-seller"><th scope="row">Seller</th><td data-role="addr"><span class="muted">pending</span></td><td class="num" data-role="before">-</td><td class="num now" data-role="now">-</td><td class="st" data-role="status"></td></tr>
+          <tr id="s-buyer"><th scope="row">Buyer</th><td data-role="addr"><span class="muted">pending</span></td><td class="num" data-role="before">-</td><td class="num now" data-role="now">-</td><td class="st" data-role="status"></td></tr>
+        </tbody>
+        <tbody class="contract">
+          <tr class="group"><th colspan="5" scope="colgroup">Contract</th></tr>
+          <tr id="htlc"><th scope="row">HTLC escrow</th><td data-role="addr"><span class="muted">not opened</span></td><td class="num" data-role="before"></td><td class="num now" data-role="now">0.00</td><td class="st" data-role="status"><span class="chip chip-none">NONE</span></td></tr>
+        </tbody>
+      </table>
+      <table class="ltable txtable">
+        <colgroup><col class="c-step"><col class="c-kind"><col class="c-tx"><col class="c-status"></colgroup>
+        <thead><tr><th scope="col">Step</th><th scope="col">Transaction</th><th scope="col">Txid</th><th scope="col" class="st">Status</th></tr></thead>
+        <tbody>
+          <tr id="tx-s-lock"><td>4</td><td>Lock, opens the escrow</td><td data-role="tx"><span class="muted">-</span></td><td class="st" data-role="status"><span class="chip chip-none">PENDING</span></td></tr>
+          <tr id="tx-s-claim"><td>5</td><td>Claim, publishes the preimage</td><td data-role="tx"><span class="muted">-</span></td><td class="st" data-role="status"><span class="chip chip-none">PENDING</span></td></tr>
+        </tbody>
+      </table>
+      <dl class="kv">
+        <dt>Program</dt><dd id="s-program"><span class="muted">-</span></dd>
+        <dt>Test USDC mint</dt><dd id="s-mint"><span class="muted">-</span></dd>
+      </dl>
+      <div id="freeze" class="notice" role="note" hidden>
+        <span class="notice-tag">WARNING</span>
+        <span id="freeze-text">Freeze authority on the test mint, as on real USDC. The issuer could freeze the escrow.</span>
+      </div>
+    </section>
+
+    <svg id="fly" aria-hidden="true"></svg>
+
+    <div id="final" class="overlay" hidden>
+      <div class="final-card" role="dialog" aria-labelledby="final-title">
+        <div class="final-head">
+          <span class="label" id="final-title">Settlement summary</span>
+          <span id="final-status" class="chip chip-settled">SETTLED</span>
+          <span class="final-hint"><kbd>Esc</kbd> hide</span>
+        </div>
+        <table class="dtable final-table">
+          <thead><tr><th scope="col">Leg</th><th scope="col">Account</th><th scope="col" class="num">Before</th><th scope="col" class="num">After</th><th scope="col">Transaction</th></tr></thead>
+          <tbody id="final-body"></tbody>
+        </table>
+        <p class="risk" id="final-risk">Test networks, test tokens. A conditional exchange with residual risk, not atomic settlement.</p>
+      </div>
+    </div>
+
+    <div id="idle" class="overlay idle">
+      <div class="idle-card">
+        <div class="idle-title" id="idle-title">Press Space to start</div>
+        <div class="idle-sub" id="idle-sub">A Kaspa test asset against Solana test USDC, linked by one hash lock.</div>
+      </div>
+    </div>
+  </main>
+
+  <section id="caption" aria-live="polite" hidden>
+    <div class="cap-meta"><span id="cap-step" class="cap-step">&nbsp;</span><span id="cap-chain" class="tag"></span><span id="cap-actor" class="tag tag-actor"></span></div>
+    <div id="cap-text" class="cap-text"><span class="muted">Waiting for the first event.</span></div>
+    <div class="cap-chips" id="cap-chips"></div>
+  </section>
+
+  <section id="log" class="empty" aria-label="Event log">
+    <div class="log-head"><span class="label">Event log</span><span id="log-note" class="log-note"></span><span id="log-count" class="log-count">0 events</span></div>
+    <div class="log-scroll" id="log-scroll" tabindex="0">
+      <table class="dtable log-table">
+        <colgroup><col class="l-time"><col class="l-step"><col class="l-chain"><col class="l-actor"><col class="l-text"><col class="l-tx"></colgroup>
+        <thead><tr><th scope="col">Time</th><th scope="col">Step</th><th scope="col">Chain</th><th scope="col">Actor</th><th scope="col">Event</th><th scope="col">Txid</th></tr></thead>
+        <tbody id="log-body"></tbody>
+      </table>
+      <div class="log-empty" id="log-empty">No events yet.</div>
+    </div>
+  </section>
+
+  <div id="errbar" role="alert" hidden></div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

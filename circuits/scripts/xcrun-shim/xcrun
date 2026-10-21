@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+# Copyright (c) 2026 the Impulse authors. A KiiLabs product. Licensed under the Apache License, Version 2.0.
+# Build-time shim for risc0-sys 1.5.0 on macOS (circuits/README.md, "Building on macOS").
+# risc0-sys compiles its Metal kernels with the Metal compiler's default language standard; the
+# Metal compiler of this laptop's Xcode defaults to a newer standard that rejects three
+# assignments in poseidon2.metal (measured, run: `xcrun --sdk macosx metal -c poseidon2.metal`
+# fails, the same with -std=metal3.2 succeeds). This shim adds -std=metal3.2 to `metal -c`
+# compiles and passes every other xcrun call through unchanged. risc0 4.0.4 proves on the CPU
+# (its Metal segment and recursion provers are commented out), so these kernels are compiled
+# and linked but not used for proving.
+set -euo pipefail
+real=/usr/bin/xcrun
+args=("$@")
+# Without a Metal toolchain (Xcode not installed), `xcrun metal` and `xcrun metallib` cannot run.
+# Write an empty output file instead: risc0 4.0.4 proves on the CPU and never loads these kernels.
+if ! "$real" --sdk macosx -f metal >/dev/null 2>&1; then
+  for i in "${!args[@]}"; do
+    if [ "${args[$i]}" = "metal" ] || [ "${args[$i]}" = "metallib" ]; then
+      for j in "${!args[@]}"; do
+        if [ "${args[$j]}" = "-o" ]; then
+          mkdir -p "$(dirname "${args[$((j + 1))]}")"; : > "${args[$((j + 1))]}"; exit 0
+        fi
+      done
+    fi
+  done
+fi
+for i in "${!args[@]}"; do
+  if [ "${args[$i]}" = "metal" ]; then
+    for a in "${args[@]}"; do
+      case "$a" in -std=*) exec "$real" "${args[@]}" ;; esac
+    done
+    if printf '%s\n' "${args[@]}" | grep -qx -- '-c'; then
+      exec "$real" "${args[@]:0:$((i + 1))}" -std=metal3.2 "${args[@]:$((i + 1))}"
+    fi
+  fi
+done
+exec "$real" "${args[@]}"

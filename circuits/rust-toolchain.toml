@@ -1,0 +1,6 @@
+# Host crates of circuits/ build with the same pinned Rust as the root workspace (rule 3, docs/ENGINEERING-RULES.md).
+# The guests do not use this file: they build in Docker with the RISC Zero toolchain (D60).
+[toolchain]
+channel = "1.94.0"
+components = ["rustfmt", "clippy"]
+profile = "minimal"

@@ -1,0 +1,64 @@
+Template v4 measurements in the pinned engine (kaspa-txscript at rusty-kaspa a41a333, covenants enabled, mainnet parameters)
+date: 2026-10-21T06:21Z
+commit: 83fbff6 (working tree 0 changed paths under contracts, tests/engine and circuits)
+template v4 hash: 9656711aae5fad7375afa9076241765356f6f7b9a9d5816ad0f4dc48cc4cddc5
+image ID (terms guest): ffaa95f97b44a9209e245579361b81baaa45bd414f11446f11d8d7a1903916a3
+silverc: silverscript-lang 1.0.0, tag v1.0.0 (commit 3ed973335b59269293564805cc2c58a14595ec03), command: silverc contracts/impulse_vault_v4.sil --constructor-args contracts/compiled/impulse_vault.v4.ctor.json -o <artifact> (scripts/build-template-v4.sh)
+machine: Apple M1 Max
+command: IMPULSE_V4_UNITS_OUT=<file> cargo test -p impulse-engine-tests --test v4_live -- --ignored --test-threads=1 --nocapture (scripts/measure-v4-units.sh); real-receipt part: real
+method: the probe table is tests/engine/v4_script.rs v4_probe_units (used_script_units() of an unbounded run of each accepted input); the rest is tests/engine/v4_live.rs; units are used_script_units() of an unbounded run of each accepted input with a real receipt; v1 is the same trade shape on template v1 with random throwaway keys; budgets are the smallest covering the units; masses are MassCalculator under mainnet parameters at exact covering budgets
+
+Template sizes (bytes, compiled artifacts with the placeholder state):
+  template v1 3946, template v3 4931, template v4 3598
+  v4 against v1: -348 bytes, ratio 0.912; v4 against v3: -1333 bytes, ratio 0.730
+
+Script units per vault input, probe build (the verify call replaced by a comparison of sha256(J) with the proof), against template v1 on the same shape. The probe holds everything except the gate; the gate adds the precompile's fixed cost on top (below).
+| Shape | v4 probe, asset vault | v4 probe, cash vault | v1, asset vault | v1, cash vault |
+| --- | --- | --- | --- | --- |
+| settle, KAS cash | 116097 | 116101 | 157552 | 145878 |
+| settle, KCC-20 cash | 121215 | 121219 | 174710 | 176077 |
+| settle, external cash | 112098 | none | 136150 | none |
+| refund, asset leg, depositor | 112063 | n/a | 136278 | n/a |
+| refund, KCC-20 cash leg, depositor | 112063 | n/a | 139752 | n/a |
+| refund, KAS cash leg, depositor | 109216 | n/a | 109026 | n/a |
+
+Masses and relay fee of the plans the v4 builders make (impulse-core builder_plan_masses: the fixture world of the builders' tests, the vault input budgets the builders commit, mainnet parameters, the fee at the relay minimum of 100 sompi per gram of fee mass). Storage mass depends on the values of the UTXOs; these are the minimum values the builders accept, so a larger value only lowers it:
+| settle-kas-asset | inputs 4 | vault input budgets [1570, 1570] | compute 326738 | transient 39952 | storage 32548 | fee mass 326738 | fee 32673800 sompi at the relay minimum |
+| settle-kcc20-asset | inputs 5 | vault input budgets [1570, 1570] | compute 329376 | transient 47824 | storage 48401 | fee mass 329376 | fee 32937600 sompi at the relay minimum |
+| settle-external-asset | inputs 3 | vault input budgets [1570, 3] | compute 165402 | transient 24048 | storage 28263 | fee mass 165402 | fee 16540200 sompi at the relay minimum |
+| refund-asset-depositor | inputs 3 | vault input budgets [1570, 3] | compute 165404 | transient 24056 | storage 28263 | fee mass 165404 | fee 16540400 sompi at the relay minimum |
+| refund-kas-cash-counterparty | inputs 2 | vault input budgets [1570, 10] | compute 162963 | transient 16972 | storage 63 | fee mass 162963 | fee 16296300 sompi at the relay minimum |
+| refund-asset-depositor-earmarked | inputs 3 | vault input budgets [1570, 3] | compute 165404 | transient 24056 | storage 28263 | fee mass 165404 | fee 16540400 sompi at the relay minimum |
+
+PROVE refund-asset: {   "execute_ms": 79,   "total_cycles": 3145728,   "user_cycles": 2494565,   "segments": 3,   "succinct_ms": 342182,   "succinct_receipt_bytes": 222668,   "identity_p254_ms": 39022,   "groth16_ms": 26286,   "groth16_container": "impulse-zk-groth16-10169",   "proof_bytes": 128,   "total_ms": 407593 }
+PROVE refund-earmarked: {   "execute_ms": 63,   "total_cycles": 3145728,   "user_cycles": 2487125,   "segments": 3,   "succinct_ms": 344579,   "succinct_receipt_bytes": 222668,   "identity_p254_ms": 38906,   "groth16_ms": 26562,   "groth16_container": "impulse-zk-groth16-10369",   "proof_bytes": 128,   "total_ms": 410133 }
+| Shape | Input | v4 units | v1 units | difference | v4 budget (units) | v4 sigscript bytes | sig-ops (v4, v1) | note |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| settle, KAS cash | asset vault | 15620666 | 157552 | 15463114 | 1562 | 3870 | 2, 2 | v4 and v1 redeem scripts |
+| settle, KAS cash | cash vault | 15620670 | 145878 | 15474792 | 1562 | 3870 | 2, 2 |  |
+MASS | settle, KAS cash | budgets [1562, 1562, 1, 0] | compute 323885 | transient 39700 | storage 144833333 | inputs 4 | outputs 4
+
+Refund: script units per vault input, template v4 against template v1 (random throwaway keys)
+| Refund | v4 units | v1 units | difference |
+| --- | --- | --- | --- |
+| asset leg, depositor | 15616632 | 136425 | 15480207 |
+| asset leg, counterparty | 15616632 | 136460 | 15480172 |
+| cash leg (KAS), authority | 15613785 | 109026 | 15504759 |
+PROVE kas-0: {   "execute_ms": 82,   "total_cycles": 4194304,   "user_cycles": 3544796,   "segments": 4,   "succinct_ms": 459330,   "succinct_receipt_bytes": 222668,   "identity_p254_ms": 38874,   "groth16_ms": 26461,   "groth16_container": "impulse-zk-groth16-10534",   "proof_bytes": 128,   "total_ms": 524768 }
+PROVE kas-1: {   "execute_ms": 79,   "total_cycles": 3670016,   "user_cycles": 3402715,   "segments": 4,   "succinct_ms": 411141,   "succinct_receipt_bytes": 222668,   "identity_p254_ms": 39067,   "groth16_ms": 26585,   "groth16_container": "impulse-zk-groth16-10752",   "proof_bytes": 128,   "total_ms": 476894 }
+PROVE refund-asset-depositor: {   "execute_ms": 64,   "total_cycles": 3145728,   "user_cycles": 2486879,   "segments": 3,   "succinct_ms": 342073,   "succinct_receipt_bytes": 222668,   "identity_p254_ms": 39040,   "groth16_ms": 26190,   "groth16_container": "impulse-zk-groth16-11072",   "proof_bytes": 128,   "total_ms": 407390 }
+PROVE refund-asset-counterparty: {   "execute_ms": 64,   "total_cycles": 3145728,   "user_cycles": 2486456,   "segments": 3,   "succinct_ms": 348955,   "succinct_receipt_bytes": 222668,   "identity_p254_ms": 39582,   "groth16_ms": 26497,   "groth16_container": "impulse-zk-groth16-11264",   "proof_bytes": 128,   "total_ms": 415120 }
+PROVE refund-cash-authority: {   "execute_ms": 57,   "total_cycles": 2228224,   "user_cycles": 2064600,   "segments": 3,   "succinct_ms": 257979,   "succinct_receipt_bytes": 222668,   "identity_p254_ms": 38998,   "groth16_ms": 22372,   "groth16_container": "impulse-zk-groth16-11462",   "proof_bytes": 128,   "total_ms": 319429 }
+| settle, KCC-20 cash | asset vault | 15625784 | 174710 | 15451074 | 1562 | 3870 | 2, 2 | v4 and v1 redeem scripts |
+| settle, KCC-20 cash | cash vault | 15625788 | 176077 | 15449711 | 1562 | 3870 | 2, 2 |  |
+MASS | settle, KCC-20 cash | budgets [1562, 1562, 1, 1, 0] | compute 326323 | transient 47572 | storage 141662991 | inputs 5 | outputs 5
+| cash leg (KCC-20), depositor | 15616632 | 139718 | 15476914 |
+PROVE kcc20-0: {   "execute_ms": 92,   "total_cycles": 4325376,   "user_cycles": 4025401,   "segments": 5,   "succinct_ms": 497022,   "succinct_receipt_bytes": 222668,   "identity_p254_ms": 40107,   "groth16_ms": 26487,   "groth16_container": "impulse-zk-groth16-11609",   "proof_bytes": 128,   "total_ms": 563729 }
+PROVE kcc20-1: {   "execute_ms": 93,   "total_cycles": 4456448,   "user_cycles": 4044756,   "segments": 5,   "succinct_ms": 507289,   "succinct_receipt_bytes": 222668,   "identity_p254_ms": 39162,   "groth16_ms": 26378,   "groth16_container": "impulse-zk-groth16-11862",   "proof_bytes": 128,   "total_ms": 572944 }
+PROVE refund-cash-depositor: {   "execute_ms": 66,   "total_cycles": 3145728,   "user_cycles": 2551253,   "segments": 3,   "succinct_ms": 349369,   "succinct_receipt_bytes": 222668,   "identity_p254_ms": 39353,   "groth16_ms": 27223,   "groth16_container": "impulse-zk-groth16-12084",   "proof_bytes": 128,   "total_ms": 416032 }
+| settle, external cash | asset vault | 15616667 | 136150 | 15480517 | 1561 | 3870 | 2, 2 | v4 and v1 redeem scripts |
+MASS | settle, external cash | budgets [1561, 1, 0] | compute 163249 | transient 23796 | storage 96666669 | inputs 3 | outputs 3
+PROVE external-0: {   "execute_ms": 63,   "total_cycles": 2621440,   "user_cycles": 2356213,   "segments": 3,   "succinct_ms": 302573,   "succinct_receipt_bytes": 222668,   "identity_p254_ms": 40576,   "groth16_ms": 26876,   "groth16_container": "impulse-zk-groth16-12354",   "proof_bytes": 128,   "total_ms": 370113 }
+
+MASS lines above: the engine harness's world, whose UTXO values are artificially small, so its storage mass is not representative; the compute and transient masses there are those of the shape at exact covering budgets. The plans of the v4 builders (table above) are the representative masses, asserted against all three caps.
+Proof gate: the precompile costs 14,000,000 units fixed and 250,000 for each of the six elements of the verifying key, 15,500,000 in all (V3-ZK.md 3.4); the same fragment and key as v3; each vault input of a settle carries its own verification. The PROVE lines are the prover's own timings for that receipt on this machine while other work was running (a checkpoint run on an idle machine is docs/evidence/i21-proving-<date>/).

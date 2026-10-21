@@ -1,0 +1,199 @@
+// Copyright (c) 2026 the Impulse authors. A KiiLabs product. Licensed under the Apache License, Version 2.0.
+// ImpulseHashlock v1: the Kaspa side of a hashlock exchange. One template, two entries
+// (settleWithPreimage, refund), instantiated per trade for the KCC-20 asset the seller locks.
+// Design: spec/V2.md section 10 (10.2 state, 10.3 entries, 10.4 requires). Increment: I18.
+//
+// The hashlock terms, with the counterpart record replaced by its hash, are the contract state, so
+// the template (everything around the state span) and its hash are the same for every trade and
+// the P2SH address commits to every term. Fields the entries never read (version, network, nonce,
+// counterpartHash, tradeRef) are still part of the state and therefore of the address.
+//
+// There is no authority and no funding-mode field: a hashlock vault is always earmarked (spec
+// section 10.6, R5), and no signature gates the claim (D31).
+//
+// Claim layout (settleWithPreimage):
+//   input 0   this vault (the authorizer)              output 0  asset to buyer delivery
+//   input 1   escrowed asset token (transfer leader,   output 1  authorizer KAS to the seller
+//             witness 0)
+// Lock time 0. Refund layout, as v1's asset-leg refund:
+//   input 0   this vault                               output 0  its KAS, whole, to the seller
+//   input 1   the escrowed token (the seller may       output 1  that token, whole, to seller refund
+//             leave it out)
+// Lock time expiry_daa for the seller, 0 for the buyer. Fees come from other inputs in both layouts.
+//
+// Release 0.4 of this template (spec/V2.md section 10.4, "Inputs outside the layout"): no token
+// rides along in a spend of this vault. Every input other than this vault carries no covenant or
+// the asset covenant ([HF1], [HF3]); a spend has at most MAX_INPUTS inputs ([HF2], [HF4]), the
+// bound of those loops, checked by the contract itself..
+pragma silverscript ^0.1.0; // language version of the silverscript v1.0.0 compiler
+
+contract ImpulseHashlock(
+    byte initVersion,
+    byte initNetwork,
+    byte[8] initNonce,
+    pubkey initSellerKey,
+    pubkey initBuyerKey,
+    byte[32] initAssetCovenantId,
+    byte[32] initAssetTemplateHash,
+    int initAssetPrefixLen,
+    int initAssetSuffixLen,
+    int initAmount,
+    byte initBuyerDeliveryType,
+    byte[32] initBuyerDeliveryId,
+    byte initSellerRefundType,
+    byte[32] initSellerRefundId,
+    byte[32] initHashLock,
+    int initExpiryDaa,
+    byte[32] initCounterpartHash,
+    byte[32] initTradeRef
+) {
+    // State, spec/V2.md section 10.2, in this order.
+    byte version = initVersion;
+    byte network = initNetwork;
+    byte[8] nonce = initNonce;
+    pubkey sellerKey = initSellerKey;
+    pubkey buyerKey = initBuyerKey;
+    byte[32] assetCovenantId = initAssetCovenantId;
+    byte[32] assetTemplateHash = initAssetTemplateHash;
+    int assetPrefixLen = initAssetPrefixLen;
+    int assetSuffixLen = initAssetSuffixLen;
+    int amount = initAmount;
+    byte buyerDeliveryType = initBuyerDeliveryType;
+    byte[32] buyerDeliveryId = initBuyerDeliveryId;
+    byte sellerRefundType = initSellerRefundType;
+    byte[32] sellerRefundId = initSellerRefundId;
+    byte[32] hashLock = initHashLock;
+    int expiryDaa = initExpiryDaa;
+    byte[32] counterpartHash = initCounterpartHash;
+    byte[32] tradeRef = initTradeRef;
+
+    // KCC-20 runtime state; field order and types must match kcc20.sil exactly.
+    struct KCC20State {
+        byte[32] ownerIdentifier;
+        byte identifierType;
+        int amount;
+        bool isMinter;
+    }
+
+    byte constant IDENTIFIER_SCRIPT_HASH = 0x01;
+    int constant TOKEN_INPUT = 1;
+    int constant TOKEN_OUTPUT = 1;
+    int constant SECRET_LEN = 32;
+    // Inputs of a spend, at most; both loops start after the vault at input 0.
+    int constant MAX_INPUTS = 12;
+    int constant MAX_INPUTS_AFTER_VAULT = 11;
+    // OpInputCovenantId of an input without a covenant (rusty-kaspa a41a333: ZERO_HASH).
+    byte[32] constant NO_COVENANT = byte[32](0x0000000000000000000000000000000000000000000000000000000000000000);
+
+    // Anyone holding the secret may submit: every output that matters is fixed by this script, so
+    // a front-runner can only complete the same exchange (spec section 10.6, R14).
+    entry settleWithPreimage(byte[] secret) {
+        // At most MAX_INPUTS inputs, the bound of the input check below.
+        require(tx.inputs.length <= MAX_INPUTS); // [HF2]
+
+        // Canonical position: the vault at input 0, its escrowed token at input 1.
+        require(this.activeInputIndex == 0); // [H1]
+
+        // The preimage is exactly 32 bytes (R6) and hashes to the committed lock.
+        require(secret.length == SECRET_LEN); // [H2]
+        require(sha256(secret) == hashLock); // [H3]
+
+        // The escrowed token is the only input of the asset covenant, sits at input 1, runs the
+        // pinned template, is owned by this vault's script hash, holds exactly the amount and is
+        // not a minter.
+        require(OpCovInputCount(assetCovenantId) == 1); // [HE1]
+        require(OpCovInputIdx(assetCovenantId, 0) == TOKEN_INPUT); // [HE2]
+        KCC20State escrowed = readInputStateWithTemplate(TOKEN_INPUT, assetPrefixLen, assetSuffixLen, assetTemplateHash);
+        require(escrowed.identifierType == IDENTIFIER_SCRIPT_HASH); // [HE3]
+        require(this.activeScriptPubKey == byte[](new ScriptPubKeyP2SH(escrowed.ownerIdentifier))); // [HE4]
+        require(escrowed.amount == amount); // [HE5]
+        // A minter escrow would let the claimer hand the minting right to any output it adds.
+        require(!escrowed.isMinter); // [HE6]
+
+        // No token rides along: every input after the vault carries no covenant or the asset
+        // covenant, whose only input is the escrow ([HE1], [HE2]).
+        byte[32] zero = NO_COVENANT;
+        byte[32] assetCov = assetCovenantId;
+        for (i, 1, tx.inputs.length, MAX_INPUTS_AFTER_VAULT) {
+            byte[32] c = OpInputCovenantId(i);
+            require(c == zero || c == assetCov); // [HF1]
+        }
+
+        // Output 0 delivers exactly the amount to the buyer, under the asset covenant and the pinned
+        // template, carrying at least the escrow's own KAS.
+        require(OpOutputCovenantId(0) == assetCovenantId); // [HD1]
+        require(tx.outputs[0].value >= tx.inputs[TOKEN_INPUT].value); // [HD2]
+        KCC20State expected = KCC20State {
+            ownerIdentifier: buyerDeliveryId,
+            identifierType: buyerDeliveryType,
+            amount: amount,
+            isMinter: false
+        };
+        validateOutputStateWithInputTemplate(0, expected, TOKEN_INPUT, assetPrefixLen, assetSuffixLen, assetTemplateHash);
+
+        // Output 1 returns the authorizer's KAS to the seller, at least in full.
+        require(tx.outputs[1].scriptPubKey == byte[](new ScriptPubKeyP2PK(sellerKey))); // [HS8]
+        require(tx.outputs[1].value >= tx.inputs[0].value); // [HS9]
+    }
+
+    // v1's asset-leg refund without the authority, always earmarked.
+    entry refund(sig s, pubkey signer) {
+        // At most MAX_INPUTS inputs, the bound of the input check below.
+        require(tx.inputs.length <= MAX_INPUTS); // [HF4]
+
+        // 1. The seller or the buyer signs.
+        require(signer == sellerKey || signer == buyerKey); // [HR1]
+        require(checkSig(s, signer)); // [HR2]
+
+        // 2. Always earmarked: the seller's own refund opens at expiryDaa. The buyer may send the
+        //    asset home at any time.
+        bool bySeller = signer == sellerKey;
+        if (bySeller) {
+            require(tx.daa >= expiryDaa); // [HR3]
+        }
+
+        // 3. Everything goes home whole: one vault UTXO per refund, at input 0, its KAS at output 0.
+        require(this.activeInputIndex == 0); // [HR4]
+        require(tx.outputs[0].value == tx.inputs[0].value); // [HR5]
+        require(tx.outputs[0].scriptPubKey == byte[](new ScriptPubKeyP2PK(sellerKey))); // [HR7]
+
+        // No token rides along: every input after the vault carries no covenant or the asset
+        // covenant ([HR8] and [HR9] place that one at input 1).
+        byte[32] zero = NO_COVENANT;
+        byte[32] assetCov = assetCovenantId;
+        for (i, 1, tx.inputs.length, MAX_INPUTS_AFTER_VAULT) {
+            byte[32] c = OpInputCovenantId(i);
+            require(c == zero || c == assetCov); // [HF3]
+        }
+
+        // Only the seller may refund the authorizer on its own. The buyer's refund takes the
+        // escrowed token home with it, so it never separates the two.
+        int tokenInputs = OpCovInputCount(assetCovenantId);
+        if (!bySeller) {
+            require(tokenInputs == 1); // [HR11]
+        }
+
+        // Any token of the asset covenant in the transaction is this vault's escrow at input 1 and
+        // returns whole (amount, minter flag and its own KAS) to the seller's refund owner at output 1.
+        if (tokenInputs > 0) {
+            require(tokenInputs == 1); // [HR8]
+            require(OpCovInputIdx(assetCovenantId, 0) == TOKEN_INPUT); // [HR9]
+            KCC20State escrowed = readInputStateWithTemplate(TOKEN_INPUT, assetPrefixLen, assetSuffixLen, assetTemplateHash);
+            require(this.activeScriptPubKey == byte[](new ScriptPubKeyP2SH(escrowed.ownerIdentifier))); // [HR12]
+            // Anyone can make a token owned by this vault. In the buyer's refund it must hold the
+            // full amount, so a decoy costs the whole leg, which goes home to the seller.
+            if (!bySeller) {
+                require(escrowed.amount == amount); // [HR14]
+            }
+            require(OpOutputCovenantId(TOKEN_OUTPUT) == assetCovenantId); // [HR10]
+            require(tx.outputs[TOKEN_OUTPUT].value >= tx.inputs[TOKEN_INPUT].value); // [HR13]
+            KCC20State home = KCC20State {
+                ownerIdentifier: sellerRefundId,
+                identifierType: sellerRefundType,
+                amount: escrowed.amount,
+                isMinter: escrowed.isMinter
+            };
+            validateOutputStateWithInputTemplate(TOKEN_OUTPUT, home, TOKEN_INPUT, assetPrefixLen, assetSuffixLen, assetTemplateHash);
+        }
+    }
+}

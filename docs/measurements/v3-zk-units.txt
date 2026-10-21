@@ -1,0 +1,40 @@
+Template v3 measurements in the pinned engine (kaspa-txscript at rusty-kaspa a41a333, covenants enabled, mainnet parameters)
+date: 2026-10-20T12:25Z
+commit: 94ffda5 (working tree 0 changed paths under contracts and tests/engine)
+template v3 hash: f00009e88c562fc529d1c30e406c783eb7532e39f6426be518616eb9a7283d4c
+image ID: e4ecfb2bc1a9e9fce969b41af67991b22603eac1ff0542756ccf0b8234d43386
+machine: Apple M1 Max
+command: IMPULSE_V3_UNITS_OUT=<file> cargo test -p impulse-engine-tests --test v3_measure -- --nocapture (scripts/measure-v3-units.sh)
+method: tests/engine/v3_measure.rs, header comment
+
+Template sizes (bytes, with the fixture state):
+  template v3 redeem script 5004 bytes (v1 4019); asset vault signature script 5208 bytes (v1 4093)
+
+Settle: script units per vault input, template v3 against template v1 (same terms otherwise)
+| Shape | v3 asset vault (with proof) | v1 asset vault | difference | difference minus 15,500,000 | v3 cash vault | v1 cash vault | v3 asset budget (units) | v3 sig-ops (asset, cash) | v1 sig-ops (asset, cash) |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| KAS cash, P2PK owner, list of 1 | 15566626 | 57454 | 15509172 | 9172 | 52750 | 45780 | 1556 | 2, 2 | 2, 2 |
+| KAS cash, P2PK owner, list of 1,000 | 15566626 | 57454 | 15509172 | 9172 | 52750 | 45780 | 1556 | 2, 2 | 2, 2 |
+| KAS cash, P2SH owner, list of 1,000 | 15566525 | 57454 | 15509071 | 9071 | 52750 | 45780 | 1556 | 2, 2 | 2, 2 |
+| KCC-20 cash, P2PK owner, list of 1,000 | 15583784 | 74612 | 15509172 | 9172 | 82949 | 75979 | 1558 | 2, 2 | 2, 2 |
+
+Settle: transaction masses in grams at exact covering budgets (mainnet parameters)
+Storage mass is driven by the KAS values: the fixture rows use dust-sized values (an authorizer holds 20,000 sompi), so their storage mass is not representative and is not asserted; the last row scales every KAS value by 10,000.
+| Shape | Budgets per input (units) | Compute | Transient | Storage | Inputs | Outputs | Compute cap 450,000 | Transient cap 900,000 | Storage cap 450,000 | Pre-Toccata standard cap 100,000 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| KAS cash, P2PK owner, list of 1 | [1556, 5, 1, 0] | 170132 | 49888 | 144833333 | 4 | 4 | within | within | not asserted | over |
+| KAS cash, P2PK owner, list of 1,000 | [1556, 5, 1, 0] | 170132 | 49888 | 144833333 | 4 | 4 | within | within | not asserted | over |
+| KAS cash, P2SH owner, list of 1,000 | [1556, 5, 1, 0] | 170131 | 49884 | 144833333 | 4 | 4 | within | within | not asserted | over |
+| KCC-20 cash, P2PK owner, list of 1,000 | [1558, 8, 1, 1, 0] | 172924 | 57176 | 141662991 | 5 | 5 | within | within | not asserted | over |
+| KCC-20 cash, P2PK owner, list of 1,000, every KAS value x 10,000 | [1558, 8, 1, 1, 0] | 172924 | 57176 | 14166 | 5 | 5 | within | within | within | over |
+Mainnet block compute mass limit: 500000 grams. Grams per compute budget unit: 100.
+
+Refund: script units per vault input, template v3 against template v1 (random throwaway keys)
+| Refund | v3 units | v1 units | difference |
+| --- | --- | --- | --- |
+| asset leg, depositor | 138266 | 136296 | 1970 |
+| asset leg, counterparty | 138283 | 136313 | 1970 |
+| asset leg, authority | 138283 | 136313 | 1970 |
+| cash leg, depositor | 141706 | 139736 | 1970 |
+
+Proof gate: the precompile's fixed cost is 14,000,000 units; the fragment verifies with 5 public inputs, 6 gamma_abc points at 250,000 each (V3-ZK.md 3.2, 3.4).

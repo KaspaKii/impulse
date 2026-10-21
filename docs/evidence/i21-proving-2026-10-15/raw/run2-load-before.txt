@@ -1,0 +1,10 @@
+20:37  up 1 day, 12:41, 1 user, load averages: 22.60 41.00 34.50
+ %CPU COMM
+ 79.2 <desktop app helper>
+ 78.3 /usr/sbin/spindump
+ 68.4 <desktop app helper (renderer)>
+ 62.3 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer
+ 27.8 /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/Metadata.framework/Versions/A/Support/mds_stores
+ 27.1 /System/Library/PrivateFrameworks/iCloudDriveCore.framework/Versions/A/Support/bird
+ 17.3 /System/Library/PrivateFrameworks/FileProvider.framework/Support/fileproviderd
+running containers: 0

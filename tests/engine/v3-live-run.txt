@@ -1,0 +1,10 @@
+Real-proof authority settles on the shipped template v3 (tests/engine/v3_live.rs)
+run by scripts/ci-zk.sh: cargo test -p impulse-engine-tests --test v3_live -- --ignored --test-threads=1
+sha256 contracts/impulse_vault_v3.sil 904cf59ac2fa9cf512bf7dd205e84c6ee89a794812e1e91b4713d58557a76ddd
+sha256 circuits/IMAGE_ID a670d9cf007e82cb1f8ae0dae2f187b70c47b4fa87cf7f163b48c609df6b8d23
+sha256 tests/engine/v3_live.rs 9fb0a63d7940c4f5aa3177ab8a6789b16c8d4ce142033d4c45f8f9feb10c5a1f
+sha256 tests/engine/harness.rs d135e43502e8ca9208ff4184f3a35bc5521438cdbec36413ea977f6fb6a297b9
+sha256 tests/engine/v3_common.rs 53802417598703e7c241bd82c339dd2443a4b20b4c63a55553045ad8172dad3d
+sha256 circuits/GROTH16_PROVER_IMAGE f0e28b653ed2e58d88b0807dafa62f9405da00ee143c3719b94575e47abdd42c
+tests passed: 2
+date 2026-10-21

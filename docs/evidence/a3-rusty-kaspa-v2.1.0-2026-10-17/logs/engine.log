@@ -1,0 +1,616 @@
+help: Check that the patched package version and available features are compatible
+      with the dependency requirements. If the patch has a different version from
+      what is locked in the Cargo.lock file, run `cargo update` to use the new
+      version. This may also occur with an optional dependency that is not enabled.
+   Compiling educe v0.6.0
+   Compiling bytemuck v1.25.2
+   Compiling aho-corasick v1.1.5
+   Compiling regex-syntax v0.8.11
+   Compiling hex v0.4.3
+   Compiling cargo_metadata v0.18.1
+   Compiling kaspa-utils v2.1.0 (~/scratch/rk/utils)
+   Compiling kaspa-hashes v2.1.0 (~/scratch/rk/crypto/hashes)
+   Compiling merlin v3.0.0
+   Compiling ruint v1.20.1
+   Compiling kaspa-core v2.1.0 (~/scratch/rk/core)
+   Compiling risc0-core v3.0.1
+   Compiling wide v1.7.1
+   Compiling frost-core v3.0.0
+   Compiling risc0-zkp v3.0.4
+   Compiling clap_derive v4.6.7
+   Compiling frost-rerandomized v3.0.0
+   Compiling frost-secp256k1-tr v3.0.0
+   Compiling kaspa-merkle v2.1.0 (~/scratch/rk/crypto/merkle)
+   Compiling kaspa-smt v2.1.0 (~/scratch/rk/crypto/smt)
+   Compiling kaspa-txscript-errors v2.1.0 (~/scratch/rk/crypto/txscript/errors)
+   Compiling risc0-binfmt v3.0.4
+   Compiling risc0-circuit-recursion v4.0.4
+   Compiling ark-ff v0.6.0
+   Compiling ark-ff v0.5.0
+   Compiling regex-automata v0.4.18
+   Compiling risc0-circuit-rv32im v4.0.4
+   Compiling clap v4.6.7
+   Compiling risc0-circuit-keccak v4.0.5
+   Compiling ark-poly v0.5.0
+   Compiling ark-relations v0.5.1
+   Compiling regex v1.13.1
+   Compiling ark-snark v0.5.1
+   Compiling vergen v8.3.2
+   Compiling workflow-core-macros v0.18.0
+   Compiling ark-ec v0.5.0
+   Compiling workflow-core v0.18.0
+   Compiling ark-poly v0.6.0
+   Compiling workflow-wasm v0.18.0
+   Compiling malachite-nz v0.9.2
+   Compiling ark-ec v0.6.0
+   Compiling ark-relations v0.6.0
+   Compiling kaspa-addresses v2.1.0 (~/scratch/rk/crypto/addresses)
+   Compiling ark-crypto-primitives v0.5.0
+   Compiling ark-bn254 v0.5.0
+   Compiling ark-groth16 v0.5.0
+   Compiling ark-snark v0.6.0
+   Compiling risc0-groth16 v3.0.4
+   Compiling risc0-zkvm v3.0.4
+   Compiling ark-crypto-primitives v0.6.0
+   Compiling ark-bn254 v0.6.0
+   Compiling ark-groth16 v0.6.0
+   Compiling kaspa-math v2.1.0 (~/scratch/rk/math)
+   Compiling kaspa-muhash v2.1.0 (~/scratch/rk/crypto/muhash)
+   Compiling kaspa-consensus-core v2.1.0 (~/scratch/rk/consensus/core)
+   Compiling kaspa-txscript v2.1.0 (~/scratch/rk/crypto/txscript)
+   Compiling silverscript-abi v0.1.0 (~/scratch/ss/silverscript-abi)
+   Compiling kaspa-txscript-zk-sdk v2.1.0 (~/scratch/rk/crypto/txscript/zk-sdk)
+   Compiling silverscript-lang v1.0.0 (~/scratch/ss/silverscript-lang)
+   Compiling impulse-core v0.1.0 (~/impulse-a3/crates/impulse-core)
+   Compiling impulse-engine-tests v0.1.0 (~/impulse-a3/tests/engine)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 6m 14s
+     Running builders.rs (target/debug/deps/builders-7eed817de94f7b5f)
+
+running 30 tests
+test builders::add_signature_checks_the_slot ... ok
+test builders::emit_kcc20_fixtures ... ignored, writes crates/impulse-core/src/tx/testdata/
+test builders::a_transfer_beyond_the_tokens_max_cov_ins_is_refused_by_the_token ... ok
+test builders::assemble_from_signature_bytes ... ok
+test builders::boundary_settle_before_earliest_is_refused ... ok
+test builders::boundary_refund_from_expiry_is_accepted ... ok
+test builders::boundary_settle_from_earliest_is_accepted ... ok
+test builders::boundary_refund_before_expiry_is_refused ... ok
+test builders::ipst_combine ... ok
+test builders::fund_from_several_tokens_or_the_exact_amount_validates_in_the_engine ... ok
+test builders::direct_validates_in_the_engine ... ok
+test builders::finalize_refuses_budgets_raised_after_signing ... ok
+test builders::kcc20_scripts_match_the_compiler ... ok
+test builders::refunds_of_stray_tokens_validate_in_the_engine ... ok
+test builders::node_rule_ports_follow_the_pinned_source ... FAILED
+test builders::settle_without_earliest_validates_in_the_engine ... ok
+test builders::kcc20_fixtures_are_the_pinned_compile ... ok
+test builders::the_ipst_reader_refuses_a_signature_that_does_not_verify ... ok
+test builders::the_vault_refuses_what_the_builder_never_makes ... ok
+test builders::per_byte_script_units_are_measured ... ok
+test builders::verify_schnorr_sig65_refuses_bad_signatures ... ok
+test builders::topped_up_outputs_validate_in_the_engine ... ok
+test builders::signed_ipsts_round_trip ... ok
+test builders::budgets_follow_the_template_length ... ok
+test builders::fund_builders_validate_in_the_engine ... ok
+test builders::settle_masses ... ok
+test builders::settle_validates_in_the_engine_in_every_mode ... ok
+test builders::budgets_cover_every_spend ... ok
+test builders::refund_validates_in_the_engine_for_every_leg_and_signer ... ok
+test builders::signatures_land_in_their_slots_and_verify ... ok
+
+failures:
+
+---- builders::node_rule_ports_follow_the_pinned_source stdout ----
+
+thread 'builders::node_rule_ports_follow_the_pinned_source' (5462389) panicked at tests/engine/builders.rs:1408:46:
+called `Option::unwrap()` on a `None` value
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    builders::node_rule_ports_follow_the_pinned_source
+
+test result: FAILED. 28 passed; 1 failed; 1 ignored; 0 measured; 0 filtered out; finished in 36.30s
+
+error: test failed, to rerun pass `-p impulse-engine-tests --test builders`
+     Running escrow_release.rs (target/debug/deps/escrow_release-8538540bf94d4664)
+
+running 13 tests
+test escrow_cannot_move_with_no_vault_input ... ok
+test escrow_cannot_move_with_witness_pointing_away_from_its_vault ... ok
+test refund_by_authority_cannot_send_asset_escrow_to_stranger ... ok
+test refund_by_counterparty_cannot_send_asset_escrow_to_stranger ... ok
+test refund_by_counterparty_cannot_send_cash_escrow_to_stranger ... ok
+test refund_cannot_split_escrow_between_home_and_stranger ... ok
+test second_escrow_deposit_cannot_ride_along_a_counterparty_refund ... ok
+test second_escrow_deposit_cannot_ride_along_a_refund ... ok
+test second_escrow_deposit_cannot_ride_along_a_settle ... ok
+test second_vault_utxo_via_refund_at_input_2_cannot_release_escrow ... ok
+test second_vault_utxo_via_refund_cannot_release_escrow_held_at_another_index ... ok
+test escrow_cannot_move_with_another_vault_as_witness ... ok
+test second_vault_utxo_via_settle_at_input_2_cannot_release_escrow ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 38.17s
+
+     Running htlc_builders.rs (target/debug/deps/htlc_builders-7f5bd767123ce4b7)
+
+running 4 tests
+test fund_then_claim ... ok
+test refunds ... ok
+test the_core_vault_is_the_compiled_contract ... ok
+test budgets_follow_the_template_length ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 8.44s
+
+     Running htlc_measure.rs (target/debug/deps/htlc_measure-648157557840676c)
+
+running 1 test
+test hashlock_script_units_budgets_and_sig_ops ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 15.70s
+
+     Running htlc_refund.rs (target/debug/deps/htlc_refund-a7643a86a33e47cc)
+
+running 38 tests
+test hr13_token_carrier_kas_short ... ok
+test hr11_buyer_cannot_refund_the_authorizer_without_the_token ... ok
+test hr14_decoy_amount_plus_1 ... ok
+test hr12_buyer_cannot_substitute_a_foreign_token ... ok
+test hr14_decoy_amount_0 ... ok
+test hr10_home_output_under_decoy_covenant ... ok
+test hr14_decoy_of_the_full_amount_pays_the_seller ... ok
+test hr14_decoy_amount_1 ... ok
+test hr14_decoy_amount_minus_1 ... ok
+test buyer_refund_at_any_time ... ok
+test hr1_no_authority ... ok
+test hr1_stranger_signer ... ok
+test hr2_seller_cannot_pose_as_the_buyer_before_expiry ... ok
+test hr2_seller_named_stranger_signs ... ok
+test hr3_seller_refund_at_lock_time_0 ... ok
+test hr3_seller_refund_with_timestamp_lock_time ... ok
+test hr3_seller_authorizer_alone_before_expiry ... ok
+test hr3_seller_refund_one_daa_before_expiry ... ok
+test hr3_seller_refund_with_finalized_input ... ok
+test hr4_second_vault_utxo_cannot_refund_off_input_0 ... ok
+test hr5_authorizer_kas_over ... ok
+test hr7_authorizer_kas_to_the_buyer ... ok
+test hr5_authorizer_kas_short ... ok
+test hr7_authorizer_kas_to_stranger ... ok
+test refund_cannot_send_the_escrow_to_the_buyer ... ok
+test refund_cannot_send_the_escrow_to_a_stranger ... ok
+test minter_escrow_goes_home_as_minter ... ok
+test hr8_second_escrow_deposit_cannot_ride_along_a_seller_refund ... ok
+test refund_cannot_split_the_escrow ... ok
+test hr9_decoy_token_at_input_1_real_escrow_elsewhere ... ok
+test refund_escrow_sigscript_claims_a_state_its_utxo_does_not_hold ... ok
+test refund_home_output_wrong_owner_type ... ok
+test refund_escrow_under_another_template ... ok
+test seller_refund_of_the_authorizer_alone ... ok
+test refund_minter_escrow_cannot_lose_its_minter_flag ... ok
+test seller_refund_of_an_under_funded_escrow ... ok
+test seller_refund_at_and_after_expiry ... ok
+test seller_authorizer_only_refund_after_expiry_leaves_a_race ... ok
+
+test result: ok. 38 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 26.63s
+
+     Running htlc_settle.rs (target/debug/deps/htlc_settle-adfd423542f95788)
+
+running 36 tests
+test claim_needs_no_lock_time ... ok
+test claim_outputs_may_carry_more_kas ... ok
+test h1_second_vault_utxo_cannot_claim_off_input_0 ... ok
+test claim_with_the_right_preimage ... ok
+test escrow_sigscript_claims_a_state_its_utxo_does_not_hold ... ok
+test escrow_read_with_wrong_suffix_len ... ok
+test h2_empty_secret ... ok
+test escrow_under_another_template ... ok
+test escrow_read_with_wrong_prefix_len ... ok
+test claim_after_expiry_is_accepted ... ok
+test h3_hash_lock_as_secret ... ok
+test h3_secret_one_bit_off ... ok
+test hd2_delivery_carrier_kas_short ... ok
+test he1_escrow_without_covenant_binding ... ok
+test h2_secret_of_31_bytes ... ok
+test h2_secret_of_64_bytes ... ok
+test h2_secret_of_33_bytes ... ok
+test h3_wrong_secret ... ok
+test he1_second_escrow_deposit_cannot_ride_along ... ok
+test hd1_output0_under_decoy_covenant ... ok
+test hs8_authorizer_return_omitted ... ok
+test he3_escrow_owner_type_pubkey ... ok
+test hs8_authorizer_return_to_stranger ... ok
+test he5_escrow_under_funded ... ok
+test he2_escrow_under_another_covenant_real_asset_elsewhere ... ok
+test he4_escrow_owned_by_another_vault ... ok
+test hs9_authorizer_return_short ... ok
+test hs8_authorizer_return_to_the_buyer ... ok
+test he5_escrow_over_funded ... ok
+test he6_minter_escrow_cannot_hand_minting_to_a_stranger ... ok
+test output0_is_minter ... ok
+test output0_to_the_seller ... ok
+test output0_wrong_owner ... ok
+test output0_short_amount ... ok
+test output0_wrong_owner_type ... ok
+test output0_under_another_template ... ok
+
+test result: ok. 36 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 16.18s
+
+     Running instantiate.rs (target/debug/deps/instantiate-4601fc6a83b64b0d)
+
+running 7 tests
+test self_settling_external_cash_has_no_real_terms ... ok
+test external_cash_vault_refunds_only_by_the_buyer ... ok
+test external_cash_vault_refunds_whole_as_kas_to_the_buyer_p2pk ... ok
+test foreign_token_at_the_external_cash_vault_is_unprotected ... ok
+test the_engine_judges_the_core_terms ... ok
+test core_vaults_refund_in_the_engine_for_every_signer has been running for over 60 seconds
+test core_vaults_settle_in_the_engine_in_every_mode has been running for over 60 seconds
+test core_vaults_settle_in_the_engine_in_every_mode ... ok
+test core_vaults_refund_in_the_engine_for_every_signer ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 206.74s
+
+     Running locktime.rs (target/debug/deps/locktime-a09dc04a1e6e8dc6)
+
+running 13 tests
+test r3_cash_depositor_earmarked_refund_one_daa_before_expiry ... ok
+test r3_depositor_earmarked_refund_one_daa_before_expiry ... ok
+test r3_depositor_earmarked_refund_with_finalized_input ... ok
+test depositor_earmarked_refund_after_expiry ... ok
+test depositor_revocable_refund_needs_no_lock_time ... ok
+test r3_unknown_funding_mode_is_earmarked ... ok
+test counterparty_earmarked_refund_one_daa_before_expiry ... ok
+test s3_settle_one_daa_before_earliest ... ok
+test s3_settle_with_timestamp_lock_time ... ok
+test s3_settle_with_finalized_vault_input ... ok
+test settle_after_earliest ... ok
+test settle_at_earliest ... ok
+test settle_without_earliest_needs_no_lock_time ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 7.15s
+
+     Running measure.rs (target/debug/deps/measure-3b946c86f4a06723)
+
+running 1 test
+test sizes_units_and_mass_per_entry_and_mode ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 20.86s
+
+     Running refund.rs (target/debug/deps/refund-8681aa522ba79421)
+
+running 46 tests
+test r11_counterparty_cannot_refund_asset_authorizer_without_token ... ok
+test r11_authority_cannot_refund_asset_authorizer_without_token ... ok
+test r13_token_carrier_kas_short ... ok
+test r11_counterparty_cannot_refund_cash_authorizer_without_token ... ok
+test r11_authority_cannot_refund_cash_authorizer_without_token ... ok
+test r14_asset_decoy_amount_0 ... ok
+test r14_asset_decoy_amount_0_by_authority ... ok
+test r12_counterparty_cannot_substitute_a_foreign_token ... ok
+test r10_home_output_under_decoy_covenant ... ok
+test a3_earmarked_counterparty_cancels_the_other_leg_before_expiry ... ok
+test r14_asset_decoy_amount_leg_minus_1 ... ok
+test r14_asset_decoy_amount_1 ... ok
+test r14_cash_decoy_amount_1 ... ok
+test r14_cash_decoy_amount_0 ... ok
+test r14_cash_decoy_amount_leg_minus_1 ... ok
+test r1_stranger_signer ... ok
+test r14_counterparty_cannot_refund_under_funded_escrow ... ok
+test r2_authority_named_counterparty_signs ... ok
+test r14_decoy_of_the_full_leg_amount_pays_the_depositor ... ok
+test r4_second_kas_cash_deposit_cannot_refund_off_input_0 ... ok
+test r5_kas_cash_short ... ok
+test r6_kas_cash_to_stranger ... ok
+test r1_authority_key_without_authority_flag ... ok
+test r2_depositor_named_stranger_signs ... ok
+test r5_authorizer_kas_short ... ok
+test r7_authorizer_kas_to_counterparty ... ok
+test r7_authorizer_kas_to_stranger ... ok
+test refund_authority_earmarked ... ok
+test refund_authority_revocable ... ok
+test refund_authorizer_without_token_by_depositor ... ok
+test r9_decoy_token_at_input_1_real_escrow_elsewhere ... ok
+test refund_counterparty_earmarked ... ok
+test refund_counterparty_revocable ... ok
+test refund_external_cash_asset_leg ... ok
+test refund_depositor_earmarked ... ok
+test refund_depositor_revocable ... ok
+test refund_escrow_sigscript_claims_a_state_its_utxo_does_not_hold ... ok
+test refund_external_cash_leg_vault_goes_home ... ok
+test refund_kas_cash_leg ... ok
+test refund_escrow_under_another_template ... ok
+test refund_self_settling_trade ... ok
+test refund_kcc20_cash_leg ... ok
+test refund_home_output_wrong_owner_type ... ok
+test refund_minter_escrow_goes_home_as_minter ... ok
+test refund_minter_escrow_cannot_lose_its_minter_flag ... ok
+test refund_under_funded_escrow_goes_home_whole ... ok
+
+test result: ok. 46 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 47.75s
+
+     Running settle.rs (target/debug/deps/settle-006c40351b56597a)
+
+running 57 tests
+test d2_external_cash_asset_delivery_carrier_kas_short ... ok
+test e1_escrow_without_covenant_binding ... ok
+test d1_output0_under_decoy_covenant ... ok
+test e2_escrow_under_another_covenant_real_asset_elsewhere ... ok
+test authorizer_returns_may_exceed_the_authorizer_value ... ok
+test deliveries_may_carry_more_than_the_escrow_kas ... ok
+test d2_asset_delivery_carrier_kas_short ... ok
+test d2_cash_delivery_carrier_kas_short ... ok
+test e3_escrow_owner_type_pubkey ... ok
+test e2_escrow_without_covenant_binding_real_asset_elsewhere ... ok
+test d1_cash_output1_under_decoy_covenant ... ok
+test e4_escrow_owned_by_the_cash_vault ... ok
+test e5_escrow_under_funded ... ok
+test cross_trade_mixing_is_accepted ... ok
+test e5_escrow_over_funded ... ok
+test escrow_read_with_wrong_prefix_len ... ok
+test e5_cash_escrow_under_funded ... ok
+test e6_minter_escrow_cannot_hand_minting_to_a_stranger ... ok
+test escrow_read_with_wrong_suffix_len ... ok
+test escrow_sigscript_claims_a_state_its_utxo_does_not_hold ... ok
+test e5_cash_escrow_over_funded ... ok
+test e4_escrow_owned_by_another_vault ... ok
+test escrow_under_another_template ... ok
+test external_cash_leg_vault_never_settles ... ok
+test output0_is_minter ... ok
+test output0_under_another_template ... ok
+test output0_short_amount ... ok
+test output0_wrong_owner ... ok
+test output0_wrong_owner_type ... ok
+test s1_asset_vault_refuses_input_1 ... ok
+test kcc20_proceeds_to_stranger ... ok
+test s1_second_kas_cash_deposit_cannot_settle_off_its_index ... ok
+test kcc20_proceeds_short ... ok
+test kcc20_proceeds_under_the_asset_template ... ok
+test s2_kas_cash_vault_over_funded ... ok
+test s2_kas_cash_vault_under_funded ... ok
+test s4_kas_proceeds_to_stranger ... ok
+test s5_kas_proceeds_short ... ok
+test s6_authority_signature_from_stranger ... ok
+test s7_self_settling_external_cash_never_settles ... ok
+test s6_authority_signature_missing ... ok
+test s7_external_cash_without_authority ... ok
+test s6_authority_signature_from_a_party ... ok
+test s8_external_cash_seller_return_omitted ... ok
+test s8_buyer_authorizer_return_omitted ... ok
+test s9_external_cash_seller_return_short ... ok
+test s8_seller_authorizer_return_omitted ... ok
+test settle_authority_external_cash ... ok
+test s8_buyer_authorizer_return_to_stranger ... ok
+test settle_authority_kas_cash ... ok
+test s8_seller_authorizer_return_to_stranger ... ok
+test s9_buyer_return_short ... ok
+test s9_seller_return_short ... ok
+test settle_self_settling_kas_cash ... ok
+test settle_authority_kcc20_cash ... ok
+test settle_earmarked_funding ... ok
+test settle_self_settling_kcc20_cash ... ok
+
+test result: ok. 57 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 96.91s
+
+     Running template.rs (target/debug/deps/template-a35b13c018dba5d9)
+
+running 3 tests
+test in_process_compile_reproduces_the_committed_artifact ... ok
+test every_term_and_the_leg_index_change_the_vault_address has been running for over 60 seconds
+test every_test_vault_runs_the_committed_template has been running for over 60 seconds
+test every_term_and_the_leg_index_change_the_vault_address ... ok
+test every_test_vault_runs_the_committed_template ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 121.44s
+
+     Running threshold.rs (target/debug/deps/threshold-0a692ebebfcc7850)
+
+running 6 tests
+test frost_library_gives_one_of_three_no_signature ... ok
+test frost_2_of_3_authority_settles_external_cash ... ok
+test s6_frost_another_groups_signature_cannot_settle ... ok
+test frost_2_of_3_authority_settles_kas_cash ... ok
+test frost_2_of_3_authority_settles_kcc20_cash ... ok
+test s6_frost_lone_share_cannot_settle has been running for over 60 seconds
+test s6_frost_lone_share_cannot_settle ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 71.03s
+
+     Running v2_builders.rs (target/debug/deps/v2_builders-795d26f46815ad81)
+
+running 8 tests
+test a_tampered_tranche_is_refused_by_the_engine ... ok
+test a_redirected_delivery_fails_every_vault ... ok
+test tranche_budgets_cover_the_measured_units ... ok
+test committed_budgets_cover_the_measured_units ... ok
+test partial_trades_fund_as_genesis_and_settle_in_tranches_in_the_engine ... ok
+test builders_fund_and_settle_every_shape_in_the_engine ... ok
+test builders_refund_every_leg_in_the_engine ... ok
+test core_vault_scripts_are_the_compilers has been running for over 60 seconds
+test core_vault_scripts_are_the_compilers ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 77.39s
+
+     Running v2_measure.rs (target/debug/deps/v2_measure-2b815b5f49c70f95)
+
+running 3 tests
+test per_byte_and_per_leg_units_are_measured has been running for over 60 seconds
+test practical_max_n has been running for over 60 seconds
+test refund_units_are_measured has been running for over 60 seconds
+test refund_units_are_measured ... ok
+test practical_max_n ... ok
+test per_byte_and_per_leg_units_are_measured ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 511.48s
+
+     Running v2_partial.rs (target/debug/deps/v2_partial-575601c5f0459e60)
+
+running 11 tests
+test shared_covenant_id_blocks_tranches_not_final_or_refund ... ok
+test mixed_final_and_tranche_is_accepted ... ok
+test tranche_sequences_at_the_edges ... ok
+test refund_of_a_partly_filled_vault_by_each_role ... ok
+test any_terms_field_change_in_the_continuation_is_refused has been running for over 60 seconds
+test full_settle_on_partial_terms has been running for over 60 seconds
+test remainder_leak_refused_on_every_leg has been running for over 60 seconds
+test strays_below_and_at_min_lot has been running for over 60 seconds
+test tranche_leaving_less_than_min_lot_refused has been running for over 60 seconds
+test two_tranches_then_final has been running for over 60 seconds
+test full_settle_on_partial_terms ... ok
+test under_lot_refused_first_and_last_tranche has been running for over 60 seconds
+test two_tranches_then_final ... ok
+test remainder_leak_refused_on_every_leg ... ok
+test strays_below_and_at_min_lot ... ok
+test tranche_leaving_less_than_min_lot_refused ... ok
+test under_lot_refused_first_and_last_tranche ... ok
+test any_terms_field_change_in_the_continuation_is_refused ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 492.26s
+
+     Running v2_refund.rs (target/debug/deps/v2_refund-935347458cbedbea)
+
+running 37 tests
+test depositor_refunds_the_authorizer_without_its_token ... ok
+test earmarked_depositor_refunds_at_expiry ... ok
+test r11_authority_cannot_refund_the_authorizer_alone ... ok
+test r11_another_depositor_cannot_refund_the_authorizer_alone ... ok
+test r10_home_output_under_decoy_covenant ... ok
+test covenant_vault_refunds ... ok
+test home_builtin_wrong_owner_amount_or_minter ... ok
+test depositor_refunds_any_amount ... ok
+test every_role_refunds_every_leg_kind ... ok
+test r15_refund_leaves_a_continuation ... ok
+test r12_foreign_token_not_owned_by_the_vault ... ok
+test r13_home_carrier_short ... ok
+test r14_decoy_below_one_lot ... ok
+test r17_token_above_the_leg_amount ... ok
+test r14_without_partial_the_leg_amount_exactly ... ok
+test r18_token_not_whole_lots ... ok
+test r1_negative_signer_leg ... ok
+test n10_refunds has been running for over 60 seconds
+test r1_signer_leg_beyond_the_authority ... ok
+test r2_depositor_named_stranger_signs ... ok
+test r16_authority_signs_when_the_terms_name_none ... ok
+test r3_earmarked_depositor_one_daa_before_expiry ... ok
+test r4_second_kas_deposit_cannot_refund_off_input_0 ... ok
+test r2_another_depositor_named_stranger_signs ... ok
+test r6_kas_refund_to_stranger ... ok
+test r3_depositor_naming_another_of_its_legs_is_still_earmarked ... ok
+test r5_vault_kas_short ... ok
+test r7_authorizer_kas_to_stranger ... ok
+test r8_second_escrow_rides_along ... ok
+test n10_refunds ... ok
+test r9_decoy_at_input_1_real_escrow_elsewhere ... ok
+test v8_leg_index_equal_to_leg_count ... ok
+test v10_kas_refund_type_2 ... ok
+test v8_negative_leg_index ... ok
+test v4_leg_list_longer_than_leg_count ... ok
+test v4_leg_list_short ... ok
+test v9_leg_kind_byte_2 ... ok
+test v3_leg_count_above_max_legs ... ok
+
+test result: ok. 37 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 108.58s
+
+     Running v2_settle.rs (target/debug/deps/v2_settle-007d9101b2959ecf)
+
+running 64 tests
+test c3_two_continuations ... ok
+test c5_continuation_with_another_script ... ok
+test c4_continuation_at_another_position ... ok
+test c2_tranche_from_a_zero_covenant_vault ... ok
+test c6_kas_remainder_short ... ok
+test c1_final_settle_leaves_a_continuation ... ok
+test c7_authorizer_continuation_short ... ok
+test c2_tranche_from_a_plain_vault_refused ... ok
+test d2_delivery_carrier_kas_short ... ok
+test amount_i64_max_settles ... ok
+test c9_remainder_carrier_short ... ok
+test d1_delivery_under_decoy_covenant ... ok
+test e1_second_escrow_of_the_covenant_rides_along ... ok
+test delivery_builtin_wrong_owner_or_amount ... ok
+test c8_remainder_under_decoy_covenant ... ok
+test e2_escrow_at_another_position_decoy_at_its_slot ... ok
+test e3_escrow_owner_type_pubkey ... ok
+test amount_with_top_bit_set_is_negative_and_refused ... ok
+test e4_escrow_owned_by_another_vault ... ok
+test e6_minter_escrow ... ok
+test n2_kas_cash_authority ... ok
+test n2_kas_cash_self_settling ... ok
+test n2_earmarked_funding ... ok
+test missing_delivery_fails_every_vault_n3_with_kas ... ok
+test missing_delivery_fails_every_vault_n3_ring ... ok
+test n2_kcc20_cash_authority ... ok
+test n2_kcc20_cash_self_settling ... ok
+test lots_differ_across_vaults_n3 ... ok
+test p2_escrow_over_funded ... ok
+test p1_zero_lots ... ok
+test p2_kas_vault_over_funded ... ok
+test p4_lots_beyond_the_escrow ... ok
+test n3_two_kcc20_legs_and_a_kas_leg ... ok
+test n3_ring_of_three_kcc20_legs ... ok
+test n10_all_kcc20_legs_self_settling ... ok
+test p3_held_not_whole_lots ... ok
+test n2_layout_is_v1_layout_position_for_position ... ok
+test n10_bilateral_nine_kcc20_legs_and_a_kas_leg ... ok
+test lots_differ_across_vaults_n10 ... ok
+test p3_p4_under_funded_refused ... ok
+test p5_tranche_below_min_lot ... ok
+test s1_second_kas_deposit_cannot_settle_off_its_index ... ok
+test remainder_builtin_wrong_amount_or_owner ... ok
+test p6_remainder_below_min_lot ... ok
+test p4_tranche_beyond_held_with_crafted_negative_min_lot ... ok
+test s4_kas_delivery_to_stranger ... ok
+test s5_kas_delivery_short ... ok
+test s8_authorizer_return_omitted ... ok
+test s1_vault_at_another_vault_position ... ok
+test s3_settle_one_daa_before_earliest ... ok
+test missing_delivery_fails_every_vault_n10 has been running for over 60 seconds
+test s10_crossed_settle_of_trades_differing_only_in_nonce ... ok
+test s6_authority_signature_from_stranger ... ok
+test missing_delivery_fails_every_vault_n10 ... ok
+test s9_authorizer_return_short ... ok
+test s8_authorizer_return_to_stranger ... ok
+test s10_crossed_settle_of_two_trades_with_identical_deliveries ... ok
+test v5_leg_index_equal_to_leg_count ... ok
+test v5_negative_leg_index_refused ... ok
+test v2_leg_list_longer_than_leg_count ... ok
+test v2_leg_list_short ... ok
+test v7_kas_delivery_type_2 ... ok
+test v6_leg_kind_byte_2 ... ok
+test tranche_settles_on_partial_terms ... ok
+test v1_leg_count_above_max_legs has been running for over 60 seconds
+test v1_leg_count_above_max_legs ... ok
+
+test result: ok. 64 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 205.09s
+
+     Running v2_template.rs (target/debug/deps/v2_template-2ca99804131cecf3)
+
+running 5 tests
+test v1_and_v2_template_hashes_are_distinct ... ok
+test in_process_compile_reproduces_the_committed_v2_artifact ... ok
+test suffix_constant_is_the_template_suffix ... ok
+test every_state_field_and_the_leg_index_change_the_vault_address has been running for over 60 seconds
+test every_test_vault_runs_the_committed_template has been running for over 60 seconds
+test every_test_vault_runs_the_committed_template ... ok
+test every_state_field_and_the_leg_index_change_the_vault_address ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 76.83s
+
+     Running verify.rs (target/debug/deps/verify-56d49bde4449cacc)
+
+running 11 tests
+test a_pinned_kcc20_artifact_that_declares_other_entries_is_refused ... ok
+test the_kcc20_minter_controller_is_not_a_kcc20_token ... ok
+test the_pinned_kcc20_template_reads_as_kcc20_with_its_minter_branch ... ok
+test a_vault_script_revealed_where_the_engine_does_not_run_it_is_refused ... ok
+test a_vault_of_tampered_terms_is_refused_by_the_engine_and_the_verifier ... ok
+test a_swapped_signature_script_is_refused_by_the_engine_and_the_bound_decode ... ok
+test a_spent_input_verifies_only_against_the_utxo_whose_spend_runs_its_script ... ok
+test a_kcc20_token_with_extended_state_cannot_settle_or_refund_and_is_refused ... ok
+test the_pinned_kcc20_templates_are_kcc20_sil_built_with_the_pinned_compiler ... ok
+test accepted_settles_decode_to_their_trade_and_verify ... ok
+test accepted_refunds_decode_with_their_signer ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 28.05s
+
+error: 1 target failed:
+    `-p impulse-engine-tests --test builders`

@@ -1,0 +1,10 @@
+20:58  up 1 day, 13:02, 1 user, load averages: 22.55 49.58 52.88
+ %CPU COMM
+ 93.7 /usr/sbin/spindump
+ 19.3 /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/Metadata.framework/Versions/A/Support/mds_stores
+ 11.9 /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/Metadata.framework/Versions/A/Support/mds
+  8.9 /System/Library/PrivateFrameworks/PhotoLibraryServices.framework/Versions/A/Support/photolibraryd
+  6.2 /System/Library/PrivateFrameworks/FileProvider.framework/Support/fileproviderd
+  5.2 /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/Metadata.framework/Versions/A/Support/mdworker_shared
+  5.0 /System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/Metadata.framework/Versions/A/Support/mdworker_shared
+running containers: 0

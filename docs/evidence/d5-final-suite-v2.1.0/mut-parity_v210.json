@@ -1,0 +1,211 @@
+{
+ "about": "Contract mutation run for the parity rows (I10): each tagged require of the contract replaced by require(true) in turn, the parity crate run against the mutant through IMPULSE_VAULT_SIL, and the tests that failed recorded under the tag. Written by scripts/gen-parity.sh --mutate-contract; never edit by hand. The generator refuses a row citing a tag whose mutant does not fail its test, and a record whose contract, inputs or citing tests have changed since.",
+ "contract": "contracts/impulse_vault.sil",
+ "contract_sha256": "7ad37f06cb4e7c1b43c4fb42b6cacee313eb41074c18e5e4d9de2a595a251132",
+ "inputs": {
+  "tests/parity/common.rs": "d09ddde2379c3cf00e95f0af34b2e6626b534f07a2e02a6395cd5ca753d1ecbd",
+  "tests/parity/trade.rs": "941f285effeb60cd6a3a9267962457cd44c93fd24146a8090e89dc3192e16ccc",
+  "tests/parity/verify_world.rs": "34cd100c6a12e9970940c7fd0276845236fb227d5d1a97958c436bc60e958072",
+  "tests/engine/harness.rs": "9e241ebbca281923a4f712dd5f5fc138aba28c015c827bd73f14639b41f5734a",
+  "tests/engine/real_terms.rs": "4ea3db702024d10bd12eefa851055b89c3edd9fef5af6e0398c35e3c2a73e531",
+  "tests/engine/fixtures/kcc20/kcc20.sil": "54bca2fee1067777282753a0a82d793e574e46a508d535b1af5570347dece96a"
+ },
+ "tests": {
+  "edges::edge01_funding_by_plain_transfer": "68f1f042bbc8753eb76ddc28fe62b83811d00ac2cd9a4e22f7622476c12b7296",
+  "edges::edge02_native_kas_needs_no_wrapping": "978b5842900d99a667351fa0f71f0e4457e50faebf382638be0f0e1032ca978b",
+  "edges::edge03_kas_at_a_vault_is_never_swept_to_the_closer": "91dd64f2eb736b9485d370265a6c68c35510b5b66e205cb94df4fdea715216cc",
+  "edges::edge04_over_deposit_never_leaks": "1042671a2f1d29d1db9bb5a7c778dbf7d5c403f3c1c5b2221948803be4e113ff",
+  "edges::edge05_settlement_destinations": "6952a02d357723f4a391f65d00667aa53854b1d4a3ddc7fd44dbe13daf99b0f8",
+  "edges::edge06_no_recipient_account_to_reassign": "feec4bafef6e9c8a58744081c78bae609bbb84af145072f28519313c7b764d34",
+  "edges::edge07_trade_reference_is_bound": "620685d1b3c23b1bc530471ad1e1abfc7a14c393634034f8c3575be4e1c276b1",
+  "edges::edge08_unwind_returns_the_actual_balance": "c59e270e6b63335c8bc2df6c96e8cac1e1c41fa618828d890e97daf5f0de516c",
+  "edges::edge09_late_deposit_after_a_reject": "67b19ff73582c951d946395af92d936d21ded3f5ed2d223172a59614d031a8d0",
+  "edges::edge10_no_rent_for_the_closer": "0b868bfa6f2eae1342be339cd843823e2057cd2c81a1a18c090cdfcefddc2a40",
+  "edges::edge11_expiry_stops_neither_refunds_nor_settle": "f95639e8836fe2ed745fa283cfd3f52176eab54ae4ccf25fb06f5987a7cf705f",
+  "edges::edge12_earliest_settlement": "037711e7262e7c355cb9c15ff2eab0251dbc1d2178af7fba4df2f2f4ea7ecd50",
+  "edges::edge13_earliest_inherits_the_expiry_cap": "764503bf7d335d882bac97e13fbf96f0d6de2a27b0018469a589cbd826c01b47",
+  "edges::edge14_gates_use_the_daa_score": "7cd84f6e5ef7e14297915f37192849575889bb78c1517f33ecec8e7bfdd060dd",
+  "edges::edge15_no_tombstone_needed": "0cc81d6fc3dbb9c9ae1fdaebb3ab1bbe6b1c01dabaebbf9817e229efdafa64bb",
+  "edges::edge16_parties_are_keys_multisig_only_as_destination": "b7ab57368728f941ef6b8df1893b6b45d1cdd9f2682d790971fa6ff760476218",
+  "edges::edge17_forged_terms_get_another_address": "03d60cfb295062a3a79e83b3cb6239d2a3d7ae0d3f0326f8c3bd89b15cb826e8",
+  "edges::edge18_no_squatting_and_exact_u64": "3c8223afd07e991e9b048cdba423e3636464e247aa978a5ebec29f123fa66bb4",
+  "edges::edge19_look_alike_scripts_are_refused": "c361375db9104809b331bcb58ff9a55a3b23924fcfe056178a67cf1960a3ea48",
+  "edges::edge20_issuer_powers_are_the_named_templates": "ecb5a3f653bbf8d0e96c6a335cb89281f8049f23ac9ac298ece08a0211dfd15b",
+  "edges::edge21_no_transfer_hooks": "646526390259d137db97680ce4bc5db7fb63091e3f606b24185c275c40575df3",
+  "edges::edge22_dust_cannot_block_settlement": "0f7306a1d82bfd23b11cbc55fcff1588244f229eb39dabae111002794c5b6554",
+  "edges::edge23_no_second_transfer_in_settle": "a6326f0f18ebc0865562c3ac3218fa2fe4ae237ef5824e4c0e92e62b15e3e5b6",
+  "edges::edge24_no_program_deployment": "cd858994ddb2b35aabeee08bfa82cee2237f408610a4fc855d1530c89cd7c199",
+  "edges::edge25_earmarked_funding_blocks_only_the_depositors_withdrawal": "4264e03ee9aab33312a03b43e7d5170a70c3d59889784f745abb0d0ab203c5ee",
+  "errors::err00_signer_not_party": "605cd3253cbe94431d69685315132bdb7ba824ac5473e15555cc97ef0be6daf1",
+  "errors::err01_dvp_expired": "403bfcfff68393b1555dc03cfd649f29023a5990e8eb38259003ed15c950d698",
+  "errors::err02_settlement_authority_mismatch": "4baa40c0cb859088fe6bc989540ba8e3aad4df49721ea595061d7e6ef0e14431",
+  "errors::err03_settlement_too_early": "7bbda861788ca18972baad0be0fb39f18be96c5b80d3d1c2ddb9b626cfeb7700",
+  "errors::err04_leg_not_funded": "102db9f2173a5785f682016d9bf656149f5c8688ec55f721f414e76f9fe909c9",
+  "errors::err05_expiry_not_in_future": "d1eec11f16d4541ea92d642284b9b3cb4da13a57d683459a86782dfc25594f43",
+  "errors::err06_earliest_after_expiry": "40528a5dc6bf26d36982755c3ad59eabd018bc4f1c634c2a07f2ffed818b4ab7",
+  "errors::err07_self_dvp": "8bfaa552608357b6f3b7f54ad96eee5ce9fe94982159515a05a8cbef48fa7017",
+  "errors::err08_same_mint": "dd94b602ee53628d58d976d9274135a4749ed15c1b8a6ed9d55466189ac6fb61",
+  "errors::err09_zero_amount": "5b50cb05113b8345f2ce8bfc8216a7cd83c80f9610cfbd897867824be98a27f1",
+  "errors::err10_blocked_mint_extension": "6d314b1027bab12c83368d0b9b50a834f911067cf3f9d6d0066e7499fbd1c545",
+  "errors::err11_settlement_authority_is_party": "c15b15c1709209f36922874c8eb0ae627031b2e748c44c3160c607298103ef77",
+  "errors::err12_settlement_authority_executable": "6d27d0db5fa9016c4434026aade45c48de358e0baccd201b164b390864870a00",
+  "errors::err13_nonce_already_used": "144df318a7f97f78ea008b9f47e0bd5862ee3bff3d7c542ce5df5739a82b37d3",
+  "errors::err14_expiry_too_far_in_future": "3b1c9c5d80d6f0edfa2d77849034c6662a32765311ccc1ddbb51e415efe60770",
+  "errors::err15_ref_string_too_long": "72bb28a85be2adb8c54a4e72e431cc97666cdd4d0623ac260ef956c59d2517b5",
+  "errors::err16_dvp_still_open": "8f74af4af04ca93ae1b0e93485a3861a38b5ee6e4cc69b780186121c6b926dca",
+  "errors::err17_dvp_never_created": "267473ad386f3b95fdbaab64b08c27bc258ef29607993052ff5c5ee5817e4796",
+  "errors::err18_escrow_preloaded_with_lamports": "d8c67a90030a45af0b69c1a41ace8ca98508a1c205acd828b4da58e9fe377384",
+  "errors::err19_settlement_destination_is_swap_dvp": "fce174a9513a21a3f9da35b3acd2d1d38555388c7c9c1b7d0d2d76ca575801bb",
+  "errors::err20_swap_dvp_preloaded_with_lamports": "0eeebbc05a5ccd526addda9ab1b0070ed90415c0b84d8605a59bd73484c25509",
+  "errors::err21_recipient_ata_mismatch": "bb25e2d277279b64082791775e7b9eac7429e58c874fed4485c70d592a7932ac",
+  "errors::err22_party_not_signer_capable": "7dab17570113a6a94bf92100607009708248141c71bf2349bd2da327ad6c12b8",
+  "errors::err23_mint_authority_changed": "41049ea7137a85db013cfcfecb9f944df8804d2d5ec086ea9847c03012029f54",
+  "instructions::ix0_create_is_derived_locally_by_each_party": "cc0b7dd58ea29dfee694ff15a1736040a9dc59cf590a8ce4e10cdac262f680a7",
+  "instructions::ix1_reclaim_is_the_depositors_refund": "2b37ff1f11bbe526eb929f4e549cfd1b5721a9cf9243cbef7eecfe698cf59edc",
+  "instructions::ix2_settle_moves_both_legs_in_one_transaction": "5037da3a5a560866c5de1711ce717be51ef943a9a5628ddf10d7c26dd717b30b",
+  "instructions::ix3_cancel_is_the_authority_refund_of_each_leg": "eaa43da50c49cb18fb07b33d1fd9d0f3cbd473f1778e1a36e0c9b5c43c1b2936",
+  "instructions::ix4_reject_is_a_party_refund_of_each_leg": "e6e7999abcc41137c5c3b7b3228ed58f4b013bb60996b2550f713482715bbab8",
+  "instructions::ix5_recover_is_the_ordinary_refund": "7c6ae31d004eb4135a3200e6e9e2682ac4a349e3fdbf0c5a97fa40b448c0c326"
+ },
+ "flipped": {
+  "[E1]": [
+   "edges::edge22_dust_cannot_block_settlement",
+   "errors::err08_same_mint",
+   "errors::err17_dvp_never_created",
+   "errors::err23_mint_authority_changed"
+  ],
+  "[E2]": [
+   "errors::err17_dvp_never_created"
+  ],
+  "[E3]": [
+   "errors::err17_dvp_never_created"
+  ],
+  "[E4]": [
+   "errors::err17_dvp_never_created"
+  ],
+  "[E5]": [
+   "edges::edge04_over_deposit_never_leaks",
+   "errors::err04_leg_not_funded",
+   "errors::err17_dvp_never_created"
+  ],
+  "[E6]": [
+   "edges::edge20_issuer_powers_are_the_named_templates",
+   "errors::err17_dvp_never_created",
+   "errors::err23_mint_authority_changed"
+  ],
+  "[S8]": [
+   "edges::edge10_no_rent_for_the_closer",
+   "errors::err17_dvp_never_created"
+  ],
+  "[S9]": [
+   "errors::err17_dvp_never_created",
+   "errors::err18_escrow_preloaded_with_lamports"
+  ],
+  "[D1]": [
+   "errors::err17_dvp_never_created"
+  ],
+  "[D2]": [
+   "errors::err17_dvp_never_created"
+  ],
+  "[S1]": [
+   "edges::edge03_kas_at_a_vault_is_never_swept_to_the_closer",
+   "errors::err17_dvp_never_created"
+  ],
+  "[S7]": [
+   "errors::err17_dvp_never_created"
+  ],
+  "[S2]": [
+   "edges::edge02_native_kas_needs_no_wrapping",
+   "errors::err04_leg_not_funded",
+   "errors::err17_dvp_never_created",
+   "errors::err20_swap_dvp_preloaded_with_lamports"
+  ],
+  "[S3]": [
+   "edges::edge13_earliest_inherits_the_expiry_cap",
+   "edges::edge14_gates_use_the_daa_score",
+   "errors::err01_dvp_expired",
+   "errors::err03_settlement_too_early",
+   "errors::err06_earliest_after_expiry",
+   "errors::err17_dvp_never_created"
+  ],
+  "[S4]": [
+   "errors::err17_dvp_never_created",
+   "instructions::ix2_settle_moves_both_legs_in_one_transaction"
+  ],
+  "[S5]": [
+   "errors::err17_dvp_never_created"
+  ],
+  "[S6]": [
+   "errors::err02_settlement_authority_mismatch",
+   "errors::err11_settlement_authority_is_party",
+   "errors::err17_dvp_never_created"
+  ],
+  "[R1]": [
+   "errors::err00_signer_not_party",
+   "errors::err17_dvp_never_created"
+  ],
+  "[R2]": [
+   "errors::err02_settlement_authority_mismatch",
+   "errors::err17_dvp_never_created",
+   "errors::err22_party_not_signer_capable"
+  ],
+  "[R3]": [
+   "edges::edge04_over_deposit_never_leaks",
+   "edges::edge08_unwind_returns_the_actual_balance",
+   "edges::edge09_late_deposit_after_a_reject",
+   "edges::edge14_gates_use_the_daa_score",
+   "edges::edge25_earmarked_funding_blocks_only_the_depositors_withdrawal",
+   "errors::err14_expiry_too_far_in_future",
+   "errors::err17_dvp_never_created",
+   "instructions::ix3_cancel_is_the_authority_refund_of_each_leg",
+   "instructions::ix4_reject_is_a_party_refund_of_each_leg",
+   "instructions::ix5_recover_is_the_ordinary_refund"
+  ],
+  "[R4]": [
+   "errors::err17_dvp_never_created"
+  ],
+  "[R5]": [
+   "edges::edge02_native_kas_needs_no_wrapping",
+   "edges::edge08_unwind_returns_the_actual_balance",
+   "errors::err17_dvp_never_created",
+   "errors::err20_swap_dvp_preloaded_with_lamports"
+  ],
+  "[R6]": [
+   "errors::err17_dvp_never_created",
+   "errors::err20_swap_dvp_preloaded_with_lamports"
+  ],
+  "[R7]": [
+   "edges::edge09_late_deposit_after_a_reject",
+   "errors::err17_dvp_never_created",
+   "errors::err21_recipient_ata_mismatch"
+  ],
+  "[R11]": [
+   "edges::edge03_kas_at_a_vault_is_never_swept_to_the_closer",
+   "errors::err17_dvp_never_created"
+  ],
+  "[R8]": [
+   "errors::err17_dvp_never_created"
+  ],
+  "[R9]": [
+   "errors::err17_dvp_never_created"
+  ],
+  "[R12]": [
+   "errors::err17_dvp_never_created"
+  ],
+  "[R14]": [
+   "edges::edge04_over_deposit_never_leaks",
+   "edges::edge08_unwind_returns_the_actual_balance",
+   "edges::edge09_late_deposit_after_a_reject",
+   "errors::err17_dvp_never_created",
+   "instructions::ix3_cancel_is_the_authority_refund_of_each_leg",
+   "instructions::ix4_reject_is_a_party_refund_of_each_leg",
+   "instructions::ix5_recover_is_the_ordinary_refund"
+  ],
+  "[R10]": [
+   "errors::err17_dvp_never_created"
+  ],
+  "[R13]": [
+   "errors::err17_dvp_never_created"
+  ]
+ }
+}

@@ -1,0 +1,55 @@
+[package]
+name = "impulse-cli"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[[bin]]
+name = "impulse"
+path = "src/main.rs"
+
+[features]
+# Tests only: the offline fake node and the hidden `impulse fake-node` command (spec/CLI.md,
+# "Offline fake node (tests only)"). Off by default; a release build has neither.
+offline-fake-node = ["dep:borsh", "dep:kaspa-txscript"]
+# I20: `impulse zk`, the list-gated settle (spec/V3-ZK.md). Off by default, with impulse-core's `zk`
+# feature, so the default build links neither the proof parser nor the v3 builders.
+zk = ["impulse-core/zk", "impulse-core/zk-hashed", "dep:impulse-terms-core"]
+
+[dependencies]
+impulse-terms-core = { path = "../../circuits/terms-core", optional = true }
+base64.workspace = true
+blake2b_simd.workspace = true
+bs58.workspace = true
+borsh = { workspace = true, optional = true, features = ["derive"] }
+clap.workspace = true
+# I13 phase 2: `impulse frost` needs impulse_core::threshold (FROST); I18: `impulse xchain new`
+# needs impulse_core::htlc::HashlockSecret (feature htlc-secret, D50). Default impulse-core stays
+# keyless and secretless for the SDK and the watcher.
+impulse-core = { path = "../impulse-core", features = ["threshold", "htlc-secret"] }
+kaspa-addresses.workspace = true
+kaspa-consensus-core.workspace = true
+kaspa-txscript = { workspace = true, optional = true }
+kaspa-wrpc-client.workspace = true
+qrcode.workspace = true
+rand.workspace = true
+reqwest.workspace = true
+secp256k1.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+tokio.workspace = true
+zeroize.workspace = true
+
+[dev-dependencies]
+borsh = { workspace = true, features = ["derive"] }
+# The shared engine harness (tests/engine/harness.rs, through #[path]) carries the v4 host checker.
+impulse-terms-core = { path = "../../circuits/terms-core" }
+# Integration follow-up (2026-10-11): a test hands the signed-transaction file `submit` writes to
+# the watcher's own start-up path. Tests only; the watcher links nothing of the CLI.
+impulse-watch = { path = "../impulse-watch" }
+# I13 phase 2: the offline end-to-end test runs the settle the CLI signs through the real script
+# engine. Same pinned rusty-kaspa revision; already in the tree.
+kaspa-txscript.workspace = true
+silverscript-abi.workspace = true

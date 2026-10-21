@@ -1,0 +1,18 @@
+# The Groth16 ("shrink-wrap") prover image, pinned by manifest digest (spec/V3-ZK.md section 14.1).
+# impulse-zk-prove runs only the digest for its host's platform, refuses if that image is not
+# present locally (ZK_PROVER_IMAGE), and runs it with --network none.
+#
+# Tag source: risc0-groth16 3.0.4 and 3.0.5, src/prove/docker.rs, which run the image by this tag
+# (measured, source).
+# Digest source: the registry's manifest list, read on 2026-10-12 with
+#   docker buildx imagetools inspect risczero/risc0-groth16-prover:v2025-04-03.1
+# by the maintainers during I20, on the owner's M1 Max laptop. The linux/arm64 image was then
+# pulled by digest and `docker pull` reported the same digest.
+# RISC Zero publishes no digest for this tag in the risc0-groth16 3.0.4 or 3.0.5 crate sources
+# (measured, run: grep for sha256 in both, no match). No web source was compared.
+# Status: recorded by the maintainers; owner confirmation pending (D61).
+# Manifest list digest (both platforms): sha256:a4f80ce2e0b8e2bb7637a93c37136a6776ac00ec843a3fdf1c67b1d5ffea64ee
+image=risczero/risc0-groth16-prover
+tag=v2025-04-03.1
+linux/amd64=sha256:7f173963196570b7a71816ed70565a4579264c5d2e3e0ecb028102538ad0e331
+linux/arm64=sha256:55236d558d1e16e27f86f73237215c49f686521cab7652931c61c96d62cabcfc

@@ -1,0 +1,21 @@
+# Copyright (c) 2026 the Impulse authors. A KiiLabs product. Licensed under the Apache License, Version 2.0.
+# No workspace inheritance: the guests depend on this crate by path from their own workspaces.
+[package]
+name = "impulse-list-core"
+version = "0.3.0-alpha"
+edition = "2021"
+license = "Apache-2.0"
+
+[lib]
+name = "list_core"
+
+[features]
+default = []
+std = []
+# Exposes statement_with_forced_leaf for the zero-leaf guard test (spec/V3-ZK.md section 13.4).
+# The guest never enables it.
+test-hook = []
+
+[dev-dependencies]
+sha2 = "0.10.9"
+hex = "0.4.3"

@@ -1,0 +1,10 @@
+ 9:12  up 1 day, 22:46, 1 user, load averages: 48.53 71.03 67.26
+ %CPU COMM
+464.7 ~/impulse/target/debug/deps/parity-033e62b47795e44c
+ 89.7 ~/rusty-kaspa-v2.0.1/target/release/kaspad
+ 70.0 /usr/libexec/syspolicyd
+ 52.3 ~/.rustup/toolchains/1.94.0-aarch64-apple-darwin/bin/rustc
+ 47.0 ~/.rustup/toolchains/1.94.0-aarch64-apple-darwin/bin/rustc
+ 31.1 /Applications/Docker.app/Contents/MacOS/Docker Desktop.app/Contents/Frameworks/Docker Desktop Helper (Renderer).app/Contents/MacOS/Docker Desktop Helper (Renderer)
+ 30.0 /System/Library/Frameworks/Virtualization.framework/Versions/A/XPCServices/com.apple.Virtualization.VirtualMachine.xpc/Contents/MacOS/com.apple.Virtualization.VirtualMachine
+running containers: 21

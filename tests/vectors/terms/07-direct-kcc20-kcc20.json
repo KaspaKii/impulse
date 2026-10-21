@@ -1,0 +1,55 @@
+{
+  "name": "07-direct-kcc20-kcc20",
+  "description": "Direct mode (no escrow, no authority), revocable as Direct requires. KCC-20 for KCC-20. A Direct transaction reads the legs, buyer_delivery and seller_proceeds; the refund targets are committed but unused. Mainnet.",
+  "terms": {
+    "version": 1,
+    "network": "mainnet",
+    "settlement_mode": "direct",
+    "nonce": "31525211795558711",
+    "seller_key": "95e2f4e4fe97ed99e78ac44930508f03b408bde943a16d35bd8f1d0228a8bc3e",
+    "buyer_key": "67b2e7c8dfe143ccdad9cdd0929b9bfff2ed9039ef21a146a2caab1c2b542de3",
+    "authority_key": null,
+    "asset_leg": {
+      "kind": "kcc20",
+      "covenant_id": "fe904de9baa7fe17d441105dd757e7911e192998e4e096d3c84f4711c6b3dd0d",
+      "template_hash": "a227fc3aa2f3d922b7f8d7dfdca462660dbe51bd1735508f9dda9a656100c794",
+      "template_prefix_len": 40,
+      "template_suffix_len": 1420,
+      "amount": "75"
+    },
+    "cash_leg": {
+      "kind": "kcc20",
+      "covenant_id": "ed65a319f14088ebd1d5acb4b61afb66962ad692880e255d48047a013793682c",
+      "template_hash": "a227fc3aa2f3d922b7f8d7dfdca462660dbe51bd1735508f9dda9a656100c794",
+      "template_prefix_len": 40,
+      "template_suffix_len": 1420,
+      "amount": "7500000"
+    },
+    "buyer_delivery": {
+      "kind": "kcc20",
+      "identifier_type": "pubkey",
+      "identifier": "67b2e7c8dfe143ccdad9cdd0929b9bfff2ed9039ef21a146a2caab1c2b542de3"
+    },
+    "seller_proceeds": {
+      "kind": "kcc20",
+      "identifier_type": "pubkey",
+      "identifier": "95e2f4e4fe97ed99e78ac44930508f03b408bde943a16d35bd8f1d0228a8bc3e"
+    },
+    "seller_refund": {
+      "kind": "kcc20",
+      "identifier_type": "pubkey",
+      "identifier": "95e2f4e4fe97ed99e78ac44930508f03b408bde943a16d35bd8f1d0228a8bc3e"
+    },
+    "buyer_refund": {
+      "kind": "kcc20",
+      "identifier_type": "pubkey",
+      "identifier": "67b2e7c8dfe143ccdad9cdd0929b9bfff2ed9039ef21a146a2caab1c2b542de3"
+    },
+    "earliest_daa": null,
+    "expiry_daa": "400864000",
+    "funding_mode": "revocable",
+    "trade_ref": "c72655914bb4d123f69377d1b84229f4ba09ce386405ae033f15356e6b7036fd"
+  },
+  "canonical": "01000037118b5a0300700095e2f4e4fe97ed99e78ac44930508f03b408bde943a16d35bd8f1d0228a8bc3e67b2e7c8dfe143ccdad9cdd0929b9bfff2ed9039ef21a146a2caab1c2b542de30001fe904de9baa7fe17d441105dd757e7911e192998e4e096d3c84f4711c6b3dd0da227fc3aa2f3d922b7f8d7dfdca462660dbe51bd1735508f9dda9a656100c794280000008c0500004b0000000000000001ed65a319f14088ebd1d5acb4b61afb66962ad692880e255d48047a013793682ca227fc3aa2f3d922b7f8d7dfdca462660dbe51bd1735508f9dda9a656100c794280000008c050000e070720000000000010067b2e7c8dfe143ccdad9cdd0929b9bfff2ed9039ef21a146a2caab1c2b542de3010095e2f4e4fe97ed99e78ac44930508f03b408bde943a16d35bd8f1d0228a8bc3e010095e2f4e4fe97ed99e78ac44930508f03b408bde943a16d35bd8f1d0228a8bc3e010067b2e7c8dfe143ccdad9cdd0929b9bfff2ed9039ef21a146a2caab1c2b542de30000b3e4170000000000c72655914bb4d123f69377d1b84229f4ba09ce386405ae033f15356e6b7036fd",
+  "terms_hash": "12e53ad167a7757bca77713754341e6f6deaa0fd8ef717f8c5d3a83995c0cb0b"
+}

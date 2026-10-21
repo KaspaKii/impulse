@@ -1,0 +1,196 @@
+diff Cargo.toml
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -72,3 +72,34 @@
+ # Dev-dependency of impulse-core (I13): compile-time check that FROST secret types erase on drop.
+ # Already in the tree through frost-core, at the version in the lock.
+ # (zeroize is declared once above.)
++
++# D5 evidence only (scratch copy): build every rusty-kaspa crate in the lock from tag v2.1.0 (01b532e).
++[patch."https://github.com/kaspanet/rusty-kaspa"]
++kaspa-addresses = { path = "/private/tmp/scratch/d5final/rk/crypto/addresses" }
++kaspa-consensus-client = { path = "/private/tmp/scratch/d5final/rk/consensus/client" }
++kaspa-consensus-core = { path = "/private/tmp/scratch/d5final/rk/consensus/core" }
++kaspa-consensus-notify = { path = "/private/tmp/scratch/d5final/rk/consensus/notify" }
++kaspa-consensus-wasm = { path = "/private/tmp/scratch/d5final/rk/consensus/wasm" }
++kaspa-core = { path = "/private/tmp/scratch/d5final/rk/core" }
++kaspa-hashes = { path = "/private/tmp/scratch/d5final/rk/crypto/hashes" }
++kaspa-index-core = { path = "/private/tmp/scratch/d5final/rk/indexes/core" }
++kaspa-math = { path = "/private/tmp/scratch/d5final/rk/math" }
++kaspa-merkle = { path = "/private/tmp/scratch/d5final/rk/crypto/merkle" }
++kaspa-mining-errors = { path = "/private/tmp/scratch/d5final/rk/mining/errors" }
++kaspa-muhash = { path = "/private/tmp/scratch/d5final/rk/crypto/muhash" }
++kaspa-notify = { path = "/private/tmp/scratch/d5final/rk/notify" }
++kaspa-rpc-core = { path = "/private/tmp/scratch/d5final/rk/rpc/core" }
++kaspa-rpc-macros = { path = "/private/tmp/scratch/d5final/rk/rpc/macros" }
++kaspa-smt = { path = "/private/tmp/scratch/d5final/rk/crypto/smt" }
++kaspa-txscript = { path = "/private/tmp/scratch/d5final/rk/crypto/txscript" }
++kaspa-txscript-errors = { path = "/private/tmp/scratch/d5final/rk/crypto/txscript/errors" }
++kaspa-txscript-zk-sdk = { path = "/private/tmp/scratch/d5final/rk/crypto/txscript/zk-sdk" }
++kaspa-utils = { path = "/private/tmp/scratch/d5final/rk/utils" }
++kaspa-wasm-core = { path = "/private/tmp/scratch/d5final/rk/wasm/core" }
++kaspa-wrpc-client = { path = "/private/tmp/scratch/d5final/rk/rpc/wrpc/client" }
++
++# D5 evidence only (scratch copy): silverscript v1.0.0 (3ed9733) vendored with the minimum
++# source adaptation to the v2.1.0 API (removed covenants_enabled flag and *_POST_TOCCATA helpers).
++[patch."https://github.com/kaspanet/silverscript"]
++silverscript-abi = { path = "/private/tmp/scratch/d5final/ss/silverscript-abi" }
++silverscript-lang = { path = "/private/tmp/scratch/d5final/ss/silverscript-lang" }
+diff crates/impulse-cli/src/sim.rs
+--- a/crates/impulse-cli/src/sim.rs
++++ b/crates/impulse-cli/src/sim.rs
+@@ -202,7 +202,6 @@
+         Network::Testnet => &TESTNET_PARAMS,
+     };
+     let flags = EngineFlags {
+-        covenants_enabled: true,
+         sigop_script_units: Gram(params.mass_per_sig_op).into(),
+     };
+     let populated = PopulatedTransaction::new(tx, entries.to_vec());
+diff crates/impulse-cli/tests/frost.rs
+--- a/crates/impulse-cli/tests/frost.rs
++++ b/crates/impulse-cli/tests/frost.rs
+@@ -466,7 +466,6 @@
+ // runner (docs/reference/BORROW-MAP.md); no WarpCore type remains.
+ fn engine_flags() -> EngineFlags {
+     EngineFlags {
+-        covenants_enabled: true,
+         sigop_script_units: Gram(MAINNET_PARAMS.mass_per_sig_op).into(),
+     }
+ }
+diff crates/impulse-core/src/terms/validate.rs
+--- a/crates/impulse-core/src/terms/validate.rs
++++ b/crates/impulse-core/src/terms/validate.rs
+@@ -11,7 +11,7 @@
+ use kaspa_consensus_core::constants::{LOCK_TIME_THRESHOLD, MAX_SOMPI};
+ use kaspa_consensus_core::tx::ScriptPublicKey;
+ use kaspa_txscript::script_class::ScriptClass;
+-use kaspa_txscript::MAX_SCRIPTS_SIZE_POST_TOCCATA;
++use kaspa_txscript::MAX_SCRIPTS_SIZE;
+ use secp256k1::{PublicKey, XOnlyPublicKey};
+ 
+ /// About one year of DAA score: 365 days at 10 DAA per second. Modelled, not measured: it
+@@ -20,7 +20,7 @@
+ 
+ /// Upper bound on a KCC-20 template's prefix plus suffix length: the post-Toccata consensus
+ /// script size limit (rusty-kaspa a41a333), since the template is part of one script.
+-pub const MAX_TEMPLATE_LEN: u64 = MAX_SCRIPTS_SIZE_POST_TOCCATA as u64;
++pub const MAX_TEMPLATE_LEN: u64 = MAX_SCRIPTS_SIZE as u64;
+ 
+ /// What the creation checks compare the terms with.
+ #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+diff crates/impulse-core/src/tx/mod.rs
+--- a/crates/impulse-core/src/tx/mod.rs
++++ b/crates/impulse-core/src/tx/mod.rs
+@@ -145,7 +145,6 @@
+ /// One data push, as the engine reads it (covenant-era limits, as silverscript-abi builds).
+ pub(crate) fn push_data(data: &[u8]) -> Result<Vec<u8>, TxError> {
+     let mut builder = ScriptBuilder::with_flags(EngineFlags {
+-        covenants_enabled: true,
+         ..Default::default()
+     });
+     builder.add_data(data).map_err(|e| TxError::Encoding {
+diff crates/impulse-core/src/tx/rules.rs
+--- a/crates/impulse-core/src/tx/rules.rs
++++ b/crates/impulse-core/src/tx/rules.rs
+@@ -195,7 +195,7 @@
+     let storage = calculator
+         .calc_contextual_masses(&populated)
+         .map_or(u64::MAX, |m| m.storage_mass);
+-    let cofactors = params.mempool_block_mass_cofactors().raw_post();
++    let cofactors = params.block_mass_cofactors();
+     let fee_mass = non_contextual
+         .compute_mass
+         .max(non_contextual.normalized_transient(&cofactors));
+diff crates/impulse-watch/src/entry.rs
+--- a/crates/impulse-watch/src/entry.rs
++++ b/crates/impulse-watch/src/entry.rs
+@@ -114,7 +114,6 @@
+         ];
+         // Covenant-era limits, under which a 3,000-byte redeem script push is canonical.
+         let mut builder = ScriptBuilder::with_flags(EngineFlags {
+-            covenants_enabled: true,
+             ..Default::default()
+         });
+         for d in &data {
+diff crates/impulse-watch/src/tests.rs
+--- a/crates/impulse-watch/src/tests.rs
++++ b/crates/impulse-watch/src/tests.rs
+@@ -86,7 +86,6 @@
+ 
+ fn push_all(items: &[&[u8]]) -> Vec<u8> {
+     let mut b = ScriptBuilder::with_flags(EngineFlags {
+-        covenants_enabled: true,
+         ..Default::default()
+     });
+     for item in items {
+@@ -1826,7 +1825,6 @@
+             &entries[0],
+             EngineCtx::new(&cache).with_reused(&reused),
+             EngineFlags {
+-                covenants_enabled: true,
+                 ..Default::default()
+             },
+         );
+diff crates/impulse-watch/tests/e2e.rs
+--- a/crates/impulse-watch/tests/e2e.rs
++++ b/crates/impulse-watch/tests/e2e.rs
+@@ -652,7 +652,6 @@
+ 
+ fn push_all(items: &[&[u8]]) -> Vec<u8> {
+     let mut b = ScriptBuilder::with_flags(EngineFlags {
+-        covenants_enabled: true,
+         ..Default::default()
+     });
+     for item in items {
+diff tests/engine/builders.rs
+--- a/tests/engine/builders.rs
++++ b/tests/engine/builders.rs
+@@ -1405,10 +1405,23 @@
+             .iter()
+             .find(|p| p["name"] == "kaspa-consensus-core")
+             .expect("kaspa-consensus-core in the build");
+-        let source = core["source"].as_str().unwrap();
+-        assert!(
+-            source.ends_with("#a41a333b08848f41bf737b72592e463a6011b8ac"),
+-            "{source}"
++        // D5 (scratch copy only): the v2.1.0 clone is patched in as a path dependency, so the
++        // package has no source; its revision is the clone's checkout.
++        assert!(core["source"].is_null(), "{}", core["source"]);
++        let clone = std::path::Path::new(core["manifest_path"].as_str().unwrap())
++            .ancestors()
++            .nth(3)
++            .unwrap()
++            .to_path_buf();
++        let head = std::process::Command::new("git")
++            .arg("-C")
++            .arg(&clone)
++            .args(["rev-parse", "HEAD"])
++            .output()
++            .expect("git rev-parse");
++        assert_eq!(
++            String::from_utf8_lossy(&head.stdout).trim(),
++            "01b532e8b553523216471682649693af92f0fd16"
+         );
+         // .../consensus/core/Cargo.toml -> .../consensus/src/processes/transaction_validator
+         let validator = std::path::Path::new(core["manifest_path"].as_str().unwrap())
+diff tests/engine/harness.rs
+--- a/tests/engine/harness.rs
++++ b/tests/engine/harness.rs
+@@ -421,7 +421,6 @@
+ /// Engine flags as consensus sets them after Toccata on mainnet.
+ pub fn engine_flags() -> EngineFlags {
+     EngineFlags {
+-        covenants_enabled: true,
+         sigop_script_units: Gram(MAINNET_PARAMS.mass_per_sig_op).into(),
+     }
+ }
+@@ -497,7 +496,7 @@
+ 
+ /// Mainnet per-block compute mass limit in grams.
+ pub fn block_compute_mass_limit() -> u64 {
+-    MAINNET_PARAMS.prior_block_mass_limits.compute
++    MAINNET_PARAMS.block_mass_limits.compute
+ }
+ 
+ /// Smallest compute budget whose allowance (budget units plus the free per-input allowance) covers `used`.
